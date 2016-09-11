@@ -1,42 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js" ></script>
-    <title>Winni-jane.GitHub.com by winni-jane</title>
-  </head>
+<head>
+<title>winni-jane的技术博客</title>
+<meta charset="utf-8">
+<script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body>
 
-  <body ng-app="myApp" ng-controller="customersCtrl">
-    <header>
-      <div class="inner">
-        <h1>Winni-jane.GitHub.com</h1>
-      </div>
-    </header>
+<div ng-app="myApp" ng-controller="customersCtrl"> 
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">  
-          <ul>
-            <li ng-repeat="info in list"> <a href="{{info.html_url}}" target="_blank"> {{info.name}} </a> </li>
-          </ul>
-        </section>
+<ul>
+    <li ng-repeat="x in list">
+      <a href="{{x.download_url}}" target="_blank"> {{ x.name }} </a>
+      
+    </li>
+</ul>
 
-        <aside id="sidebar">
-        </aside>
-        
-      </div>
-    </div>
-    
-    <script>
-      var app = angular.module('myApp', []);
-      app.controller('customersCtrl', function($scope, $http) {
-        $http.get("https://api.github.com/repos/Winni-jane/Winni-jane.github.com/contents/source?ref=master")
-        .success(function (response) {$scope.list = response;});
-      });
-    </script>
+</div>
 
-  
-  </body>
-</html>
+<script>
+var app = angular.module('myApp', []);
+app.controller('customersCtrl', function($scope, $http) {
+      $http.get("https://api.github.com/repos/winni-jane/winni-jane.github.com/contents/source?ref=master")
+        .success(function (response) {$scope.list= response;});
+});
+</script>
