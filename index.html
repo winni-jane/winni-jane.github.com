@@ -24,7 +24,7 @@
 <script type="text/ng-template" id="embedded.home.html">
     <ul>
         <li ng-repeat="x in list">
-          <a href="{{x.download_url}}" target="_blank"> {{ x.name }} </a>
+          <a href="#/info:{{x.download_url}}" target="_blank"> {{ x.name }} </a>
         </li>
     </ul>
 </script>
@@ -32,7 +32,7 @@
 
 <script type="text/ng-template" id="embedded.info.html">
     <div>
-        this is my blog info
+        this is my blog info : {{content}}
     </div>
 </script>
 
@@ -53,6 +53,8 @@ app.controller('HomeController', function ($scope, $route, $http) {
 app.controller('InfoController', function ($scope, $route) { 
     $scope.$route = $route;
     
+      $http.get($scope.download_url)
+        .success(function (response) {$scope.content= response;});
 });
 
 app.config(function ($routeProvider) {
@@ -61,7 +63,7 @@ app.config(function ($routeProvider) {
         templateUrl: 'embedded.home.html',
         controller: 'HomeController'
     }).
-    when('/about', {
+    when('/info:download_url', {
         templateUrl: 'embedded.info.html',
         controller: 'InfoController'
     }).
