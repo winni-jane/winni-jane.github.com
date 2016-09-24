@@ -48,3 +48,13 @@
     }  
 要实现 keyPathsForValuesAffectingInformation  或 keyPathsForValuesAffectingValueForKey: 方法是告诉系统 information 属性依赖于哪些其他属性，这两个方法都返回一个key-path 的集合。
 如果选择实现 keyPathsForValuesAffectingValueForKey，要先获取 super 返回的结果 set，然后判断 key 是不是目标 key，如果是就将依赖属性的 key-path 结合追加到 super 返回的结果 set 中，否则直接返回 super的结果。
+
+AFN中应用：
++ (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
+    if ([key isEqualToString:@"reachable"] || [key isEqualToString:@"reachableViaWWAN"] || [key isEqualToString:@"reachableViaWiFi"]) {
+        return [NSSet setWithObject:@"networkReachabilityStatus"];
+    }
+
+    return [super keyPathsForValuesAffectingValueForKey:key];
+}
+
