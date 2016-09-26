@@ -3,4 +3,14 @@
  3.dispatch_queue_t  queue =  dispatch_queue_create ( "com.dispatch.concurrent" ,  DISPATCH_QUEUE_CONCURRENT );  //生成一个并发执行队列，block被分发到多个线程去执行 
  4.官网文档解释说共有三个并发队列，但实际还有一个更低优先级的队列，设置优先级为 DISPATCH_QUEUE_PRIORITY_BACKGROUND 。Xcode调试时可以观察到正在使用的各个dispatch队列
  5. dispatch_queue_t  queue =  dispatch_get_main_queue(); //获得主线程的dispatch队列，实际是一个串行队列。同样无法控制主线程dispatch队列的执行继续或中断。 
- 6.
+ 6.Objective-c  NSString和char*之间的转换 
+NSString *string_content = "I'm jordy";  
+char *char_content = [string_content cStringUsingEncoding:NSASCIIStringEncoding]; 
+反过来，char *color_char = [color_string cStringUsingEncoding:NSASCIIStringEncoding];  
+7.dispatch_set_target_queue的两个作用：
+用来给新建的queue设置优先级：
+dispatch_set_target_queue(serialQueue, globalQueue); 
+serialQueue 就有了与globalQueue一样的优先级。
+（2）一般都是把一个任务放到一个串行的queue中，如果这个任务被拆分了，被放置到多个串行的queue中，但实际还是需要这个任务同步执行，那么就会有问题，因为多个串行queue之间是并行的
+这时使用dispatch_set_target_queue将多个串行的queue指定到了同一目标，那么着多个串行queue在目标queue上就是同步执行的，不再是并行执行。
+
