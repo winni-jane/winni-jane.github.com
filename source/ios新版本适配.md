@@ -20,3 +20,4 @@ UIColor的问题 sRGB;
 iOS 10 中将通知相关的 API 都统一了,在此基础上很多用户定义的通知,并且可以捕捉到各个通知状态的回调;
 UICollectionViewCell的的优化;
 在iOS 10 中, UIRefreshControl可以直接在UICollectionView和UITableView中使用,并且脱离了UITableViewController.现在RefreshControl是UIScrollView的一个属性;
+http://www.cnblogs.com/HJQ2016/p/5866582.html
