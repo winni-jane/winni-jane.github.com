@@ -1,0 +1,2 @@
+NSString *imagePath = [[NSBundle mainBundle]pathForResource:@"eg_cute" ofType:@".gif"];
+[NSURL fileURLWithPath:imagePath]
