@@ -67,7 +67,48 @@ PS：__unsafe_unretained修饰符可以被视为iOS SDK 4.3以前版本的__weak
 如果你看过 AFNetworking 的源码，会发现 AFN 中作者会把变量在 block 外面先用 __weak 声明，在 block 内把前面 weak 声明的变量赋值给 __strong 修饰的变量。这种写法的好处就是可以让变量在 block 内部安全可用，即使外部释放了，也会在 block 的生命周期内保留该变量。这种写法非常巧妙，既避免了循环引用的问题，又可以在 block 内部持有该变量。
 
 
+4.另外，MRC中__block是不会引起retain；但在ARC中__block则会引起retain。所以ARC中应该使用__weak。在MRC的编译环境下，block如果作为成员参数要copy一下将栈上的block拷贝到堆上.
 
+5.在block使用之后要对，block指针做赋空值处理，如果是MRC的编译环境下，要先release掉block对象。
+block作为类对象的成员变量，使用block的人有可能用类对象参与block中的运算而产生循环引用。
+将block赋值为空，是解掉循环引用的重要方法。
+typedef void(^SuccBlock)(id data);
+@interface NetworkClass {
+    SuccessBlock _sucBlock;
+}
+@property (nonatomic,assign)BOOL propertyUseInCallBack;
+- (void) requestWithSucBlock: (SuccessBlock) callbackBlock;
+@end
+ 
+@implementation NetworkClass
+- (void) requestWithSucBlock: (SuccessBlock) callbackBlock {
+    _sucBlock = callbackBlock;//MRC下：_sucBlock = [callbackBlock copy]; 不copy block会在栈上被回收。
+}
+ 
+- (void) netwrokDataBack: (id) data {
+    if (data != nil && _sucBlock != NULL) {
+        _sucBlock(data);
+    }
+    //MRC下：要先将[_sucBlock release];（之前copy过）
+    _sucBlock = nil; //Importent: 在使用之后将Block赋空值，解引用 !!!
+}
+@end
+ 
+//=======================以下是使用方===========================
+@implementation UserCode
+- (void) temporaryNetworkCall
+{
+    NetworkClass *netObj = [[NetworkClass alloc] init];
+    netObj.propertyUseInCallBack = NO;
+    [netObj requestWithSucBlock: ^(id data) {
+        //由于block里面引用netObj的指针所以这里产生了循环引用，且由于这个block是作为参数传入对象的，编译器不会报错。
+        //因此，NetworkClass使用完block之后一定要将作为成员变量的block赋空值。
+        if (netObj.propertyUseInCallBack == YES) {
+            //Do Something...
+        }
+    }];
+}
+@end
 
 
 
