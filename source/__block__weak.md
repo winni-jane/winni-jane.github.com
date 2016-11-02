@@ -18,6 +18,22 @@ NSMutableArray *mArray = [NSMutableArray arrayWithObjects:@"a",@"b",@"abc",nil];
 (4) 
 循环引用的问题，为了解决这个问题，可以用weak关键字。
 也可以使用__block关键字，然后再block快结束的时候，把__block引用的变量设置为nil。
+
+    MyObject *obj = [[MyObject alloc]init];  
+    obj.text = @"11111111111111";  
+    TLog(@"obj",obj);  
+      
+    __block MyObject *blockObj = obj;  
+    obj = nil;  
+    void(^testBlock)() = ^(){  
+        TLog(@"blockObj - block",blockObj);  
+        blockObj = nil;  
+    };  
+    obj = nil;  
+    testBlock();  
+    TLog(@"blockObj",blockObj);
+    
+    另外一点就是 __block 修饰的变量在 block 内外都是唯一的，要注意这个特性可能带来的隐患。
 (5)只有在使用local变量时，block会复制对象，且强引用指针指向的对象一次。其它如全局变量、static变量、block变量等，block不会拷贝指针,只会强引用指针指向的对象一次。
 (6)
 //先声明一个weak弱对象
@@ -42,7 +58,18 @@ NSMutableArray *mArray = [NSMutableArray arrayWithObjects:@"a",@"b",@"abc",nil];
 (1).__block对象在block中是可以被修改、重新赋值的。
 (2).__block对象在block中不会被block强引用一次，从而不会出现循环引用问题。
 因此，__block和__weak修饰符的区别其实是挺明显的：
-1.__block不管是ARC还是MRC模式下都可以使用，可以修饰对象，还可以修饰基本数据类型。
-2.__weak只能在ARC模式下使用，也只能修饰对象（NSString），不能修饰基本数据类型（int）。
-3.__block对象可以在block中被重新赋值，__weak不可以。
+<1>.__block不管是ARC还是MRC模式下都可以使用，可以修饰对象，还可以修饰基本数据类型。
+<2>.__weak只能在ARC模式下使用，也只能修饰对象（NSString），不能修饰基本数据类型（int）。
+<3>.__block对象可以在block中被重新赋值，__weak不可以。
 PS：__unsafe_unretained修饰符可以被视为iOS SDK 4.3以前版本的__weak的替代品，不过不会被自动置空为nil。所以尽可能不要使用这个修饰符
+
+3.
+如果你看过 AFNetworking 的源码，会发现 AFN 中作者会把变量在 block 外面先用 __weak 声明，在 block 内把前面 weak 声明的变量赋值给 __strong 修饰的变量。这种写法的好处就是可以让变量在 block 内部安全可用，即使外部释放了，也会在 block 的生命周期内保留该变量。这种写法非常巧妙，既避免了循环引用的问题，又可以在 block 内部持有该变量。
+
+
+
+
+
+
+
+
