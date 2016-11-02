@@ -138,8 +138,37 @@ dispatch_async(queue, { () -&amp;gt; Void in
 在这里，闭包会强引用 self，但是实例化的 self 不会强引用闭包，所以一旦闭包结束，它就会被释放，所以循环引用也不会产生。
 
 
+9.AFN中
+__block NSURLSessionDataTask *task = [self uploadTaskWithStreamedRequest:request progress:nil completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
+        if (error) {
+            if (failure) {
+                failure(task, error);
+            }
+        } else {
+            if (success) {
+                success(task, responseObject);
+            }
+        }
+    }];
+    
+（2）
+__block NSError *error = nil;
 
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 
+        [inputStream open];
+        [outputStream open];
+
+        while ([inputStream hasBytesAvailable] && [outputStream hasSpaceAvailable]) {
+            uint8_t buffer[1024];
+
+            NSInteger bytesRead = [inputStream read:buffer maxLength:1024];
+            if (inputStream.streamError || bytesRead < 0) {
+                error = inputStream.streamError;
+                break;
+            }
 
 
 
