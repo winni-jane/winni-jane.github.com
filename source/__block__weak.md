@@ -130,7 +130,12 @@ int number = myblock(4);
 __block 的标记告诉编译器，这个变量在 block 里面需要做特殊处理。
 一般来说，在 block 中用的变量值是被复制过来的，所以对于变量本身的修改并不会影响这个变量的真实值。而当我们用 __block 标记的时候，表示在 block 中的修改对于 block 外也是有效地。
 
+8.
 
+dispatch_async(queue, { () -&amp;gt; Void in
+   self.doSomething();
+});
+在这里，闭包会强引用 self，但是实例化的 self 不会强引用闭包，所以一旦闭包结束，它就会被释放，所以循环引用也不会产生。
 
 
 
