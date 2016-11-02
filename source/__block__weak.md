@@ -13,6 +13,9 @@ NSMutableArray *mArray = [NSMutableArray arrayWithObjects:@"a",@"b",@"abc",nil];
     }];
    
     NSLog(@"%@",mArrayCount);
+ 因为我们只是对截获的变量进行了操作，而没有进行赋值，所以对于截获变量，可以进行操作而不可以进行赋值。
+ 还有一点需要注意，在Block中不可以对C语言数组进行操作，原因是：～～～不支持。。。。
+ 
  (3)当block不是self的属性时，block内部使用self也不会造成内存泄露.
  当使用类方法有block作为参数使用时，block内部使用self也不会造成内存泄露.
 (4) 
@@ -122,6 +125,20 @@ int number = myblock(4);
 《1》- (void)funtion:(int ^()(int))block
 《2》typedef int (^myblock)(int)
 -(void)funtion:(myblock)block
+
+7.
+__block 的标记告诉编译器，这个变量在 block 里面需要做特殊处理。
+一般来说，在 block 中用的变量值是被复制过来的，所以对于变量本身的修改并不会影响这个变量的真实值。而当我们用 __block 标记的时候，表示在 block 中的修改对于 block 外也是有效地。
+
+
+
+
+
+
+
+
+
+
 
 
 
