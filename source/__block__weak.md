@@ -110,7 +110,18 @@ typedef void(^SuccBlock)(id data);
 }
 @end
 
+6.创建block
+myblock=^(int a){
+	int result = a + a;
+	return result;
+}
+ 调用 block
+int number = myblock(4); 
 
+（2）声明一个 block 作为参数 
+《1》- (void)funtion:(int ^()(int))block
+《2》typedef int (^myblock)(int)
+-(void)funtion:(myblock)block
 
 
 
