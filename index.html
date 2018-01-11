@@ -30,6 +30,37 @@
 </script>
 
 
+<script>
+var app = angular.module('myApp', ['ngRoute']);
+
+app.controller('HomeController', function ($scope, $route, $http) { 
+    $scope.$route = $route;
+      $http.get("https://api.github.com/repos/winni-jane/winni-jane.github.com/contents/source?ref=master")
+        .success(function (response) {$scope.list= response;});
+});
+
+app.controller('InfoController', function ($scope, $route) { 
+    $scope.$route = $route;
+    
+      $http.get($scope.download_url)
+        .success(function (response) {$scope.content= response;});
+});
+
+app.config(function ($routeProvider) {
+    $routeProvider.
+    when('/home', {
+        templateUrl: 'embedded.home.html',
+        controller: 'HomeController'
+    }).
+    when('/info:download_url', {
+        templateUrl: 'embedded.info.html',
+        controller: 'InfoController'
+    }).
+    otherwise({
+        redirectTo: '/home'
+    });
+});
+</script>
 
 
 
