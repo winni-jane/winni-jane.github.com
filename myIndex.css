@@ -1,0 +1,186 @@
+* {
+	margin: 0;
+	padding: 0
+}
+body {
+	font: 12px  Arial, Helvetica, sans-serif;
+	color: #666666;
+	background: url(image/bg.png);
+}
+img {
+	border: 0;
+	display: block
+}
+ul, ol, li {
+	list-style: none;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size: 100%;
+	font-weight: normal;
+}
+a {
+	outline: none;
+}
+
+a:link, a:visited, a:active {
+	text-decoration: none;
+	color: #000000
+}
+a:hover {
+	text-decoration: none;
+	color: #000;
+}
+
+
+.f_l {
+	float: left
+}
+.f_r {
+	float: right
+}
+
+.contenttop {
+	width: 1000px;
+	margin: auto;
+}
+.logo {
+	padding: 50px 0 20px 20px;
+	font-size: 26px;
+	font-family: "微软雅黑", sans-serif;
+	color: #333;
+	font-weight: bold;
+}
+.clear {
+	clear: both;
+}
+.blank {
+	height: 8px;
+	overflow: hidden;
+	width: 100%;
+	margin: auto;
+	clear: both
+}
+nav {
+	margin: 0 0 15px 0
+}
+.navigation {
+	height: 64px;
+	background: url(image/navbg.png) no-repeat;
+	font-family: "微软雅黑";
+}
+.menu {
+	position: relative;
+	margin-left: 70px;
+	padding-top: 10px
+}
+.menu li {
+	float: left;
+	width: 210px;
+	text-align: center;
+	position: relative;
+	line-height: 46px;
+}
+.menu li a {
+	display: block;
+	text-decoration: none;
+	color: #fff;
+	font-size: 15px;
+	font-weight: bold
+}
+.menu ul {
+	position: relative;
+	background: url(image/menuMybg.png);
+	z-index: 300;
+}
+.menu li ul {
+	display: none;
+	width: 210px;
+	position: absolute;
+	TOP: 40px;
+	left: 0;
+}
+.menu li ul li {
+	font-size: 12px;
+	height: 28px;
+	line-height: 28px
+}
+.menu li ul li a {
+	font-size: 14px
+}
+.menu li ul li a:hover {
+	background: #000
+}
+
+/*内容*/
+
+.outside {
+	
+	width: 1000px;
+	margin: auto;
+	
+}
+
+.stripe {
+	/*background: url(image/mainbg.jpg) no-repeat;*/
+	/*background: rgba(77, 123, 175, 0.58);*/
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=##D0D0D0,endColorStr=#FFFFDF); /*IE*/   
+    background:-moz-linear-gradient(top,##D0D0D0,#FFFFDF);/*火狐*/   
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(#D0D0D0), to(#FFFFDF));/*谷歌*/   
+  
+	width: 720px;
+	height: 14px;
+	background-size:720px 14px;
+	border-radius:50px;
+}
+
+.container {
+	/*background: rgba(77, 123, 175, 0.58);*/
+	background: #FFFCEC;
+	overflow: hidden;
+	width: 620px;
+	margin-left: 50px;
+	border-left: #d2d2d2 1px solid;
+	border-right: #d2d2d2 1px solid;
+	border-bottom: #d2d2d2 1px solid;
+	margin-bottom: 100px;
+	height: 700px;
+}
+
+.list {
+	font-family: "微软雅黑";
+
+	margin-top: 80px;
+	padding-left: 20px;
+	padding-top: 20px;
+	line-height: 28px;
+	font-size: 15px;
+	width: 200px;
+	height: 500px;
+	border:15px solid transparent; 
+}
+
+#round
+{
+	-moz-border-image:url(image/listBg.png) 30 30 round;	/* Old Firefox */
+	-webkit-border-image:url(image/listBg.jpg) 30 30 round;	/* Safari and Chrome */
+	-o-border-image:url(image/listBg.jpg) 30 30 round;		/* Opera */
+	border-image:url(image/listBg.jpg) 30 30 round;
+}
+
+.listul li
+{
+	background: url(image/rec_more.png) no-repeat;
+	background-size: 13px 25px;
+	padding-left: 15px;
+	
+}
+
+.listul li a:link,a:visited
+{
+	color: gray;
+
+}
+.listul li a:hover {color: #FF00FF} 
+.listul li a:active {color: #0000FF}
+
+
