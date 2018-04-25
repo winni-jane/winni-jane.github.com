@@ -1,27 +1,27 @@
-1.
-(1)如果修改局部变量，需要加__block.
-__block int multiplier = 7;
-     int (^myBlock)(int) = ^(int num) {
-         multiplier ++;//这样就可以了
-         return num * multiplier;
-     };
-(2)如果局部变量是数组或者指针的时候只复制这个指针，两个指针指向同一个地址,block只修改指针上的内容.
-NSMutableArray *mArray = [NSMutableArray arrayWithObjects:@"a",@"b",@"abc",nil];
-    NSMutableArray *mArrayCount = [NSMutableArray arrayWithCapacity:1];
-    [mArray enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock: ^(id obj,NSUInteger idx, BOOL *stop){
-        [mArrayCount addObject:[NSNumber numberWithInt:[obj length]]];
-    }];
-   
-    NSLog(@"%@",mArrayCount);
- 因为我们只是对截获的变量进行了操作，而没有进行赋值，所以对于截获变量，可以进行操作而不可以进行赋值。
- 还有一点需要注意，在Block中不可以对C语言数组进行操作，原因是：～～～不支持。。。。
- 
- (3)当block不是self的属性时，block内部使用self也不会造成内存泄露.
- 当使用类方法有block作为参数使用时，block内部使用self也不会造成内存泄露.
-(4) 
-循环引用的问题，为了解决这个问题，可以用weak关键字。
-也可以使用__block关键字，然后再block快结束的时候，把__block引用的变量设置为nil。
-
+1. <br/>
+(1)如果修改局部变量，需要加__block. <br/>
+__block int multiplier = 7; <br/>
+     int (^myBlock)(int) = ^(int num) {<br/>
+         multiplier ++;//这样就可以了<br/>
+         return num * multiplier;<br/>
+     };<br/>
+(2)如果局部变量是数组或者指针的时候只复制这个指针，两个指针指向同一个地址,block只修改指针上的内容.<br/>
+NSMutableArray *mArray = [NSMutableArray arrayWithObjects:@"a",@"b",@"abc",nil];<br/>
+    NSMutableArray *mArrayCount = [NSMutableArray arrayWithCapacity:1];<br/>
+    [mArray enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock: ^(id obj,NSUInteger idx, BOOL *stop){<br/>
+        [mArrayCount addObject:[NSNumber numberWithInt:[obj length]]];<br/>
+    }];<br/>
+   <br/>
+    NSLog(@"%@",mArrayCount);<br/>
+ 因为我们只是对截获的变量进行了操作，而没有进行赋值，所以对于截获变量，可以进行操作而不可以进行赋值。<br/>
+ 还有一点需要注意，在Block中不可以对C语言数组进行操作，原因是：～～～不支持。。。。<br/>
+ <br/>
+ (3)当block不是self的属性时，block内部使用self也不会造成内存泄露.<br/>
+ 当使用类方法有block作为参数使用时，block内部使用self也不会造成内存泄露.<br/>
+(4) <br/>
+循环引用的问题，为了解决这个问题，可以用weak关键字。<br/>
+也可以使用__block关键字，然后再block快结束的时候，把__block引用的变量设置为nil。<br/>
+<p>
     MyObject *obj = [[MyObject alloc]init];  
     obj.text = @"11111111111111";  
     TLog(@"obj",obj);  
@@ -37,6 +37,7 @@ NSMutableArray *mArray = [NSMutableArray arrayWithObjects:@"a",@"b",@"abc",nil];
     TLog(@"blockObj",blockObj);
     
     另外一点就是 __block 修饰的变量在 block 内外都是唯一的，要注意这个特性可能带来的隐患。
+    </p>
 (5)只有在使用local变量时，block会复制对象，且强引用指针指向的对象一次。其它如全局变量、static变量、block变量等，block不会拷贝指针,只会强引用指针指向的对象一次。
 (6)
 //先声明一个weak弱对象
