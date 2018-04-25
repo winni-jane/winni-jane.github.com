@@ -1,0 +1,10 @@
+如果需要每个属性或每个方法都去指定nonnull和nullable，是一件非常繁琐的事。苹果为了减轻我们的工作量，专门提供了两个宏：NS_ASSUME_NONNULL_BEGIN和NS_ASSUME_NONNULL_END。 <br/>
+在这两个宏之间的代码，所有简单指针对象都被假定为nonnull. <br/>
+<br/>
+NS_ASSUME_NONNULL_BEGIN <br/>
+@interface TestNullabilityClass ()  <br/>
+ @property (nonatomic, copy) NSArray * items;  <br/>
+ - (id)itemWithName:(nullable NSString *)name;  <br/>
+ <br/>
+@end <br/>
+NS_ASSUME_NONNULL_END <br/>
