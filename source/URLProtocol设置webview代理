@@ -1,0 +1,148 @@
+1. <br/>
+#import <Foundation/Foundation.h> <br/>
+<br/>
+@interface BFURLProtocol : NSURLProtocol <br/>
+ <br/>
+@end <br/>
+2. <br/>
+<br/>
+// <br/>
+//  BFURLProtocol.m  <br/>
+//  NFTesth5  <br/>
+// <br/>
+//  Created by bfmac on 16/10/11. <br/>
+//  Copyright © 2016年 inhouse. All rights reserved. <br/>
+// <br/>
+<br/>
+#import "BFURLProtocol.h"   <br/>
+<br/>
+static NSString *const TravinProtocolHandledKey = @"TravinProtocolHandledKey"; <br/>
+<br/>
+@interface BFURLProtocol()<NSURLSessionDelegate,NSURLSessionDataDelegate> <br/>
+<br/>
+@property (nonatomic, strong) NSURLSession *session;<br/>
+@property (nonatomic, strong) NSOperationQueue *operationQueue;<br/>
+@end <br/>
+<br/>
+<br/>
+@implementation BFURLProtocol <br/>
+<br/>
++ (BOOL)canInitWithRequest:(NSURLRequest *)request <br/>
+{ <br/>
+    NSLog(@"%@",request.URL);<br/>
+    //只处理http和https请求 <br/>
+    NSString *scheme = [[request URL] scheme];<br/>
+    if ( ([scheme caseInsensitiveCompare:@"http"] == NSOrderedSame || [scheme caseInsensitiveCompare:@"https"] == NSOrderedSame)) <br/>
+    { <br/>
+        //看看是否已经处理过了，防止无限循环 <br/>
+        if ([NSURLProtocol propertyForKey:TravinProtocolHandledKey inRequest:request]) { <br/>
+            return NO; <br/>
+        } <br/>
+        <br/>
+        return YES; <br/>
+    } <br/>
+    return NO; <br/>
+}  <br/>
+// 这个方法就是返回request,当然这里可以处理的需求有 : <br/>
+// 1,规范化请求头的信息 2, 处理DNS劫持,重定向App中所有的请求指向等 <br/>
++ (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request { <br/>
+    <br/>
+    return request; <br/>
+} <br/>
+
+
+// 这个方法主要用来判断两个请求是否是同一个请求， <br/>
+// 如果是，则可以使用缓存数据，通常只需要调用父类的实现即可,默认为YES,而且一般不在这里做事情 <br/>
++ (BOOL)requestIsCacheEquivalent:(NSURLRequest *)a toRequest:(NSURLRequest *)b <br/>
+{ <br/>
+    return [super requestIsCacheEquivalent:a toRequest:b]; <br/>
+} <br/>
+<br/>
+// 开始初始化一个NSURLProtocol抽象对象, 包含请求, cachedResponse , 和建立client <br/>
+- (instancetype)initWithRequest:(NSURLRequest *)request cachedResponse:(NSCachedURLResponse *)cachedResponse client: (id<NSURLProtocolClient>)client <br/>
+{<br/>
+    self = [super initWithRequest:request cachedResponse:cachedResponse client:client];<br/>
+    if (self) {<br/>
+    }<br/>
+    return self;<br/>
+}<br/>
+<br/>
+// 需要在该方法中发起一个请求，对于NSURLConnection来说，就是创建一个NSURLConnection，对于NSURLSession，就是发起一个NSURLSessionTask <br/>
+// 另外一点就是这个方法之后,会回调<NSURLProtocolClient>协议中的方法,<br/>
+- (void)startLoading<br/>
+{<br/>
+    NSMutableURLRequest *newRequest = [self.request mutableCopy];<br/>
+    // 给我们处理过的请求设置一个标识符, 防止无限循环,<br/>
+    [NSURLProtocol setProperty:@YES forKey:TravinProtocolHandledKey inRequest:newRequest];<br/>
+    <br/>
+    NSDictionary *proxyDict = @{<br/>
+                                @"HTTPEnable":@YES,<br/>
+                                (id)kCFStreamPropertyHTTPProxyHost:@"192.168.100.1",<br/>
+                                (id)kCFStreamPropertyHTTPProxyPort:@1080,<br/>
+                                (id)kCFStreamPropertySOCKSProxy:@"",<br/>
+                                @"HTTPSEnable":@YES,<br/>
+                                (id)kCFStreamPropertyHTTPSProxyHost:@"192.168.100.1",<br/>
+                                (id)kCFStreamPropertyHTTPSProxyPort:@1080,<br/>
+                                };<br/>
+    
+    <br/>
+    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];<br/>
+    configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;<br/>
+    configuration.connectionProxyDictionary = proxyDict;<br/>
+    self.operationQueue = [[NSOperationQueue alloc] init];<br/>
+    self.operationQueue.maxConcurrentOperationCount = 1;<br/>
+    self.session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:self.operationQueue]; // 创建connection <br/>
+    <br/>
+//    NSURLSessionDataTask *dataTask = [self.session dataTaskWithURL:self.request.URL]; <br/>
+//    <br/>
+//    [dataTask resume]; <br/>
+    [[self.session dataTaskWithRequest:self.request] resume]; <br/>
+<br/>
+} <br/>
+// 这个方法是和start是对应的 一般在这个方法中,断开Connection <br/>
+// 另外一点就是当NSURLProtocolClient的协议方法都回调完毕后,就会开始执行这个方法了 <br/>
+- (void)stopLoading <br/>
+{<br/>
+    // 断开连接 <br/>
+    <br/>
+    [self.session invalidateAndCancel]; <br/>
+    self.session = nil; <br/>
+    NSLog(@"断开连接"); <br/>
+    <br/>
+} <br/>
+#pragma mark - NSURLSessionDataDelegate <br/>
+-(void)URLSession:(NSURLSession*)session task:(NSURLSessionTask*)task willPerformHTTPRedirection:(NSHTTPURLResponse*)response newRequest:(NSURLRequest*)newRequest completionHandler:(void (^)(NSURLRequest*))completionHandler <br/>
+{ <br/>
+    NSMutableURLRequest *request = newRequest.mutableCopy; <br/>
+    [NSURLProtocol removePropertyForKey:TravinProtocolHandledKey inRequest:request];<br/>
+    [self.client URLProtocol:self wasRedirectedToRequest:request redirectResponse:response];<br/>
+    [task cancel];<br/>
+    [self.client URLProtocol:self didFailWithError:[NSError errorWithDomain:NSCocoaErrorDomain code:NSUserCancelledError userInfo:nil]];<br/>
+}<br/>
+-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error<br/>
+{<br/>
+    if (error) {<br/>
+        [self.client URLProtocol:self didFailWithError:error];<br/>
+    } else {<br/>
+        [self.client URLProtocolDidFinishLoading:self];<br/>
+    }<br/>
+}<br/>
+<br/>
+-(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler<br/>
+{<br/>
+    [self.client URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];<br/>
+    completionHandler(NSURLSessionResponseAllow);<br/>
+}<br/>
+<br/>
+-(void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data<br/>
+{<br/>
+    [self.client URLProtocol:self didLoadData:data];<br/>
+}<br/>
+<br/>
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+ willCacheResponse:(NSCachedURLResponse *)proposedResponse
+ completionHandler:(void (^)(NSCachedURLResponse *cachedResponse))completionHandler
+{
+    completionHandler(proposedResponse);
+}
+@end
