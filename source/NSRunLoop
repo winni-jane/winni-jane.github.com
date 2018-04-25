@@ -1,25 +1,25 @@
-1.
-    一条线程对应一个RunLoop,主线程的RunLoop默认已经创建好了, 而子线程的需要我们自己手动创建。
-        获取主线程对应的RunLoop对象mainRunLoop/CFRunLoopGetMain。
-        获取当前线程对应的RunLoop对象currentRunLoop/CFRunLoopGetCurrent。
-    RunLoop会一直循环检测，从线程start到线程end，检测检测到事件源（CFRunLoopSourceRef）执行处理函数，
-    首先会 产生通知，corefunction向线程添加runloopObservers来监听事件，并控制NSRunLoop里面线程的执行和休眠，
-    在有事情做 的时候使当前NSRunLoop控制的线程工作，没有事情做让当前NSRunLoop的控制的线程休眠。
-2.
-一个 RunLoop包含若干个Mode，每个Mode又包含若干个Source/Timer/Observer。
-每次RunLoop启动时，只能指定其中一个Mode，这个Mode被称作 CurrentMode。
-如果需要切换Mode，只能退出Loop，再重新指定一个Mode进入。
-3.
+1.<br/>
+    一条线程对应一个RunLoop,主线程的RunLoop默认已经创建好了, 而子线程的需要我们自己手动创建。<br/>
+        获取主线程对应的RunLoop对象mainRunLoop/CFRunLoopGetMain。<br/>
+        获取当前线程对应的RunLoop对象currentRunLoop/CFRunLoopGetCurrent。<br/>
+    RunLoop会一直循环检测，从线程start到线程end，检测检测到事件源（CFRunLoopSourceRef）执行处理函数，<br/>
+    首先会 产生通知，corefunction向线程添加runloopObservers来监听事件，并控制NSRunLoop里面线程的执行和休眠，<br/>
+    在有事情做 的时候使当前NSRunLoop控制的线程工作，没有事情做让当前NSRunLoop的控制的线程休眠。<br/>
+2.<br/>
+一个 RunLoop包含若干个Mode，每个Mode又包含若干个Source/Timer/Observer。<br/>
+每次RunLoop启动时，只能指定其中一个Mode，这个Mode被称作 CurrentMode。<br/>
+如果需要切换Mode，只能退出Loop，再重新指定一个Mode进入。<br/>
+3.<br/>
 
-    NSDefaultRunLoopMode：默认，空闲状态
-    UITrackingRunLoopMode：ScrollView滑动时
-    UIInitializationRunLoopMode：启动时
-    NSRunLoopCommonModes：Mode集合 Timer计时会被scrollView的滑动影响的问题可以通过将timer添加到NSRunLoopCommonModes来解决
-4.
+    NSDefaultRunLoopMode：默认，空闲状态<br/>
+    UITrackingRunLoopMode：ScrollView滑动时<br/>
+    UIInitializationRunLoopMode：启动时<br/>
+    NSRunLoopCommonModes：Mode集合 Timer计时会被scrollView的滑动影响的问题可以通过将timer添加到NSRunLoopCommonModes来解决<br/>
+4.<br/>
 应用层：NSTimer，UIEvent，Autorelease，NSObject(NSDelayedPerforming)，NSObject(NSThreadPerformAddition)，CADisplayLink，CATransition，CAAnimation，dispatch_get_main_queue()
-（GCD中dispatch到main queue的block会被dispatch到main RunLoop执行），NSPort，NSURLConnection，AFNetworking(这个第三方网络请求框架使用在开启新线程中添加自己的run loop监听事件)。
-5.
-AFN中，使用NSOperation+NSURLConnection并发模型都会面临NSURLConnection下载完成前线程退出导致NSOperation对象接收不到回调的问题。
-AFNetWorking解决这个问题的方法是单独起一个global thread，内置一个runloop，所有的connection都由这个runloop发起，回调也是它接收，不占用主线程，也不耗CPU资源。
- [runLoop addPort:[NSMachPort port] forMode:NSRunLoopCommonModes];
+（GCD中dispatch到main queue的block会被dispatch到main RunLoop执行），NSPort，NSURLConnection，AFNetworking(这个第三方网络请求框架使用在开启新线程中添加自己的run loop监听事件)。<br/>
+5.<br/>
+AFN中，使用NSOperation+NSURLConnection并发模型都会面临NSURLConnection下载完成前线程退出导致NSOperation对象接收不到回调的问题。<br/>
+AFNetWorking解决这个问题的方法是单独起一个global thread，内置一个runloop，所有的connection都由这个runloop发起，回调也是它接收，不占用主线程，也不耗CPU资源。<br/>
+ [runLoop addPort:[NSMachPort port] forMode:NSRunLoopCommonModes];<br/>
  
