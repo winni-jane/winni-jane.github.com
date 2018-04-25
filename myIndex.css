@@ -65,8 +65,10 @@ nav {
 }
 .navigation {
 	height: 64px;
-	background: url(image/navbg.png) no-repeat;
+	/*background: url(image/navbg.png) no-repeat;*/
+	background-color: #E9C2A6;
 	font-family: "微软雅黑";
+	border-radius:10px;
 }
 .menu {
 	position: relative;
@@ -83,13 +85,14 @@ nav {
 .menu li a {
 	display: block;
 	text-decoration: none;
-	color: #fff;
+	color: #5C4033;
 	font-size: 15px;
 	font-weight: bold
 }
 .menu ul {
 	position: relative;
-	background: url(image/menuMybg.png);
+	/*background: url(image/menuMybg.png);*/
+	background: #A8A8A8;
 	z-index: 300;
 }
 .menu li ul {
@@ -108,7 +111,7 @@ nav {
 	font-size: 14px
 }
 .menu li ul li a:hover {
-	background: #000
+	background: #fff;
 }
 
 /*内容*/
@@ -133,7 +136,7 @@ nav {
 	border-radius:50px;
 }
 
-.container {
+#container {
 	/*background: rgba(77, 123, 175, 0.58);*/
 	background: #FFFCEC;
 	overflow: hidden;
@@ -144,6 +147,9 @@ nav {
 	border-bottom: #d2d2d2 1px solid;
 	margin-bottom: 100px;
 	height: 700px;
+	overflow:auto;
+	padding: 20px;
+	font-size: 14px;
 }
 
 .list {
@@ -157,19 +163,20 @@ nav {
 	width: 200px;
 	height: 500px;
 	border:15px solid transparent; 
+	overflow:auto;
 }
 
-#round
+
+#roundR
 {
-	-moz-border-image:url(image/listBg.png) 30 30 round;	/* Old Firefox */
-	-webkit-border-image:url(image/listBg.jpg) 30 30 round;	/* Safari and Chrome */
-	-o-border-image:url(image/listBg.jpg) 30 30 round;		/* Opera */
-	border-image:url(image/listBg.jpg) 30 30 round;
-}
+	border-color: #856363;
+	border-width: 7px;
+	border-radius: 7px;
 
+}
 .listul li
 {
-	background: url(image/rec_more.png) no-repeat;
+	/*background: url(image/rec_more.png) no-repeat;*/
 	background-size: 13px 25px;
 	padding-left: 15px;
 	
