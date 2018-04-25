@@ -4,3 +4,4 @@
 而对于已经在堆上的block，也不要指望通过copy进行“真正的copy”，因为其引用到的变量仍然会是同一份，在这个意义上看，这里的copy和retain的作用已经非常类似。
 3.在类中，如果有block对象作为property，可以声明为copy。
 4. 在block中调用self会引起循环引用，但是在block中需要对weakSelf进行strong,保证代码在执行到block中，self不会被释放，当block执行完后，会自动释放该strongSelf .
+
