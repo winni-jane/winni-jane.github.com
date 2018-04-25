@@ -139,10 +139,10 @@ static NSString *const TravinProtocolHandledKey = @"TravinProtocolHandledKey"; <
     [self.client URLProtocol:self didLoadData:data];<br/>
 }<br/>
 <br/>
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
- willCacheResponse:(NSCachedURLResponse *)proposedResponse
- completionHandler:(void (^)(NSCachedURLResponse *cachedResponse))completionHandler
-{
-    completionHandler(proposedResponse);
-}
-@end
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask <br/>
+ willCacheResponse:(NSCachedURLResponse *)proposedResponse <br/>
+ completionHandler:(void (^)(NSCachedURLResponse *cachedResponse))completionHandler <br/>
+{ <br/>
+    completionHandler(proposedResponse); <br/>
+} <br/>
+@end <br/>
