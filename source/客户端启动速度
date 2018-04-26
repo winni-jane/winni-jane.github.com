@@ -1,3 +1,4 @@
+<pre>
 1.客户端启动速度：
 t(App总启动时间) = t1(main()之前的加载时间) + t2(main()之后的加载时间)。
 main()调用之前的加载过程
@@ -26,3 +27,4 @@ edit schme中run—》arguments —》environment variables 下面添加dyld_PRI
 	(4.)	梳理应用启动时发送的所有网络请求，是否可以统一在异步线程请求 
 
 原文：http://mp.weixin.qq.com/s/wBZFv_-l7MDtTdofIxS13A
+</pre>
