@@ -1,3 +1,4 @@
+<pre>
 1.UDID
 Unique Device Identifier 由40个字符的字母和数字组成。在ios5中可以获取，后来被禁止了。
 2.UUID
@@ -61,7 +62,7 @@ idfv的值是一定能取到的。所以非常适合于作为内部用户行为�
 
  
  
- 
+ </pre>
  
  
  
