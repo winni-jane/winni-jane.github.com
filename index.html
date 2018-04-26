@@ -3,12 +3,9 @@
 <html>
 
 <head>
-<!-- <script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
-<script src="http://apps.bdimg.com/libs/angular-route/1.3.13/angular-route.js"></script> -->
-
 <script src="//apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
+
 <script src="//apps.bdimg.com/libs/angular-route/1.3.13/angular-route.js"></script>
-  
 <title>莫凡小青的技术博客</title>
 
 <link rel="stylesheet" type="text/css" href="myIndex.css">
@@ -58,13 +55,14 @@ angular.module('ngRouteExample', ['ngRoute'])
         redirectTo: '/home'
     });
 });
+
 </script>
 <!--  -->
 </head>
 
 
 
-<body ng-app="ngRouteExample" class="ng-scope">
+<body ng-app="ngRouteExample" class="ng-scope" onload = "testBG('0')">
 
 <!-- h5新标签 定义页眉 -->
 
@@ -72,7 +70,7 @@ angular.module('ngRouteExample', ['ngRoute'])
 
 <div class="contenttop">
 
-<div class="logo f_l">我的技术博客</div>
+<div class="logo f_l">莫凡小青的技术博客</div>
 
 <div class="blank"></div>
 
@@ -80,21 +78,11 @@ angular.module('ngRouteExample', ['ngRoute'])
 
 <div class="navigation">
 
-<ul class="menu">
+<ul class="menu" id="menu">
 
-<li><a href="#/home">ios</a></li>
+<li><a href="#/home" onclick="testBG('0')">ios</a></li>
 
-<li><a href="#/about">其他</a>
-
-<ul>
-
-<li><a href="#">数据库</a></li>
-
-<li><a href="#">OC</a></li>
-
-</ul>
-
-</li>
+<li><a href="#/about" onclick="testBG('1')">数据库</a></li>
 
 </ul>
 
@@ -102,26 +90,7 @@ angular.module('ngRouteExample', ['ngRoute'])
 
 </nav>
 </div>
-<SCRIPT type=text/javascript>
 
-// Navigation Menu
-
-$(function() {
-
-$(".menu ul").css({display: "none"}); // Opera Fix
-
-$(".menu li").hover(function(){
-
-$(this).find('ul:first').css({visibility: "visible",display: "none"}).slideDown("normal");
-
-},function(){
-
-$(this).find('ul:first').css({visibility: "hidden"});
-
-});
-
-});
-</SCRIPT> 
 
 
 
@@ -143,12 +112,11 @@ $(this).find('ul:first').css({visibility: "hidden"});
 <!-- 右边显示列表 -->
 <div class="list f_r" id="roundR">
 
-<!--  -->
-<!-- <div ng-app="ngRouteExample" class="ng-scope"> -->
+
 <div >
 <script type="text/ng-template" id="embedded.home.html">
 
-<ul class="listul">
+<ul class="listul" >
 
 <li ng-repeat="x in list">
 
@@ -186,13 +154,30 @@ $(this).find('ul:first').css({visibility: "hidden"});
 
 
 
+<!-- nav 点击后要变化的背景颜色 -->
+<script type="text/javascript">  
+function  testBG(value){
 
+  var urlstr = location.href;  
+  var urlstatus=false;  
+   
+    if (value == "0") {  
+      $("#menu a").eq(0).addClass('cur'); 
+      $("#menu a").eq(1).removeClass('cur'); 
+       urlstatus = true;  
 
-
-
-
-
+    } else {  
+      $("#menu a").eq(0).removeClass('cur'); 
+      $("#menu a").eq(1).addClass('cur'); 
+       urlstatus = true; 
+    }  
+     if (!urlstatus) {$("#menu a").eq(0).addClass('cur'); } 
   
+}
+  
+
+</script>  
+
 
 
 
