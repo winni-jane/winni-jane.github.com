@@ -1,3 +1,4 @@
+<pre>
 1.遵循NSCopying和NSMutableCopying协议。copy(浅拷贝)  mutablecopy（深拷贝）
 2.copy：
 -(id) copyWithZone:(NSZone *)zone //创建一个复制的接收器,储存zone   
@@ -50,6 +51,6 @@ mutableCopy方法会调用- (id)mutableCopyWithZone:(NSZone *)zone，得到可�
     NSArray* trueDeepCopyArray = [NSKeyedUnarchiver unarchiveObjectWithData://是真正意义上的深拷贝
     [NSKeyedArchiver archivedDataWithRootObject: array]];
 
-
+</pre>
 
 
