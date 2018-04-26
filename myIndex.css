@@ -176,8 +176,9 @@ nav {
 }
 .listul li
 {
-	/*background: url(image/rec_more.png) no-repeat;*/
-	background-size: 13px 25px;
+	background: url(image/listnum.png) no-repeat;
+	background-size: 10px 10px;
+	background-position:center left;
 	padding-left: 15px;
 	
 }
