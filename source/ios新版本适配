@@ -1,3 +1,4 @@
+<pre>
 ios新版本适配:
 1.ios9:
 网络适配_改用更安全的HTTPS;
@@ -22,3 +23,4 @@ UICollectionViewCell的的优化;
 在iOS 10 中, UIRefreshControl可以直接在UICollectionView和UITableView中使用,并且脱离了UITableViewController.现在RefreshControl是UIScrollView的一个属性;
 http://www.cnblogs.com/HJQ2016/p/5866582.html
 http://www.cnblogs.com/xiaopin/p/5942987.html
+</pre>
