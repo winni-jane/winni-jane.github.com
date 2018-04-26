@@ -1,3 +1,4 @@
+<pre>
 1.[_walker addObserver:self
             forKeyPath:@"age"
                 options:NSKeyValueObservingOptionNew
@@ -58,3 +59,4 @@ AFN中应用：
     return [super keyPathsForValuesAffectingValueForKey:key];
 }
 
+</pre>
