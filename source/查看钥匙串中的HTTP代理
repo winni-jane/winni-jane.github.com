@@ -1,3 +1,4 @@
+<pre>
 //         [request setValue:@"10.1.1.235" forHTTPHeaderField:@"Host"];
 //         [request setValue:@"3128" forHTTPHeaderField:@"Port"];
 //        NSLog(@"%@",request.allHTTPHeaderFields);
@@ -48,3 +49,4 @@
         }
         //
         
+</pre>
