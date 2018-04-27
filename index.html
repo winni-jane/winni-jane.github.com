@@ -6,6 +6,7 @@
 <script src="//apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
 
 <script src="//apps.bdimg.com/libs/angular-route/1.3.13/angular-route.js"></script>
+
 <title>莫凡小青的技术博客</title>
 
 <link rel="stylesheet" type="text/css" href="myIndex.css">
@@ -59,7 +60,35 @@ angular.module('ngRouteExample', ['ngRoute'])
 })
 .controller('AboutController', function ($scope, $route, $http) { 
   $scope.$route = $route;
+  //数据库界面的
+   $http.get("https://api.github.com/repos/winni-jane/winni-jane.github.com/contents/dataBase?ref=master")
+  .success(function (response) {$scope.list= response;
+      
 
+    $http.get(response[0].download_url)
+  .success(function (response) {
+    document.getElementById("container").innerHTML = response;
+ 
+  var bb =document.querySelectorAll(".listul li:first-child a"); 
+  bb[0].className = 'cur'; 
+
+
+  });  
+ });
+
+
+//内容展示
+  $scope.showContent = function (download_url,event) {
+
+    $(event.target).addClass("cur"); //jQuery的方法
+    $(event.target).parent().siblings().find("a").removeClass("cur");
+
+    $http.get(download_url)
+  .success(function (response) {
+    document.getElementById("container").innerHTML = response;
+  });                                                              
+}
+  //
 })
 .config(function ($routeProvider) {
     $routeProvider.
@@ -151,7 +180,11 @@ angular.module('ngRouteExample', ['ngRoute'])
 
 <!-- about -->
   <script type="text/ng-template" id="embedded.about.html">
-      <h1> 知识分类 </h1>
+      <ul class="listul" id ="listul">
+        <li ng-repeat="x in list">
+         <a  ng-click = "showContent(x.download_url,$event)"> {{ x.name }} </a>
+        </li>
+      </ul>
    
   </script>
 
