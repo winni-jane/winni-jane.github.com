@@ -2,7 +2,7 @@
 <html>
  <head> 
  	<title>Markdown.js</title> 
- 	<script type="text/javascript" src="showdown-master/dist/showdown.min.js"></script> 
+ 	<script type="text/javascript" src="../showdown-master/dist/showdown.min.js"></script> 
  </head> 
  <style> 
   blockquote { border-left:#eee solid 5px; padding-left:20px; } 
