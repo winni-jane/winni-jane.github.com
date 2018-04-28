@@ -3,7 +3,7 @@
 	padding: 0
 }
 body {
-	font: 12px  Arial, Helvetica, sans-serif;
+	font:   Arial, Helvetica, sans-serif;
 	color: #666666;
 	background: url(image/bg.png);
 }
@@ -15,7 +15,6 @@ ul, ol, li {
 	list-style: none;
 }
 h1, h2, h3, h4, h5, h6 {
-	font-size: 100%;
 	font-weight: normal;
 }
 a {
@@ -92,7 +91,7 @@ nav {
 }
 .menu ul {
 	position: relative;
-	/*background: url(image/menuMybg.png);*/
+
 	background: #A8A8A8;
 	z-index: 300;
 }
@@ -152,7 +151,7 @@ nav {
 	height: 700px;
 	overflow:auto;
 	padding: 20px;
-	font-size: 14px;
+	/*font-size: 14px;*/
 }
 
 .list {
@@ -183,12 +182,13 @@ nav {
 	background-size: 10px 10px;
 	background-position:center left;
 	padding-left: 15px;
+	color: #5C4033;
 	
 }
 
 .listul li a:link,a:visited
 {
-	color: gray;
+	color:  gray;
 
 }
 .listul li a:hover {color: #FF00FF} 
