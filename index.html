@@ -69,8 +69,49 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
 })
 .controller('AboutController', function ($scope, $route, $http) { 
   $scope.$route = $route;
-  //数据结构界面的
+  //数据库界面的
    $http.get("https://api.github.com/repos/winni-jane/winni-jane.github.com/contents/dataBase?ref=master")
+  .success(function (response) {$scope.list= response;
+      
+
+    $http.get(response[0].download_url)
+  .success(function (response) {
+
+    var converter = new showdown.Converter(); 
+    var html = converter.makeHtml(response); 
+    document.getElementById("container").innerHTML = html; 
+    // document.getElementById("container").innerHTML = response;
+ 
+  var bb =document.querySelectorAll(".listul li:first-child a"); 
+  bb[0].className = 'cur'; 
+
+
+  });  
+ });
+
+
+//内容展示
+  $scope.showContent = function (download_url,event) {
+
+    $(event.target).addClass("cur"); //jQuery的方法
+    $(event.target).parent().siblings().find("a").removeClass("cur");
+
+    $http.get(download_url)
+  .success(function (response) {
+    var converter = new showdown.Converter(); 
+    var html = converter.makeHtml(response); 
+    document.getElementById("container").innerHTML = html; 
+
+    // document.getElementById("container").innerHTML = response;
+  });                                                              
+}
+  //
+})
+
+.controller('mySwiftController', function ($scope, $route, $http) { 
+  $scope.$route = $route;
+  //Swift界面的
+   $http.get("https://api.github.com/repos/winni-jane/winni-jane.github.com/contents/mySwift?ref=master")
   .success(function (response) {$scope.list= response;
       
 
@@ -117,6 +158,10 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
         templateUrl: 'embedded.about.html',
         controller: 'AboutController'
     }).
+    when('/mySwift', {
+        templateUrl: 'embedded.mySwift.html',
+        controller: 'mySwiftController'
+    }).
     otherwise({
         redirectTo: '/home'
     });
@@ -149,7 +194,7 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
 <li><a href="#/home" onclick="testBG('0')">ios</a></li>
 
 <li><a href="#/about" onclick="testBG('1')">数据结构</a></li>
-
+<li><a href="#/mySwift" onclick="testBG('2')">swift</a></li>
 </ul>
 
 </div>
@@ -205,6 +250,16 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
    
   </script>
 
+<!-- mySwift -->
+  <script type="text/ng-template" id="embedded.mySwift.html">
+      <ul class="listul" id ="listul">
+        <li ng-repeat="x in list">
+         <a  ng-click = "showContent(x.download_url,$event)"> {{ x.name }} </a>
+        </li>
+      </ul>
+   
+  </script>
+
 <div> 
 
       
@@ -234,11 +289,20 @@ function  testBG(value){
     if (value == "0") {  
       $("#menu a").eq(0).addClass('cur'); 
       $("#menu a").eq(1).removeClass('cur'); 
+      $("#menu a").eq(2).removeClass('cur'); 
        urlstatus = true;  
 
-    } else {  
+    } 
+    else if (value == "1"){  
       $("#menu a").eq(0).removeClass('cur'); 
       $("#menu a").eq(1).addClass('cur'); 
+       $("#menu a").eq(2).removeClass('cur'); 
+       urlstatus = true; 
+    } 
+    else {  
+      $("#menu a").eq(0).removeClass('cur'); 
+      $("#menu a").eq(1).removeClass('cur'); 
+      $("#menu a").eq(2).addClass('cur'); 
        urlstatus = true; 
     }  
      if (!urlstatus) {$("#menu a").eq(0).addClass('cur'); } 
@@ -250,11 +314,17 @@ function testBgFresh()
   var urlstr = location.href; 
   console.log(urlstr);
   var pos =  urlstr.indexOf('home');
+  var pos1 =  urlstr.indexOf('about');
   if (pos !== -1) {
        testBG('0');
-  }else{
+  }
+  else if (pos1 !== -1){
 
        testBG('1');
+  }
+  else{
+
+       testBG('2');
   }
 
 
