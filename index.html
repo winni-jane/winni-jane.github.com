@@ -70,7 +70,7 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
 .controller('AboutController', function ($scope, $route, $http) { 
   $scope.$route = $route;
   //数据库界面的
-   $http.get("https://api.github.com/repos/winni-jane/winni-jane.github.com/contents/dataBase?ref=master")
+   $http.get("https://api.github.com/repos/winni-jane/winni-jane.github.com/contents/DataStructure?ref=master")
   .success(function (response) {$scope.list= response;
       
 
