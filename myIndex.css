@@ -153,7 +153,9 @@ nav {
 	padding: 20px;
 	/*font-size: 14px;*/
 }
-
+ code { color:#00009C; background: #F6F6F6; } } 
+ blockquote { border-left:#eee solid 5px; padding-left:20px; } 
+ ul li { line-height: 20px; } 
 .list {
 	font-family: "微软雅黑";
 
