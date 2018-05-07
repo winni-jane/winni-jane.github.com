@@ -1,0 +1,135 @@
+
+
+import UIKit
+
+class ViewController: UIViewController {
+
+    var text = TestView()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        var myVariable = 42  //初始值
+        myVariable = 24
+        print(myVariable)
+        let myConstant = 42
+        print(myConstant)
+        let label = "The width is"
+        let width = 94
+        let widthLabel = label+String(width)
+        print(widthLabel)
+        var welcomeMessage :String  //类型标注
+        var red, green, blue: Double
+        welcomeMessage = "Hello"
+        print(welcomeMessage)
+        //        你可以用任何你喜欢的字符作为常量和变量名，包括 Unicode 字符：
+        let π = 3.14159
+        let 你好 = "你好世界"
+        let 🐶🐮 = "dogcow"
+        
+        //        print(_:separator:terminator:) 是一个用来输出一个或多个值到适当输出区的全局函数。默认情况下，该函数通过添加换行符来结束当前行。如果不想换行，可以传递一个空字符串给 terminator 参数--例如，print(someValue, terminator:"") 。
+        print("The current value of friendlyWelcome is \(welcomeMessage)")
+        
+        //        有一种情况下必须要用分号，即你打算在同一行内写多条独立的语句 
+        let cat = "🐱"; print(cat)
+        
+        //        Double表示64位浮点数。 Float表示32位浮点数。Double精确度很高，至少有15位数字，而Float只有6位数字。
+                let pi = 3.14159
+        // pi 会被推测为 Double 类型 当推断浮点数的类型时，Swift 总是会选择 Double 而不是Float。
+        
+        //        一个二进制数，前缀是0b,一个八进制数，前缀是0o, 一个十六进制数，前缀是0x
+        
+        //        十进制浮点数也可以有一个可选的指数（exponent)，通过大写或者小写的 e 来指定；十六进制浮点数必须有一个指数，通过大写或者小写的 p 来指定。1.25e-2 表示 1.25 × 10^-2，等于 0.0125。0xFp2 表示 15 × 2^2，等于 60.0。
+        //        整数和浮点数都可以添加额外的零并且包含下划线，并不会影响字面量：let oneMillion = 1_000_000
+        typealias AudioSample = UInt16  //类型别名
+        //        布尔（Boolean）类型，true 和 false
+        //        元组（tuples）把多个值组合成一个复合值。元组内的值可以是任意类型，并不要求是相同类型。
+        let http404Error = (404, "Not Found")
+        // http404Error 的类型是 (Int, String)，值是 (404, "Not Found")
+        print(http404Error)
+        //        可选绑定：
+        let possibleNumber = "123"
+        if let actualNumber = Int(possibleNumber) {
+            print("\'\(possibleNumber)\' has an integer value of \(actualNumber)")  //不需要再使用 !
+        } else {
+            print("\'\(possibleNumber)\' could not be converted to an integer")
+        }
+        if let firstNumber = Int("4"), let secondNumber = Int("42"), firstNumber < secondNumber && secondNumber < 100 {
+                    print("\(firstNumber) < \(secondNumber) < 100")
+        } //  只要有任意一个可选绑定的值为nil，或者任意一个布尔条件为false，则整个if条件判断为false，
+        
+        
+        
+        //Swift中，nil不是指针而是一个特定类型的空值。任何类型的可选变量都可以被设为nil，不光是指针。
+        //如var view:UIView。当我的整个应用中或整个类中不可能存在view = nil的情况时可以设置为var view:UIView! 否则就可声明为var view:UIView?
+        //可选类型:
+        let possibleString: String? = "An optional string."
+        let forcedString: String = possibleString! // 需要感叹号来获取值
+        //隐式解析可选类型   解包
+        let assumedString: String! = "An implicitly unwrapped optional string."
+        let implicitString: String = assumedString  // 不需要感叹号
+        
+        print(forcedString)
+        print(implicitString)
+        
+        
+        //错误处理
+        /*
+         Objective C的异常处理的效率很低，通常不用来做错误处理,而且Objective C也没有类似的throw关键字来表明一个方法会抛出异常，编码起来很难判断是否需要try-cache。
+         Swift采用Error协议来表示错误类型，通过do-try-catch的方式来处理可能会抛出异常的代码。
+         */
+        func makeASandwich() throws {
+            // ...
+        }
+        
+        //        do {
+        //            try makeASandwich()
+        //            //...
+        //        } catch SandwichError.outOfCleanDishes {
+        //            //...
+        //        } catch SandwichError.missingIngredients(let ingredients) {
+        //            //...
+        //        }
+        
+        
+        
+        
+        //断言
+        let age = 3
+        assert(age >= 0, "A person's age cannot be less than zero")
+        // 因为 age < 0，所以断言会触发
+        //        当代码使用优化编译的时候，断言将会被禁用，例如在 Xcode 中，使用默认的 target Release 配置选项来 build 时，断言会被禁用。
+        
+        //2.
+        //        在对负数 b 求余时，b 的符号会被忽略。这意味着 a % b 和 a % -b 的结果是相同的。
+        
+        //      Swift 也提供恒等（===）和不恒等（!==）这两个比较符来判断两个对象是否引用同一个对象实例。更多细节在类与结构。
+        
+        //        空合运算符:
+        //        空合运算符（a ?? b）代表 a != nil ? a! : b
+        
+        
+        /*
+         闭区间运算符：a...b
+                for iCount in 512...1024{
+                        //从512遍历到1024（包括1024）
+                }
+         半闭区间运算符：a..<b
+                for i in (0..<10).reversed() {
+                        print(i)
+                }
+         */
+        
+        
+    
+
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+
+}
+
