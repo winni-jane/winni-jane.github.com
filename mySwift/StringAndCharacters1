@@ -135,4 +135,10 @@ These are the same.
         //打印结果为：[(offset: 0, element: "H"), (offset: 1, element: "e"), (offset: 2, element: "l"), (offset: 3, element: "l"), (offset: 4, element: "o"), (offset: 5, element: ","), (offset: 6, element: " "), (offset: 7, element: "p"), (offset: 8, element: "l"), (offset: 9, element: "a"), (offset: 10, element: "y"), (offset: 11, element: "g"), (offset: 12, element: "r"), (offset: 13, element: "o"), (offset: 14, element: "u"), (offset: 15, element: "n"), (offset: 16, element: "d")]
         print(Array(zip(1..., str)))
         //打印结果为：[(1, "H"), (2, "e"), (3, "l"), (4, "l"), (5, "o"), (6, ","), (7, " "), (8, "p"), (9, "l"), (10, "a"), (11, "y"), (12, "g"), (13, "r"), (14, "o"), (15, "u"), (16, "n"), (17, "d")]
-        
+           
+        let isPre = "145632".hasPrefix(",") //判断字符串是否以","开头，
+        debugPrint(isPre)
+        let isSuff = "145632".hasSuffix(",") //// 判断字符串是否以","结尾
+        debugPrint(isSuff)
+        debugPrint(1...5) //CountableClosedRange(1...5)
+        print(1...5)  //1...5
