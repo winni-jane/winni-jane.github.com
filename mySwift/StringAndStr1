@@ -1,51 +1,65 @@
-      //1.字符串和字符：
-    //初始化空字符串
-    var emptyString = ""
-    // 空字符串字面量
-    var anotherEmptyString = String()  // 初始化方法
-    // 两个字符串均为空并等价。
+        /*
+         注意
+         
+         Swift 的 String 类型与 Foundation NSString 类进行了无缝桥接。Foundation 也可以对 String 进行扩展，暴露在 NSString 中定义的方法。 这意味着，如果你在 String 中调用这些 NSString 的方法，将不用进行转换。
+         
+
+         */
+        //1.字符串和字符：
+        //初始化空字符串
+        var emptyString = ""
+        // 空字符串字面量
+        var anotherEmptyString = String()  // 初始化方法
+        // 两个字符串均为空并等价。
         emptyString = "123"
         anotherEmptyString = "456"
         print(anotherEmptyString) //"456"
-    if emptyString.isEmpty {
-    print("Nothing to see here")
-    
-    }
-    //字符
-    for character in "Dog!🐶".characters {
-    print(character)
-    }
-
-//    字符串可以通过传递一个值类型为Character的数组作为自变量来初始化：
-    let catCharacters: [Character] = ["C", "a", "t", "!", "🐱"]
-    let catString = String(catCharacters)
-    print(catString) //"Cat!🐱"
-    
-//        连接字符串和字符
+        if emptyString.isEmpty {
+            print("Nothing to see here")
+            
+        }
+        /*字符 swift2
+        for character in "Dog!🐶".characters {
+            print(character)
+        }*/
+        //swift3
+        for character in "Dog!🐶" {
+            print(character)
+        }
+        //    字符串可以通过传递一个值类型为Character的数组作为自变量来初始化：
+        let catCharacters: [Character] = ["C", "a", "t", "!", "🐱"]
+        let catString = String(catCharacters)
+        print(catString) //"Cat!🐱"
+        
+        //        连接字符串和字符
         let string1 = "hello"
         let string2 = " there"
         var welcome = string1 + string2
         // welcome 现在等于 "hello there"
         
         
-//    您可以用append()方法将一个字符附加到一个字符串变量的尾部
+        //    您可以用append()方法将一个字符附加到一个字符串变量的尾部
         let exclamationMark: Character = "!"
         welcome.append(exclamationMark)
         // welcome 现在等于 "hello there!"
         
-//        字符串插值
+        //        字符串插值
         let multiplier = 3
         let message = "\(multiplier) times 2.5 is \(Double(multiplier) * 2.5)"
         // message 是 "3 times 2.5 is 7.5"
+        print(message)
         
         
-        
-        
-    let unusualMenagerie = "Koala 🐨, Snail 🐌, Penguin 🐧, Dromedary 🐪"
-    print("unusualMenagerie has \(unusualMenagerie.characters.count) characters")//计算字符数量 另外需要注意的是通过characters属性返回的字符数量并不总是与包含相同字符的NSString的length属性相同 NSString 的 length 属性是利用 UTF-16 表示的十六位代码单元数字，而不是 Unicode 可扩展的字符群集。
-    
-//        字符串索引
-//        每一个 String 值都有一个关联的索引（index）类型，String.Index，它对应着字符串中的每一个 Character 的位置。使用 startIndex 属性可以获取一个 String 的第一个 Character 的索引。使用 endIndex 属性可以获取最后一个 Character 的后一个位置的索引。因此，endIndex 属性不能作为一个字符串的有效下标。如果 String 是空串，startIndex 和 endIndex 是相等的。
+        /*swift2
+        let unusualMenagerie = "Koala 🐨, Snail 🐌, Penguin 🐧, Dromedary 🐪"
+        print("unusualMenagerie has \(unusualMenagerie.characters.count) characters")//计算字符数量 另外需要注意的是通过characters属性返回的字符数量并不总是与包含相同字符的NSString的length属性相同 NSString 的 length 属性是利用 UTF-16 表示的十六位代码单元数字，而不是 Unicode 可扩展的字符群集。
+        */
+        //swift3
+        let unusualMenagerie = "Koala 🐨, Snail 🐌, Penguin 🐧, Dromedary 🐪"
+        print("unusualMenagerie has \(unusualMenagerie.count) characters")
+        // 打印输出 "unusualMenagerie has 40 characters"
+        //        字符串索引
+        //        每一个 String 值都有一个关联的索引（index）类型，String.Index，它对应着字符串中的每一个 Character 的位置。使用 startIndex 属性可以获取一个 String 的第一个 Character 的索引。使用 endIndex 属性可以获取最后一个 Character 的后一个位置的索引。因此，endIndex 属性不能作为一个字符串的有效下标。如果 String 是空串，startIndex 和 endIndex 是相等的。
         
         let greeting = "Guten Tag!"
         greeting[greeting.startIndex]  // G
@@ -53,30 +67,72 @@
         greeting[greeting.index(after: greeting.startIndex)]  // u
         let index = greeting.index(greeting.startIndex, offsetBy: 7)
         greeting[index]  // a
-    
-//    使用 characters 属性的 indices 属性会创建一个包含全部索引的范围(Range)，用来在一个字符串中访问单个字符。
+        
+        //    使用 characters 属性的 indices 属性会创建一个包含全部索引的范围(Range)，用来在一个字符串中访问单个字符。
+        /* swift2
         for index in greeting.characters.indices {
+            print("\(greeting[index]) ", terminator: "")
+        } */
+        for index in greeting.indices {
             print("\(greeting[index]) ", terminator: "")
         }
         // 打印输出 "G u t e n   T a g ! "
         
-//        插入和删除
+        //        插入和删除
         var welcome1 = "hello"
         welcome1.insert("!", at: welcome1.endIndex)
         // welcome1 变量现在等于 "hello!"
-        
+        /* swift2
         welcome1.insert(contentsOf:" there".characters, at: welcome1.index(before: welcome1.endIndex))
+ */
+        welcome1.insert(contentsOf:" there", at: welcome1.index(before: welcome1.endIndex))
         // welcome1 变量现在等于 "hello there!"
         
         welcome1.remove(at: welcome1.index(before: welcome1.endIndex))
         // welcome1 现在等于 "hello there"
         
-        let range = welcome.index(welcome1.endIndex, offsetBy: -6)..<welcome1.endIndex
+        let range = welcome1.index(welcome1.endIndex, offsetBy: -6)..<welcome1.endIndex
         welcome1.removeSubrange(range)
         // welcome1 现在等于 "hello"
         
-//        hasPrefix(_:)和hasSuffix(_:)方法都是在每个字符串中逐字符比较其可扩展的字符群集是否标准相等，
-        //当你从字符串中获取一个子字符串 —— 例如，使用下标或者 prefix(_:) 之类的方法 —— 就可以得到一个 SubString 的实例. wift 里的 SubString 绝大部分函数都跟 String 一样，意味着你可以使用同样的方式去操作 SubString 和 String。然而，跟 String 不同的是，你只有在短时间内需要操作字符串时，才会使用 SubString。当你需要长时间保存结果时，就把 SubString 转化为 String 的实例.
 
-多行文字：
-let info = """
+        //当你从字符串中获取一个子字符串 —— 例如，使用下标或者 prefix(_:) 之类的方法 —— 就可以得到一个 SubString 的实例. wift 里的 SubString 绝大部分函数都跟 String 一样，意味着你可以使用同样的方式去操作 SubString 和 String。然而，跟 String 不同的是，你只有在短时间内需要操作字符串时，才会使用 SubString。当你需要长时间保存结果时，就把 SubString 转化为 String 的实例.
+        
+//        多行文字：这就意味着字符串开启引号之后（"""）或者结束引号（"""）之前都没有换行符号
+        let singleLineString = "These are the same."
+        let multilineString = """
+These are the same.
+"""
+        print(singleLineString)
+        print(multilineString)
+        
+        
+        let greeting21 = "Hello, world!"
+        let index21 = greeting21.index(of: ",") ?? greeting21.endIndex
+        let beginning21 = greeting21[..<index21]
+        // beginning21 的值为 "Hello"
+        
+        // 把结果转化为 String 以便长期存储。
+        let newString = String(beginning21)
+        print(newString)
+        //greeting21 是一个 String，意味着它在内存里有一片空间保存字符集。而由于 beginning21 是 greeting21 的 SubString，它重用了 greeting21 的内存空间。相反，newString 是一个 String —— 它是使用 SubString 创建的，拥有一片自己的内存空间。
+        let str = "Hello, playground"
+        // Swift3.0
+        let index0 = str.index(of: " ")!
+        let greeting0 = str[str.startIndex ..< index0]
+        let index1 = str.index(index0, offsetBy: 1) // index0 下标 +1
+        let name = str[index1 ..< str.endIndex]
+        print(greeting0)
+        print(name)
+        // Swift4.0
+        let index11 = str.index(of: " ")!
+        let greeting11 = str.prefix(upTo: index11)
+        let index12 = str.index(index11, offsetBy: 1)
+        let name1 = str.suffix(from: index12)
+        print(greeting11)
+        print(name1)
+        print(Array(str.enumerated()))
+        //打印结果为：[(offset: 0, element: "H"), (offset: 1, element: "e"), (offset: 2, element: "l"), (offset: 3, element: "l"), (offset: 4, element: "o"), (offset: 5, element: ","), (offset: 6, element: " "), (offset: 7, element: "p"), (offset: 8, element: "l"), (offset: 9, element: "a"), (offset: 10, element: "y"), (offset: 11, element: "g"), (offset: 12, element: "r"), (offset: 13, element: "o"), (offset: 14, element: "u"), (offset: 15, element: "n"), (offset: 16, element: "d")]
+        print(Array(zip(1..., str)))
+        //打印结果为：[(1, "H"), (2, "e"), (3, "l"), (4, "l"), (5, "o"), (6, ","), (7, " "), (8, "p"), (9, "l"), (10, "a"), (11, "y"), (12, "g"), (13, "r"), (14, "o"), (15, "u"), (16, "n"), (17, "d")]
+        
