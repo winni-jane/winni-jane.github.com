@@ -1,0 +1,173 @@
+//控制流
+    func setsSome() {
+        let names = ["Anna", "Alex", "Brian", "Jack"]
+        for name in names {
+            print("Hello, \(name)!")
+        }
+        let numberOfLegs = ["spider": 8, "ant": 6, "cat": 4]
+        for (animalName, legCount) in numberOfLegs {
+            print("\(animalName)s have \(legCount) legs")
+        }
+        
+        let minuteInterval = 5
+        let minutes = 60
+        //使用 stride(from:to:by:) 函数跳过不需要的标记。
+        for tickMark in stride(from: 0, to: minutes, by: minuteInterval) {
+            // 每5分钟渲染一个刻度线（0, 5, 10, 15 ... 45, 50, 55）
+        }
+        
+        //Swift 还提供了for-in循环，用来更简单地遍历数组（array），字典（dictionary），区间（range），字符串（string）和其他序列类型。
+        //如果你不需要区间序列内每一项的值，你可以使用下划线（_）替代变量名来忽略这个值：
+        let base = 3
+        let power = 10
+        var answer = 1
+        for _ in 1...power {
+            answer *= base
+        }
+        print("\(base) to the power of \(power) is \(answer)")
+        // 输出 "3 to the power of 10 is 59049"
+        
+        
+        
+        //        while循环，每次在循环开始时计算条件是否符合；
+        //        repeat-while循环，每次在循环结束时计算条件是否符合。
+        //        repeat {
+        //            statements
+        //        } while condition
+        
+        //        为了让单个case同时匹配a和A，可以将这个两个值组合成一个复合匹配，并且用逗号分开：
+        
+        let anotherCharacter: Character = "a"
+        switch anotherCharacter {
+        case "a", "A":
+            print("The letter A")
+        default:
+            print("Not the letter A")
+        }
+        
+        //        使用下划线（_）来匹配所有可能的值。
+        let somePoint = (1, 1)
+        switch somePoint {
+        case (0, 0):
+            print("(0, 0) is at the origin")
+        case (_, 0):
+            print("(\(somePoint.0), 0) is on the x-axis")
+        case (0, _):
+            print("(0, \(somePoint.1)) is on the y-axis")
+        case (-2...2, -2...2):
+            print("(\(somePoint.0), \(somePoint.1)) is inside the box")
+        default:
+            print("(\(somePoint.0), \(somePoint.1)) is outside of the box")
+        }
+        
+        
+        let anotherPoint = (2, 0)
+        switch anotherPoint {
+        case (let x, 0):
+            print("on the x-axis with an x value of \(x)")
+        case (0, let y):
+            print("on the y-axis with a y value of \(y)")
+        case let (x, y):
+            print("somewhere else at (\(x), \(y))")
+        }
+        // 输出 "on the x-axis with an x value of 2"
+        
+        let yetAnotherPoint = (1, -1)
+        switch yetAnotherPoint {
+        case let (x, y) where x == y:
+            print("(\(x), \(y)) is on the line x == y")
+        case let (x, y) where x == -y:
+            print("(\(x), \(y)) is on the line x == -y")
+        case let (x, y):
+            print("(\(x), \(y)) is just some arbitrary point")
+        }
+        // 输出 "(1, -1) is on the line x == -y"
+        
+        
+        
+        //        continue语句告诉一个循环体立刻停止本次循环，重新开始下次循环。就好像在说“本次循环我已经执行完了”，但是并不会离开整个循环体。
+        //        break语句会立刻结束整个控制流的执行。当你想要更早的结束一个switch代码块或者一个循环体时，你都可以使用break语句。
+        
+        
+        
+        //        如果你确实需要 C 风格的贯穿的特性，你可以在每个需要该特性的 case 分支中使用fallthrough关键字。下面的例子使用fallthrough来创建一个数字的描述语句。
+        /*
+         在 Swift 里，switch 语句不会从上一个 case 分支跳转到下一个 case 分支中。相反，只要第一个匹配到的 case 分支完成了它需要执行的语句，整个 switch 代码块完成了它的执行。相比之下，C 语言要求你显式地插入 break 语句到每个 case 分支的末尾来阻止自动落入到下一个 case 分支中。Swift 的这种避免默认落入到下一个分支中的特性意味着它的 switch 功能要比 C 语言的更加清晰和可预测，可以避免无意识地执行多个 case 分支从而引发的错误。
+         
+         如果你确实需要 C 风格的贯穿的特性，你可以在每个需要该特性的 case 分支中使用 fallthrough 关键字。
+         */
+        let integerToDescribe = 5
+        var description = "The number \(integerToDescribe) is"
+        switch integerToDescribe {
+        case 2, 3, 5, 7, 11, 13, 17, 19:
+            description += " a prime number, and also"
+            fallthrough
+        case 1:
+            description += " 1"
+            fallthrough
+        default:
+            description += " an integer."
+        }
+        print(description)
+        // 输出 "The number 5 is a prime number, and also 1 an integer."  会进入每个语句
+        
+        
+        //        带标签的语句
+        //        对于一个循环语句，你可以使用break或者continue加标签，来结束或者继续这条被标记语句的执行。 label name: while condition { statements }
+        //        gameLoop: while square != finalSquare {
+        //            diceRoll += 1
+        //            if diceRoll == 7 { diceRoll = 1 }
+        //            switch square + diceRoll {
+        //            case finalSquare:
+        //                // 骰子数刚好使玩家移动到最终的方格里，游戏结束。
+        //                break gameLoop
+        //            case let newSquare where newSquare > finalSquare:
+        //                // 骰子数将会使玩家的移动超出最后的方格，那么这种移动是不合法的，玩家需要重新掷骰子
+        //                continue gameLoop
+        //            default:
+        //                // 合法移动，做正常的处理
+        //                square += diceRoll
+        //                square += board[square]
+        //            }
+        //        }
+        
+        /*
+         提前退出
+         
+         像if语句一样，guard的执行取决于一个表达式的布尔值。我们可以使用guard语句来要求条件必须为真时，以执行guard语句后的代码。不同于if语句，一个guard语句总是有一个else从句，如果条件不为真则执行else从句中的代码。
+         */
+        
+        func greet(person: [String: String]) {
+            guard let name = person["name"] else {
+                return
+            }
+            print("Hello \(name)")
+            guard let location = person["location"] else {
+                print("I hope the weather is nice near you.")
+                return
+            }
+            print("I hope the weather is nice in \(location).")
+        }
+        greet(person: ["name": "John"])
+        // 输出 "Hello John!"
+        // 输出 "I hope the weather is nice near you."
+        greet(person: ["name": "Jane", "location": "Cupertino"])
+        // 输出 "Hello Jane!"
+        // 输出 "I hope the weather is nice in Cupertino."
+        /*
+         如果 guard 语句的条件被满足，则继续执行 guard 语句大括号后的代码。将变量或者常量的可选绑定作为 guard 语句的条件，都可以保护 guard 语句后面的代码。
+         */
+        /*
+         如果条件不被满足，在else分支上的代码就会被执行。这个分支必须转移控制以退出guard语句出现的代码段。它可以用控制转移语句如return,break,continue或者throw做这件事，或者调用一个不返回的方法或函数，例如fatalError()。
+         */
+        /*
+         相比于可以实现同样功能的 if 语句，按需使用 guard 语句会提升我们代码的可读性。它可以使你的代码连贯的被执行而不需要将它包在 else 块中，它可以使你在紧邻条件判断的地方，处理违规的情况。
+         */
+        //        检测 API 可用性
+        if #available(iOS 10, macOS 10.12, *) {
+            // 在 iOS 使用 iOS 10 的 API, 在 macOS 使用 macOS 10.12 的 API
+        } else {
+            // 使用先前版本的 iOS 和 macOS 的 API
+        }
+        //        最后一个参数，*，是必须的，用于指定在所有其它平台中，如果版本号高于你的设备指定的最低版本，if语句的代码块将会运行。
+    }
