@@ -1,0 +1,131 @@
+```
+func set111()  {
+        //闭包
+        /*
+         闭包是自包含的函数代码块，可以在代码中被传递和使用。Swift 中的闭包与 C 和 Objective-C 中的代码块（blocks）以及其他一些编程语言中的匿名函数比较相似。
+         
+         闭包可以捕获和存储其所在上下文中任意常量和变量的引用。被称为包裹常量和变量。 Swift 会为你管理在捕获过程中涉及到的所有内存操作。
+         全局函数是一个有名字但不会捕获任何值的闭包
+         嵌套函数是一个有名字并可以捕获其封闭函数域内值的闭包
+         闭包表达式是一个利用轻量级语法所写的可以捕获其上下文中变量或常量值的匿名闭包
+         
+         Swift 的闭包表达式拥有简洁的风格，并鼓励在常见场景中进行语法优化，主要优化如下：
+         利用上下文推断参数和返回值类型
+         隐式返回单表达式闭包，即单表达式闭包可以省略 return 关键字
+         参数名称缩写
+         尾随闭包语法
+         */
+        //http://wiki.jikexueyuan.com/project/swift/chapter2/07_Closures.html
+        let names = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
+        func backward(_ s1: String, _ s2: String) -> Bool {
+            return s1 > s2
+        }
+            var reversedNames = names.sorted(by: backward)
+        
+        //上面例子利用闭包表达式表达 闭包表达式参数 可以是 in-out 参数，但不能设定默认值。如果你命名了可变参数，也可以使用此可变参数。元组也可以作为参数和返回值。
+        /*  闭包表达式语法
+        { (parameters) -> return Type in
+                statements
+        } */
+        //上面的函数改写为：
+        reversedNames = names.sorted(by: { (s1: String, s2: String) -> Bool in
+        return s1 > s2
+        })
+        reversedNames = names.sorted(by: { s1, s2 in return s1 > s2 } )
+        //单表达式闭包隐式返回
+        reversedNames = names.sorted(by: { s1, s2 in s1 > s2 } )
+        //参数名称缩写
+        reversedNames = names.sorted(by: { $0 > $1 } )
+        //运算符方法
+        reversedNames = names.sorted(by: >)
+        //    尾随闭包
+        
+        //    如果你需要将一个很长的闭包表达式作为最后一个参数传递给函数，可以使用尾随闭包来增强函数的
+        //    可读性。尾随闭包是一个书写在函数括号之后的闭包表达式，函数支持将其作为最后一个参数调用。
+        //    sorted(by:) 方法参数的字符串排序闭包可以改写为：
+        
+            reversedNames = names.sorted() { $0 > $1 }
+        //    如果闭包表达式是函数或方法的唯一参数，则当你使用尾随闭包时，你甚至可以把 () 省略掉：
+            reversedNames = names.sorted { $0 > $1 }
+        //Swift 的 Array 类型有一个 map(_:) 方法，这个方法获取一个闭包表达式作为其唯一参数。该闭包函数会为数组中的每一个元素调用一次，并返回该元素所映射的值。具体的映射方式和返回值类型由闭包来指定。
+        let digitNames = [
+            0: "Zero", 1: "One", 2: "Two",   3: "Three", 4: "Four",
+            5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"
+        ]
+        let numbers = [16, 58, 510]
+        let strings = numbers.map {
+            (number) -> String in
+            var number = number
+            var output = ""
+            repeat {
+                output = digitNames[number % 10]! + output
+                number /= 10
+            } while number > 0
+            return output
+        }
+        // strings 常量被推断为字符串类型数组，即 [String]
+        // 其值为 ["OneSix", "FiveEight", "FiveOneZero"]
+        //字典 digitNames 下标后跟着一个叹号（!），因为字典下标返回一个可选值（optional value），表明该键不存在时会查找失败
+
+        
+        //    逃逸闭包
+        //    当一个闭包作为参数传到一个函数中，但是这个闭包在函数返回之后才被执行，我们称该闭包从函数中逃逸。当你定义接受闭包作为参数的函数时，你可以在参数名之前标注 @escaping，用来指明这个闭包是允许“逃逸”出这个函数的。
+        var completionHandlers: [() -> Void] = []
+        func someFunctionWithEscapingClosure(completionHandler: @escaping () -> Void) {
+            completionHandlers.append(completionHandler) //逃逸闭包
+        }
+        
+        func someFunctionWithNonescapingClosure(closure: () -> Void) {
+            closure()
+        }
+        
+        func doSomething() {
+            someFunctionWithEscapingClosure { self.x = 100 }  //逃逸闭包，这意味着它需要显式地引用 self
+            someFunctionWithNonescapingClosure { x = 200 }
+        }
+      
+
+        
+        func setsSome() {
+            //自动闭包 自动闭包让你能够延迟求值，因为直到你调用这个闭包，代码段才会被执行。
+            //customerProvider 的类型不是 String，而是 () -> String，一个没有参数且返回值为 String 的函数。
+            var customersInLine = ["Chris", "Alex", "Ewa", "Barry", "Daniella"]
+            print(customersInLine.count)
+            // 打印出 "5"
+            
+            let customerProvider = { customersInLine.remove(at: 0) }
+            print(customersInLine.count)
+            // 打印出 "5"
+            
+            print("Now serving \(customerProvider())!")
+            // Prints "Now serving Chris!"
+            print(customersInLine.count)
+            // 打印出 "4"
+            
+            //下面1中的内容可以用2来代替。而是通过将参数标记为 @autoclosure 来接收一个自动闭包。现在你可以将该函数当作接受 String 类型参数（而非闭包）的函数来调用。
+            
+            // 1.customersInLine is ["Alex", "Ewa", "Barry", "Daniella"]
+            func serve(customer customerProvider: () -> String) {
+                print("Now serving \(customerProvider())!")
+            }
+            serve(customer: { customersInLine.remove(at: 0) } )
+            // 打印出 "Now serving Alex!"
+            
+            
+            //        //2. customersInLine is ["Ewa", "Barry", "Daniella"]
+                    func serve2(customer customerProvider: @autoclosure () -> String) {
+                        print("Now serving \(customerProvider())!")
+                    }
+                    serve2(customer: customersInLine.remove(at: 0))
+            //        // 打印 "Now serving Ewa!"
+            
+            //值捕获 典型形式是嵌套函数。为了优化，如果一个值不会被闭包改变，或者在闭包创建后不会改变，Swift 可能会改为捕获并保存一份对值的拷贝。Swift 也会负责被捕获变量的所有内存管理工作，包括释放不再需要的变量。函数和闭包都是引用类型。
+            
+        }
+        
+        
+    }
+
+
+
+```
