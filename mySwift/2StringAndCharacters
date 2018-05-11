@@ -1,4 +1,5 @@
-        /*
+       ```
+       /*
          注意
          
          Swift 的 String 类型与 Foundation NSString 类进行了无缝桥接。Foundation 也可以对 String 进行扩展，暴露在 NSString 中定义的方法。 这意味着，如果你在 String 中调用这些 NSString 的方法，将不用进行转换。
@@ -142,3 +143,4 @@ These are the same.
         debugPrint(isSuff)
         debugPrint(1...5) //CountableClosedRange(1...5)
         print(1...5)  //1...5
+```
