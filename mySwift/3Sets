@@ -1,3 +1,6 @@
+
+```
+
    func setsSome() {
         //集合类型
         //       Swift 语言提供Arrays、Sets和Dictionaries三种基本的集合类型用来存储集合数据。数组（Arrays）是有序数据的集。集合（Sets）是无序无重复数据的集。字典（Dictionaries）是无序的键值对的集。
@@ -186,3 +189,6 @@
         
         
         
+
+
+```
