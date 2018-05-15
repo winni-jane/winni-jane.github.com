@@ -1,0 +1,131 @@
+
+```
+
+//方法、下标
+//结构体和枚举能够定义方法是 Swift 与 C/Objective-C 的主要区别之一。
+//结构体和枚举是值类型。默认情况下，值类型的属性不能在它的实例方法中被修改。
+
+//但是，如果你确实需要在某个特定的方法中修改结构体或者枚举的属性，你可以为这个方法选择可变(mutating)行为，然后就可以从其方法内部改变它的属性；
+struct Pointl {
+    var x = 0.0, y = 0.0
+    mutating func moveByX(deltaX: Double, y deltaY: Double) {
+        x += deltaX
+        y += deltaY
+    }
+}
+var somePoint = Pointl(x: 1.0, y: 1.0)
+somePoint.moveByX(deltaX: 2.0, y: 3.0)
+//print("The point is now at (\(somePoint.x), \(somePoint.y))")
+// 打印 "The point is now at (3.0, 4.0)"
+
+/*
+ 注意，不能在结构体类型的常量（a constant of structure type）上调用可变方法，因为其属性不能被改变，即使属性是变量属性，
+ 
+ let fixedPoint = Pointl(x: 3.0, y: 3.0)
+ fixedPoint.moveByX(2.0, y: 3.0)
+ // 这里将会报告一个错误
+ */
+
+
+//在可变方法中给 self 赋值
+/*
+struct Point {
+    var x = 0.0, y = 0.0
+    mutating func moveBy(x deltaX: Double, y deltaY: Double) {
+        self = Point(x: x + deltaX, y: y + deltaY)
+    }
+}
+*/
+
+/*在方法的func关键字之前加上关键字static，来指定类型方法 类还可以用关键字class来允许子类重写父类的方法实现。
+ class SomeClass {
+ class func someTypeMethod() {
+ // 在这里实现类型方法
+ }
+ }
+ SomeClass.someTypeMethod()  调用
+一个类型方法可以直接通过类型方法的名称调用本类中的其它类型方法，而无需在方法名称前面加上类型名称。
+ */
+struct LevelTracker {
+    static var highestUnlockedLevel = 1
+    var currentLevel = 1
+    
+    static func unlock(_ level: Int) {
+        if level > highestUnlockedLevel { highestUnlockedLevel = level }
+    }
+    
+    static func isUnlocked(_ level: Int) -> Bool {
+        return level <= highestUnlockedLevel
+    }
+    
+    @discardableResult
+    mutating func advance(to level: Int) -> Bool {
+        if LevelTracker.isUnlocked(level) {
+            currentLevel = level
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+//下标
+//与定义实例方法类似，定义下标使用subscript关键字，指定一个或多个输入参数和返回类型；与实例方法不同的是，下标可以设定为读写或只读。这种行为由 getter 和 setter 实现，有点类似计算型属性：/
+/*
+subscript(index: Int) -> Int {
+    get {
+        // 返回一个适当的 Int 类型的值
+    }
+    
+    set(newValue) {
+        // 执行适当的赋值操作
+    }
+}
+*/
+
+struct TimesTable {
+    let multiplier: Int
+    subscript(index: Int) -> Int {
+        return multiplier * index
+    }
+}
+let threeTimesTable = TimesTable(multiplier: 3)
+print("six times three is \(threeTimesTable[6])")
+// 打印 "six times three is 18"
+
+//Swift 的Dictionary类型的下标接受并返回可选类型的值。
+//var numberOfLegs = ["spider": 8, "ant": 6, "cat": 4]
+//numberOfLegs["bird"] = 2
+//上例中的numberOfLegs字典通过下标返回的是一个Int?或者说“可选的int”。
+
+//下标可以使用变量参数和可变参数，但不能使用输入输出参数，也不能给参数设置默认值。
+//一个类或结构体可以根据自身需要提供多个下标实现，使用下标时将通过入参的数量和类型进行区分，自动匹配合适的下标，这就是下标的重载。
+struct Matrix {
+    let rows: Int, columns: Int
+    var grid: [Double]
+    init(rows: Int, columns: Int) {
+        self.rows = rows
+        self.columns = columns
+        grid = Array(repeating: 0.0, count: rows * columns)
+    }
+    func indexIsValidForRow(row: Int, column: Int) -> Bool {
+        return row >= 0 && row < rows && column >= 0 && column < columns
+    }
+    subscript(row: Int, column: Int) -> Double {
+        get {
+            assert(indexIsValidForRow(row: row, column: column), "Index out of range")
+            return grid[(row * columns) + column]
+        }
+        set {
+            assert(indexIsValidForRow(row: row, column: column), "Index out of range")
+            grid[(row * columns) + column] = newValue
+        }
+    }
+}
+
+var matrix = Matrix(rows: 2, columns: 2)
+//matrix[0, 1] = 1.5
+//matrix[1, 0] = 3.2
+
+
+```
