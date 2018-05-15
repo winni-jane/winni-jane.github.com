@@ -1,0 +1,49 @@
+1.
+
+
+enum CSConnectionState {
+    CSConnectionStateDisconnected,
+    CSConnectionStateConnecting,
+    CSConnectionStateConnected,
+};
+typedef enum CSConnectionState CSConnectionState;
+CSConnectionState state = CSConnectionStateDisconnected;
+
+2.
+enum CSConnectionState: NSUInteger {
+    CSConnectionStateDisconnected = 1,
+    CSConnectionStateConnecting,
+    CSConnectionStateConnected,
+};
+typedef enum CSConnectionState CSConnectionState;
+
+NSUInteger表示何种“底层数据类型”来保存枚举类型的变量。
+
+3.
+前面所述的枚举使用时，创建的枚举变量只能使用一个枚举值，因为网络连接状态只会同时出现一种情况，该枚举的所有枚举值都是互斥的。
+
+　　假设我们需要表示选项，这些选项可以同时被选中，那么我们就得将枚举值定义好，各选项可以通过枚举值 “按位或操作符” 来组合。
+  
+  enum UIViewAutoresizing: NSUInteger {
+    UIViewAutoresizingNone                 = 0,
+    UIViewAutoresizingFlexibleLeftMargin   = 1 << 0,
+    UIViewAutoresizingFlexibleWidth        = 1 << 1,
+    UIViewAutoresizingFlexibleRightMargin  = 1 << 2,
+    UIViewAutoresizingFlexibleTopMargin    = 1 << 3,
+    UIViewAutoresizingFlexibleHeight       = 1 << 4,
+    UIViewAutoresizingFlexibleBottomMargin = 1 << 5
+};
+
+typedef enum UIViewAutoresizing UIViewAutoresizing;
+UIViewAutoresizing resizing = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+if (resizing & UIViewAutoresizingFlexibleWidth) {
+    // UIViewAutoresizingFlexibleWidth is set
+}
+
+4.OC封装：
+typedef NS_ENUM(NSInteger, SettingViewCellType) {
+    SettingViewCellTypeDefault,
+    SettingViewCellTypeNew,
+    SettingViewCellTypeInfo,
+    SettingViewCellTypeClean
+};
