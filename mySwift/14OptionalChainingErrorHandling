@@ -1,0 +1,216 @@
+
+```
+
+//可选链 错误处理
+class Person {
+    var residence: Residence?
+}
+
+class Residence {
+    var numberOfRooms = 1
+}
+//如果使用叹号（!）强制展开获得这个john的residence属性中的numberOfRooms值，会触发运行时错误，因为这时residence没有可以展开的值：
+let john = Person()
+let roomCount = john.residence!.numberOfRooms
+// 这会引发运行时错误
+//可选链式调用提供了另一种访问numberOfRooms的方式，使用问号（?）来替代原来的叹号（!）：
+if let roomCount = john.residence?.numberOfRooms {
+    print("John's residence has \(roomCount) room(s).")
+} else {
+    print("Unable to retrieve the number of rooms.")
+}
+// 打印 “Unable to retrieve the number of rooms.”
+
+//要注意的是，即使numberOfRooms是非可选的Int时，这一点也成立。只要使用可选链式调用就意味着numberOfRooms会返回一个Int?而不是Int。
+
+
+john.residence = Residence()
+//john.residence现在包含一个实际的Residence实例，而不再是nil。如果你试图使用先前的可选链式调用访问numberOfRooms，它现在将返回值为1的Int?类型的值
+
+
+var testScores = ["Dave": [86, 82, 84], "Bev": [79, 94, 81]]
+testScores["Dave"]?[0] = 91
+testScores["Bev"]?[0] += 1
+testScores["Brian"]?[0] = 72
+// "Dave" 数组现在是 [91, 82, 84]，"Bev" 数组现在是 [80, 94, 81]
+//前两个调用成功，因为testScores字典中包含"Dave"和"Bev"这两个键。但是testScores字典中没有"Brian"这个键，所以第三个调用失败。
+
+
+
+//错误处理
+//错误处理（Error handling）是响应错误以及从错误中恢复的过程。Swift 提供了在运行时对可恢复错误的抛出、捕获、传递和操作的一等公民支持。
+/*
+ 表示并抛出错误
+ 
+ 在 Swift 中，错误用符合Error协议的类型的值来表示。这个空协议表明该类型可以用于错误处理。
+ */
+
+//Swift 的枚举类型尤为适合构建一组相关的错误状态，枚举的关联值还可以提供错误状态的额外信息。例如，你可以这样表示在一个游戏中操作自动贩卖机时可能会出现的错误状态
+
+enum VendingMachineError: Error {
+    case invalidSelection                    //选择无效
+    case insufficientFunds(coinsNeeded: Int) //金额不足
+    case outOfStock                          //缺货
+}
+//抛出一个错误
+throw VendingMachineError.insufficientFunds(coinsNeeded: 5)
+
+
+/*
+ 处理错误
+ 
+ 某个错误被抛出时，附近的某部分代码必须负责处理这个错误，例如纠正这个问题、尝试另外一种方式、或是向用户报告错误。
+ Swift 中有4种处理错误的方式。你可以把函数抛出的错误传递给调用此函数的代码、用do-catch语句处理错误、将错误作为可选类型处理、或者断言此错误根本不会发生。
+ 在调用一个能抛出错误的函数、方法或者构造器之前，加上try关键字，或者try?或try!这种变体。
+ 
+ 用 throwing 函数传递错误
+ 
+ 为了表示一个函数、方法或构造器可以抛出错误，在函数声明的参数列表之后加上throws关键字。一个标有throws关键字的函数被称作throwing 函数。如果这个函数指明了返回值类型，throws关键词需要写在箭头（->）的前面。
+ 一个 throwing 函数可以在其内部抛出错误，并将错误传递到函数被调用时的作用域。
+ 只有 throwing 函数可以传递错误。任何在某个非 throwing 函数内部抛出的错误只能在函数内部处理。
+ 
+ */
+
+
+func canThrowErrors() throws -> String
+func cannotThrowErrors() -> String
+
+struct Item {
+    var price: Int
+    var count: Int
+}
+
+class VendingMachine {
+    var inventory = [
+        "Candy Bar": Item(price: 12, count: 7),
+        "Chips": Item(price: 10, count: 4),
+        "Pretzels": Item(price: 7, count: 11)
+    ]
+    var coinsDeposited = 0
+    func dispenseSnack(snack: String) {
+        print("Dispensing \(snack)")
+    }
+    
+    func vend(itemNamed name: String) throws {
+        guard let item = inventory[name] else {
+            throw VendingMachineError.InvalidSelection
+        }
+        
+        guard item.count > 0 else {
+            throw VendingMachineError.OutOfStock
+        }
+        
+        guard item.price <= coinsDeposited else {
+            throw VendingMachineError.InsufficientFunds(coinsNeeded: item.price - coinsDeposited)
+        }
+        
+        coinsDeposited -= item.price
+        
+        var newItem = item
+        newItem.count -= 1
+        inventory[name] = newItem
+        
+        print("Dispensing \(name)")
+    }
+}
+//错误传递
+let favoriteSnacks = [
+    "Alice": "Chips",
+    "Bob": "Licorice",
+    "Eve": "Pretzels",
+]
+func buyFavoriteSnack(person: String, vendingMachine: VendingMachine) throws {
+    let snackName = favoriteSnacks[person] ?? "Candy Bar"
+    try vendingMachine.vend(itemNamed: snackName)
+}
+
+//throwing构造器能像throwing函数一样传递错误.例如下面代码中的PurchasedSnack构造器在构造过程中调用了throwing函数,并且通过传递到它的调用者来处理这些错误。 
+struct PurchasedSnack {
+    let name: String
+    init(name: String, vendingMachine: VendingMachine) throws {
+        try vendingMachine.vend(itemNamed: name)
+        self.name = name
+    }
+}
+
+//用 Do-Catch 处理错误
+//可以使用一个do-catch语句运行一段闭包代码来处理错误。如果在do子句中的代码抛出了一个错误，这个错误会与catch子句做匹配，从而决定哪条子句能处理它。
+/*
+ do {
+ try expression
+ statements
+ } catch pattern 1 {
+ statements
+ } catch pattern 2 where condition {
+ statements
+ }
+ 在catch后面写一个匹配模式来表明这个子句能处理什么样的错误。如果一条catch子句没有指定匹配模式，那么这条子句可以匹配任何错误，并且把错误绑定到一个名字为error的局部常量。
+ 
+ */
+
+var vendingMachine = VendingMachine()
+vendingMachine.coinsDeposited = 8
+do {
+    try buyFavoriteSnack("Alice", vendingMachine: vendingMachine)
+} catch VendingMachineError.InvalidSelection {
+    print("Invalid Selection.")
+} catch VendingMachineError.OutOfStock {
+    print("Out of Stock.")
+} catch VendingMachineError.InsufficientFunds(let coinsNeeded) {
+    print("Insufficient funds. Please insert an additional \(coinsNeeded) coins.")
+}
+// 打印 “Insufficient funds. Please insert an additional 2 coins.”
+
+
+//将错误转换成可选值
+//可以使用try?通过将错误转换成一个可选值来处理错误。如果在评估try?表达式时一个错误被抛出，那么表达式的值就是nil。
+//例如,在下面的代码中,x和y有着相同的数值和等价的含义：
+func someThrowingFunction() throws -> Int {
+    // ...
+}
+
+let x = try? someThrowingFunction()
+
+let y: Int?
+do {
+    y = try someThrowingFunction()
+} catch {
+    y = nil
+}
+
+//注意，无论someThrowingFunction()的返回值类型是什么类型，x和y都是这个类型的可选类型。例子中此函数返回一个整型，所以x和y是可选整型。
+//禁用错误传递
+/*
+ 有时你知道某个throwing函数实际上在运行时是不会抛出错误的，在这种情况下，你可以在表达式前面写try!来禁用错误传递，这会把调用包装在一个不会有错误抛出的运行时断言中。如果真的抛出了错误，你会得到一个运行时错误。
+ */
+let photo = try! loadImage(atPath: "./Resources/John Appleseed.jpg")
+
+//指定清理操作
+/*
+ 可以使用defer语句在即将离开当前代码块时执行一系列语句。该语句让你能执行一些必要的清理工作，不管是以何种方式离开当前代码块的——无论是由于抛出错误而离开，还是由于诸如return或者break的语句。例如，你可以用defer语句来确保文件描述符得以关闭，以及手动分配的内存得以释放。
+ 延迟执行的语句不能包含任何控制转移语句，例如break或是return语句，或是抛出一个错误。延迟执行的操作会按照它们被指定时的顺序的相反顺序执行——也就是说，第一条defer语句中的代码会在第二条defer语句中的代码被执行之后才执行，以此类推。
+ 
+ */
+
+func processFile(filename: String) throws {
+    if exists(filename) {
+        let file = open(filename)
+        defer {
+            close(file)
+        }
+        while let line = try file.readline() {
+            // 处理文件。
+        }
+        // close(file) 会在这里被调用，即作用域的最后。
+    }
+}
+
+/*
+ 将异常转换成可选值，如果一个语句会抛出异常那么它将返回nil无论这个语句本来的返回值是什么
+ //错误转成可选值
+ if let retureMessage = try? throwDeliver(num: 1) {
+ print("可选值非空:"+retureMessage)
+ }
+ */
+
+```
