@@ -1,0 +1,231 @@
+
+```
+//析构过程/自动引用计数
+//析构器只适用于类类型，当一个类的实例被释放之前，析构器会被立即调用。析构器用关键字deinit来标示，类似于构造器要用init来标示。
+//deinit {
+// 执行析构过程
+//}
+
+//析构器是在实例释放发生前被自动调用。你不能主动调用析构器。子类继承了父类的析构器，并且在子类析构器实现的最后，父类的析构器会被自动调用。即使子类没有提供自己的析构器，父类的析构器也同样会被调用。
+class Bank {
+    static var coinsInBank = 10_000
+    static func distribute(coins numberOfCoinsRequested: Int) -> Int {
+        let numberOfCoinsToVend = min(numberOfCoinsRequested, coinsInBank)
+        coinsInBank -= numberOfCoinsToVend
+        return numberOfCoinsToVend
+    }
+    static func receive(coins: Int) {
+        coinsInBank += coins
+    }
+}
+
+
+class Player {
+    var coinsInPurse: Int
+    init(coins: Int) {
+        coinsInPurse = Bank.distribute(coins: coins)
+    }
+    func win(coins: Int) {
+        coinsInPurse += Bank.distribute(coins: coins)
+    }
+    deinit {
+        Bank.receive(coins: coinsInPurse)
+    }
+}
+var playerOne: Player? = Player(coins: 100)
+playerOne!.win(coins: 2_000)
+playerOne = nil
+//每一个 Person 实例有一个类型为 String，名字为 name 的属性，并有一个可选的初始化为 nil 的 apartment 属性。apartment 属性是可选的，因为一个人并不总是拥有公寓。
+
+//类似的，每个 Apartment 实例有一个叫 unit，类型为 String 的属性，并有一个可选的初始化为 nil 的 tenant 属性。tenant 属性是可选的，因为一栋公寓并不总是有居民。
+//这通过将可选类型的 playerOne 变量设置为 nil 来表示，意味着“没有 Player 实例”。当这一切发生时，playerOne 变量对 Player 实例的引用被破坏了。没有其它属性或者变量引用 Player 实例，因此该实例会被释放，以便回收内存。在这之前，该实例的析构器被自动调用，
+//自动引用计数
+//引用计数仅仅应用于类的实例。结构体和枚举类型是值类型，不是引用类型，也不是通过引用的方式存储和传递。
+
+//解决实例之间的循环强引用 弱引用（weak reference）和无主引用（unowned reference）。
+/*
+ 当其他的实例有更短的生命周期时，使用弱引用，也就是说，当其他实例析构在先时。在上面公寓的例子中，很显然一个公寓在它的生命周期内会在某个时间段没有它的主人，所以一个弱引用就加在公寓类里面，避免循环引用。相比之下，当其他实例有相同的或者更长生命周期时，请使用无主引用。
+ 当 ARC 设置弱引用为nil时，属性观察不会被触发。
+ */
+//你可以在声明属性或者变量时，在前面加上关键字unowned表示这是一个无主引用。
+//无主引用通常都被期望拥有值。不过 ARC 无法在实例被销毁后将无主引用设为nil，因为非可选类型的变量不允许被赋值为nil。
+//使用无主引用，你必须确保引用始终指向一个未销毁的实例。
+//如果你试图在实例被销毁后，访问该实例的无主引用，会触发运行时错误。
+
+
+class Person {
+    let name: String
+    init(name: String) { self.name = name }
+    var apartment: Apartment?
+    deinit { print("\(name) is being deinitialized") }
+}
+
+class Apartment {
+    let unit: String
+    init(unit: String) { self.unit = unit }
+    weak var tenant: Person?
+    deinit { print("Apartment \(unit) is being deinitialized") }
+}
+
+var john: Person?
+var unit4A: Apartment?
+
+//john = Person(name: "John Appleseed")
+//unit4A = Apartment(unit: "4A")
+//
+//john!.apartment = unit4A
+//unit4A!.tenant = john
+
+
+//在使用垃圾收集的系统里，弱指针有时用来实现简单的缓冲机制，因为没有强引用的对象只会在内存压力触发垃圾收集时才被销毁。但是在 ARC 中，一旦值的最后一个强引用被移除，就会被立即销毁，这导致弱引用并不适合上面的用途。
+
+//和弱引用类似，无主引用不会牢牢保持住引用的实例。和弱引用不同的是，无主引用在其他实例有相同或者更长的生命周期时使用。你可以在声明属性或者变量时，在前面加上关键字 unowned 表示这是一个无主引用。
+
+//无主引用通常都被期望拥有值。不过 ARC 无法在实例被销毁后将无主引用设为 nil，因为非可选类型的变量不允许被赋值为 nil。
+//使用无主引用，你必须确保引用始终指向一个未销毁的实例。
+
+//如果你试图在实例被销毁后，访问该实例的无主引用，会触发运行时错误。
+/*
+ 在这个数据模型中，一个客户可能有或者没有信用卡，但是一张信用卡总是关联着一个客户。为了表示这种关系，Customer类有一个可选类型的card属性，但是CreditCard类有一个非可选类型的customer属性。
+ */
+
+class Customer {
+    let name: String
+    var card: CreditCard?
+    init(name: String) {
+        self.name = name
+    }
+    deinit { print("\(name) is being deinitialized") }
+}
+class CreditCard {
+    let number: UInt64
+    unowned let customer: Customer
+    init(number: UInt64, customer: Customer) {
+        self.number = number
+        self.customer = customer
+    }
+    deinit { print("Card #\(number) is being deinitialized") }
+}
+
+//var john: Customer?
+//john = Customer(name: "John Appleseed")
+//john!.card = CreditCard(number: 1234_5678_9012_3456, customer: john!)
+//john = nil
+/*
+ Swift还提供了不安全的无主引用。与所有不安全的操作一样，你需要负责检查代码以确保其安全性。 你可以通过unowned(unsafe)来声明不安全无主引用。如果你试图在实例被销毁后，访问该实例的不安全无主引用，你的程序会尝试访问该实例之前所在的内存地址，这是一个不安全的操作。
+ */
+
+
+/*
+ 无主引用以及隐式解析可选属性
+ Person和Apartment的例子展示了两个属性的值都允许为nil，并会潜在的产生循环强引用。这种场景最适合用弱引用来解决。
+ 
+ Customer和CreditCard的例子展示了一个属性的值允许为nil，而另一个属性的值不允许为nil，这也可能会产生循环强引用。这种场景最适合通过无主引用来解决。
+ 
+ 然而，存在着第三种场景，在这种场景中，两个属性都必须有值，并且初始化完成后永远不会为nil。在这种场景中，需要一个类使用无主属性，而另外一个类使用隐式解析可选属性。
+ */
+//下面的例子定义了两个类，Country 和 City，每个类将另外一个类的实例保存为属性。在这个模型中，每个国家必须有首都，每个城市必须属于一个国家。为了实现这种关系，Country 类拥有一个 capitalCity 属性，而 City 类有一个 country 属性：
+class Country {
+    let name: String
+    var capitalCity: City!
+    init(name: String, capitalName: String) {
+        self.name = name
+        self.capitalCity = City(name: capitalName, country: self)
+    }
+}
+
+class City {
+    let name: String
+    unowned let country: Country
+    init(name: String, country: Country) {
+        self.name = name
+        self.country = country
+    }
+}
+
+var country = Country(name: "Canada", capitalName: "Ottawa")
+//print("\(country.name)'s capital city is called \(country.capitalCity.name)")
+// 打印 “Canada's capital city is called Ottawa”
+/*
+ 了建立两个类的依赖关系，City 的构造函数接受一个 Country 实例作为参数，并且将实例保存到 country 属性。
+ 
+ Country 的构造函数调用了 City 的构造函数。然而，只有 Country 的实例完全初始化后，Country 的构造函数才能把 self 传给 City 的构造函数。在两段式构造过程中有具体描述。
+ 
+ 为了满足这种需求，通过在类型结尾处加上感叹号（City!）的方式，将 Country 的 capitalCity 属性声明为隐式解析可选类型的属性。这意味着像其他可选类型一样，capitalCity 属性的默认值为 nil，但是不需要展开它的值就能访问它。在隐式解析可选类型中有描述。
+ 
+ 由于 capitalCity 默认值为 nil，一旦 Country 的实例在构造函数中给 name 属性赋值后，整个初始化过程就完成了。这意味着一旦 name 属性被赋值后，Country 的构造函数就能引用并传递隐式的 self。Country 的构造函数在赋值 capitalCity 时，就能将 self 作为参数传递给 City 的构造函数。
+ 以上的意义在于你可以通过一条语句同时创建 Country 和 City 的实例，而不产生循环强引用，并且 capitalCity 的属性能被直接访问，而不需要通过感叹号来展开它的可选值：
+ 在上面的例子中，使用隐式解析可选值意味着满足了类的构造函数的两个构造阶段的要求。capitalCity 属性在初始化完成后，能像非可选值一样使用和存取，同时还避免了循环强引用。
+ */
+//闭包引起的循环强引用
+//循环强引用还会发生在当你将一个闭包赋值给类实例的某个属性，并且这个闭包体中又使用了这个类实例时。这个闭包体中可能访问了实例的某个属性，
+//Swift 提供了一种优雅的方法来解决这个问题，称之为闭包捕获列表
+class HTMLElement {
+    
+    let name: String
+    let text: String?
+    
+    lazy var asHTML: () -> String = {
+        if let text = self.text {
+            return "<\(self.name)>\(text)</\(self.name)>"
+        } else {
+            return "<\(self.name) />"
+        }
+    }
+//    虽然闭包多次使用了 self，它只捕获 HTMLElement 实例的一个强引用。
+//    Swift 有如下要求：只要在闭包内使用 self 的成员，就要用 self.someProperty 或者 self.someMethod()（而不只是 someProperty 或 someMethod()）。这提醒你可能会一不小心就捕获了 self。
+    /*
+     在这里解决办法为：（定义捕获列表）
+     lazy var asHTML: Void -> String = {
+     [unowned self] in
+     if let text = self.text {
+     return "<\(self.name)>\(text)</\(self.name)>"
+     } else {
+     return "<\(self.name) />"
+     }
+     }
+     */
+
+    init(name: String, text: String? = nil) {
+        self.name = name
+        self.text = text
+    }
+    
+    deinit {
+        print("\(name) is being deinitialized")
+    }
+    
+}
+
+//asHTML声明为lazy属性，因为只有当元素确实需要被处理为 HTML 输出的字符串时，才需要使用asHTML。也就是说，在默认的闭包中可以使用self，因为只有当初始化完成以及self确实存在后，才能访问lazy属性。
+//可以将一个闭包赋值给asHTML属性，这个闭包能在text属性是nil时使用默认文本，这是为了避免返回一个空的 HTML 标签：
+let heading = HTMLElement(name: "h1")
+let defaultText = "some default text"
+heading.asHTML = {
+    return "<\(heading.name)>\(heading.text ?? defaultText)</\(heading.name)>"
+}
+print(heading.asHTML())
+// 打印 “<h1>some default text</h1>”
+
+//Swift 有如下要求：只要在闭包内使用self的成员，就要用self.someProperty或者self.someMethod()（而不只是someProperty或someMethod()）。这提醒你可能会一不小心就捕获了self。
+//定义捕获列表
+lazy var someClosure: (Int, String) -> String = {
+    [unowned self, weak delegate = self.delegate!] (index: Int, stringToProcess: String) -> String in
+    // 这里是闭包的函数体
+}
+/*
+ 或者
+ lazy var someClosure: Void -> String = {
+ [unowned self, weak delegate = self.delegate!] in
+ // 这里是闭包的函数体
+ }
+ */
+
+/*
+ 在闭包和捕获的实例总是互相引用并且总是同时销毁时，将闭包内的捕获定义为无主引用。
+ 
+ 相反的，在被捕获的引用可能会变为nil时，将闭包内的捕获定义为弱引用。弱引用总是可选类型，并且当引用的实例被销毁后，弱引用的值会自动置为nil。这使我们可以在闭包体内检查它们是否存在。
+ */
+
+
+```
