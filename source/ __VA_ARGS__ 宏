@@ -6,3 +6,4 @@ Debug("Y = %d\n", y);
 而处理器会把宏的调用替换成:
 printf("Y = %d\n", y);
 */
+http://www.myexception.cn/c/1879324.html
