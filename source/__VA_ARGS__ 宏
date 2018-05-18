@@ -1,0 +1,18 @@
+#define MyLog(fmt, ...)   NSLog(fmt,##__VA_ARGS__);
+/*#define debug(...) printf(__VA_ARGS__)
+
+缺省号代表一个可以变化的参数表。使用保留名 __VA_ARGS__ 把参数传递给宏。当宏的调用展开时，实际的参数就传递给 printf()了。例如:
+Debug("Y = %d\n", y);
+而处理器会把宏的调用替换成:
+printf("Y = %d\n", y);
+*/
+
+#用在预编译语句里面可以把预编译函数的变量直接格式成字符串；
+注意，不能直接在其它非预编译函数直接使用#aa的形式，
+假如main函数里面出现printf("the square of " #x " is %d.\n",(x)*(x))是不能通过编译的.
+
+## 是宏连接符，作变量链接，Func(a)里面有b##a，也就是说直接连接成b‘a’，Func3(m)对应bm，由于bm在main里面有定义，所以可以打印出来。
+
+对于##__VA_ARGS__的‘##’符号的用法，
+假如可变参数宏为空的时候，”“##”的作用就是让编译器忽略前面一个逗号，不然编译器会报错。
+http://www.myexception.cn/c/1879324.html

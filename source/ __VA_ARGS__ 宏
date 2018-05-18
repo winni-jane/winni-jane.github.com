@@ -1,9 +1,0 @@
-#define MyLog(fmt, ...)   NSLog(fmt,##__VA_ARGS__);
-/*#define debug(...) printf(__VA_ARGS__)
-
-缺省号代表一个可以变化的参数表。使用保留名 __VA_ARGS__ 把参数传递给宏。当宏的调用展开时，实际的参数就传递给 printf()了。例如:
-Debug("Y = %d\n", y);
-而处理器会把宏的调用替换成:
-printf("Y = %d\n", y);
-*/
-http://www.myexception.cn/c/1879324.html
