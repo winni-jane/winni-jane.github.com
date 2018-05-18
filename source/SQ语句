@@ -1,0 +1,822 @@
+SELECT 列名称 FROM 表名称
+SELECT * FROM 表名称
+SELECT DISTINCT 列名称 FROM 表名称   //不同的
+SELECT 列名称 FROM 表名称 WHERE 列 运算符 值
+=
+等于
+<>
+不等于
+>
+大于
+<
+小于
+>=
+大于等于
+<=
+小于等于
+BETWEEN
+在某个范围内          
+LIKE
+搜索某种模式
+SELECT  * FROM home where pId between 1 and 2
+
+在某些版本的 SQL 中，操作符 <> 可以写为 !=。
+SELECT * FROM Persons WHERE City='Beijing'
+
+SQL 使用单引号来环绕文本值（大部分数据库系统也接受双引号）。如果是数值，请不要使用引号。
+SELECT * FROM Persons WHERE Year>1965
+
+SELECT * FROM Persons WHERE FirstName='Thomas' AND LastName='Carter'
+
+SELECT * FROM Persons WHERE firstname='Thomas' OR lastname='Carter'
+
+我们也可以把 AND 和 OR 结合起来（使用圆括号来组成复杂的表达式）:
+SELECT * FROM Persons WHERE (FirstName='Thomas' OR FirstName='William')
+AND LastName='Carter'
+SELECT Company, OrderNumber FROM Orders ORDER BY Company
+SELECT Company, OrderNumber FROM Orders ORDER BY Company, OrderNumber
+SELECT Company, OrderNumber FROM Orders ORDER BY Company DESC
+SELECT Company, OrderNumber FROM Orders ORDER BY Company DESC, OrderNumber ASC
+
+
+INSERT INTO 表名称 VALUES (值1, 值2,....)
+我们也可以指定所要插入数据的列：
+INSERT INTO table_name (列1, 列2,...) VALUES (值1, 值2,....)
+
+INSERT INTO Persons VALUES ('Gates', 'Bill', 'Xuanwumen 10', 'Beijing')
+INSERT INTO Persons (LastName, Address) VALUES ('Wilson', 'Champs-Elysees')
+UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
+UPDATE Person SET FirstName = 'Fred' WHERE LastName = 'Wilson' 
+UPDATE Person SET Address = 'Zhongshan 23', City = 'Nanjing'
+WHERE LastName = 'Wilson'
+DELETE FROM 表名称 WHERE 列名称 = 值
+DELETE FROM Person WHERE LastName = 'Wilson' 
+DELETE FROM table_name // 全部删除
+DELETE * FROM table_name
+
+SELECT TOP number|percent column_name(s)
+FROM table_name
+
+
+SELECT *
+FROM Persons
+LIMIT 5
+
+
+
+SELECT TOP 2 * FROM Persons        sqlite不适用
+SELECT TOP 50 PERCENT * FROM Persons    百分之50  sqlite不适用
+
+SELECT column_name(s)
+FROM table_name
+WHERE column_name LIKE pattern
+
+
+SELECT * FROM Persons
+WHERE City LIKE 'N%'
+ "%" 可用于定义通配符（模式中缺少的字母）。
+SELECT * FROM Persons
+WHERE City LIKE '%g'
+
+SELECT * FROM Persons
+WHERE City LIKE '%lon%'
+
+SELECT * FROM Persons
+WHERE City NOT LIKE '%lon%'
+
+select  * from home  where pId LIKE '%0%'
+select  * from home  where pId LIKE '_001'
+
+%
+替代一个或多个字符
+_
+仅替代一个字符
+[charlist]
+字符列中的任何单一字符    sqlite不适用？
+[^charlist]
+或者
+[!charlist]
+不在字符列中的任何单一字符
+
+SELECT * FROM Persons
+WHERE LastName LIKE 'C_r_er'
+
+SELECT * FROM Persons
+WHERE City LIKE '[ALN]%'
+现在，我们希望从上面的 "Persons" 表中选取居住的城市以 "A" 或 "L" 或 "N" 开头的人：
+
+SELECT * FROM Persons
+WHERE City LIKE '[!ALN]%'
+现在，我们希望从上面的 "Persons" 表中选取居住的城市不以 "A" 或 "L" 或 "N" 开头的人：
+
+
+SELECT column_name(s)
+FROM table_name
+WHERE column_name IN (value1,value2,...)
+
+select  * from home  where pId in (1,2,3)
+
+SELECT * FROM Persons
+WHERE LastName IN ('Adams','Carter')
+
+SELECT column_name(s)
+FROM table_name
+WHERE column_name
+BETWEEN value1 AND value2
+
+如需以字母顺序显示介于 "Adams"（包括）和 "Carter"（不包括）之间的人，请使用下面的 SQL：
+SELECT * FROM Persons
+WHERE LastName
+BETWEEN 'Adams' AND 'Carter'
+
+不同的数据库对 BETWEEN...AND 操作符的处理方式是有差异的。某些数据库会列出介于 "Adams" 和 "Carter" 之间的人，但不包括 "Adams" 和 "Carter" ；某些数据库会列出介于 "Adams" 和 "Carter" 之间并包括 "Adams" 和 "Carter" 的人；而另一些数据库会列出介于 "Adams" 和 "Carter" 之间的人，包括 "Adams" ，但不包括 "Carter" 。 sqlite 都包括
+所以，请检查你的数据库是如何处理 BETWEEN....AND 操作符的！
+SELECT * FROM Persons
+WHERE LastName
+NOT BETWEEN 'Adams' AND 'Carter'
+
+
+Alias 实例: 使用表名称别名
+假设我们有两个表分别是："Persons" 和 "Product_Orders"。我们分别为它们指定别名 "p" 和 "po"。
+现在，我们希望列出 "John Adams" 的所有定单。
+
+SELECT po.OrderID, p.LastName, p.FirstName
+FROM Persons AS p, Product_Orders AS po
+WHERE p.LastName='Adams' AND p.FirstName='John'
+
+select  h.pId,h.uTime,hi.episode from home as h,history as hi where h.pId=hi.pId
+
+
+不使用别名的 SELECT 语句：
+SELECT Product_Orders.OrderID, Persons.LastName, Persons.FirstName
+FROM Persons, Product_Orders
+WHERE Persons.LastName='Adams' AND Persons.FirstName='John'
+
+Alias 实例: 使用一个列名别名
+select  h.pId,h.uTime as time from home as h
+
+SELECT LastName AS Family, FirstName AS Name
+FROM Persons
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+
+
+SELECT Persons.LastName, Persons.FirstName, Orders.OrderNo
+FROM Persons, Orders
+WHERE Persons.Id_P = Orders.Id_P 
+
+SELECT Persons.LastName, Persons.FirstName, Orders.OrderNo
+FROM Persons
+INNER JOIN Orders
+ON Persons.Id_P = Orders.Id_P
+ORDER BY Persons.LastName
+INNER JOIN（内连接）
+	•	JOIN: 如果表中有至少一个匹配，则返回行
+	•	LEFT JOIN: 即使右表中没有匹配，也从左表返回所有的行
+	•	RIGHT JOIN: 即使左表中没有匹配，也从右表返回所有的行
+	•	FULL JOIN: 只要其中一个表中存在匹配，就返回行
+
+full 和Right 好像不适用与sqlite
+
+select home.pId,home.uTime,history.episode from home inner join history on home.pId= history.pId order by home.pId DESC
+
+
+UNION 操作符用于合并两个或多个 SELECT 语句的结果集。
+请注意，UNION 内部的 SELECT 语句必须拥有相同数量的列。列也必须拥有相似的数据类型。同时，每条 SELECT 语句中的列的顺序必须相同。
+SELECT column_name(s) FROM table_name1
+UNION
+SELECT column_name(s) FROM table_name2
+注释：默认地，UNION 操作符选取不同的值。如果允许重复的值，请使用 UNION ALL。
+SELECT column_name(s) FROM table_name1
+UNION ALL
+SELECT column_name(s) FROM table_name2
+
+SELECT E_Name FROM Employees_China
+UNION
+SELECT E_Name FROM Employees_USA
+
+注释：这个命令无法列出在中国和美国的所有雇员。在上面的例子中，我们有两个名字相同的雇员，他们当中只有一个人被列出来了。UNION 命令只会选取不同的值。
+
+UNION ALL  可以
+
+select pId from home union select pId from history
+
+SQL SELECT INTO 语句可用于创建表的备份复件。
+
+SELECT INTO 语句从一个表中选取数据，然后把数据插入另一个表中。
+SELECT INTO 语句常用于创建表的备份复件或者用于对记录进行存档。
+
+SELECT LastName,Firstname
+INTO Persons_backup
+FROM Persons
+WHERE City='Beijing'   sqlite好像不适用或者是软件Datum free不适用
+
+
+
+IN 子句可用于向另一个数据库中拷贝表：
+SELECT *
+INTO Persons IN 'Backup.mdb'
+FROM Persons
+
+
+
+SQL SELECT INTO 实例 - 被连接的表
+从一个以上的表中选取数据也是可以做到的。
+下面的例子会创建一个名为 "Persons_Order_Backup" 的新表，其中包含了从 Persons 和 Orders 两个表中取得的信息：
+SELECT Persons.LastName,Orders.OrderNo
+INTO Persons_Order_Backup
+FROM Persons
+INNER JOIN Orders
+ON Persons.Id_P=Orders.Id_P
+
+
+
+CREATE DATABASE my_db
+
+CREATE TABLE Persons
+(
+Id_P int,
+LastName varchar(255),
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255)
+)
+
+SQL 约束
+我们将主要探讨以下几种约束：
+	•	NOT NULL
+	•	UNIQUE
+	•	PRIMARY KEY
+	•	FOREIGN KEY
+	•	CHECK
+	•	DEFAULT
+
+CREATE TABLE Persons
+(
+Id_P int NOT NULL,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255)
+)
+
+
+UNIQUE 约束唯一标识数据库表中的每条记录。
+UNIQUE 和 PRIMARY KEY 约束均为列或列集合提供了唯一性的保证。
+PRIMARY KEY 拥有自动定义的 UNIQUE 约束。
+请注意，每个表可以有多个 UNIQUE 约束，但是每个表只能有一个 PRIMARY KEY 约束。
+CREATE TABLE Persons
+(
+Id_P int NOT NULL,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255),
+UNIQUE (Id_P)
+)
+
+SQL Server / Oracle / MS Access:
+CREATE TABLE Persons
+(
+Id_P int NOT NULL UNIQUE,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255)
+)
+
+
+如果需要命名 UNIQUE 约束，以及为多个列定义 UNIQUE 约束，请使用下面的 SQL 语法：
+MySQL / SQL Server / Oracle / MS Access:
+CREATE TABLE Persons
+(
+Id_P int NOT NULL,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255),
+CONSTRAINT uc_PersonID UNIQUE (Id_P,LastName)
+)
+
+ALTER TABLE Persons
+ADD UNIQUE (Id_P)
+
+ALTER TABLE Persons
+ADD CONSTRAINT uc_PersonID UNIQUE (Id_P,LastName)
+
+
+撤销 UNIQUE 约束
+如需撤销 UNIQUE 约束，请使用下面的 SQL：
+MySQL:
+ALTER TABLE Persons
+DROP INDEX uc_PersonID
+SQL Server / Oracle / MS Access:
+ALTER TABLE Persons
+DROP CONSTRAINT uc_PersonID
+
+主键必须包含唯一的值。
+主键列不能包含 NULL 值。
+每个表都应该有一个主键，并且每个表只能有一个主键。
+
+MySQL:
+CREATE TABLE Persons
+(
+Id_P int NOT NULL,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255),
+PRIMARY KEY (Id_P)
+)
+SQL Server / Oracle / MS Access:
+CREATE TABLE Persons
+(
+Id_P int NOT NULL PRIMARY KEY,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255)
+)
+
+如果需要命名 PRIMARY KEY 约束，以及为多个列定义 PRIMARY KEY 约束，请使用下面的 SQL 语法：
+MySQL / SQL Server / Oracle / MS Access:
+CREATE TABLE Persons
+(
+Id_P int NOT NULL,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255),
+CONSTRAINT pk_PersonID PRIMARY KEY (Id_P,LastName)
+)
+
+
+ALTER TABLE Persons
+ADD PRIMARY KEY (Id_P)
+
+
+ALTER TABLE Persons
+ADD CONSTRAINT pk_PersonID PRIMARY KEY (Id_P,LastName)
+
+如果您使用 ALTER TABLE 语句添加主键，必须把主键列声明为不包含 NULL 值（在表首次创建时）。
+
+MySQL:
+ALTER TABLE Persons
+DROP PRIMARY KEY
+SQL Server / Oracle / MS Access:
+ALTER TABLE Persons
+DROP CONSTRAINT pk_PersonID
+
+
+SQL FOREIGN KEY 约束
+一个表中的 FOREIGN KEY 指向另一个表中的 PRIMARY KEY。
+FOREIGN KEY 约束用于预防破坏表之间连接的动作。
+FOREIGN KEY 约束也能防止非法数据插入外键列，因为它必须是它指向的那个表中的值之一。
+下面的 SQL 在 "Orders" 表创建时为 "Id_P" 列创建 FOREIGN KEY：
+
+CREATE TABLE Orders
+(
+Id_O int NOT NULL,
+OrderNo int NOT NULL,
+Id_P int,
+PRIMARY KEY (Id_O),
+FOREIGN KEY (Id_P) REFERENCES Persons(Id_P)
+)
+
+create table persons
+(
+idp int not null,
+lastname varchar(255),
+pId text not null,
+FOREIGN key (pId) REFERENCES home(pId)
+
+)
+
+create table person
+(
+idp int not null PRIMARY key,
+lastname varchar(255),
+pId text not null
+)
+
+
+CREATE TABLE Orders
+(
+Id_O int NOT NULL PRIMARY KEY,
+OrderNo int NOT NULL,
+Id_P int FOREIGN KEY REFERENCES Persons(Id_P)
+)
+
+如果需要命名 FOREIGN KEY 约束，以及为多个列定义 FOREIGN KEY 约束，请使用下面的 SQL 语法：
+CREATE TABLE Orders
+(
+Id_O int NOT NULL,
+OrderNo int NOT NULL,
+Id_P int,
+PRIMARY KEY (Id_O),
+CONSTRAINT fk_PerOrders FOREIGN KEY (Id_P)
+REFERENCES Persons(Id_P)
+)
+
+
+如果在 "Orders" 表已存在的情况下为 "Id_P" 列创建 FOREIGN KEY 约束，请使用下面的 SQL：
+
+ALTER TABLE Orders
+ADD FOREIGN KEY (Id_P)
+REFERENCES Persons(Id_P)
+
+如果需要命名 FOREIGN KEY 约束，以及为多个列定义 FOREIGN KEY 约束，请使用下面的 SQL 语法：
+
+ALTER TABLE Orders
+ADD CONSTRAINT fk_PerOrders
+FOREIGN KEY (Id_P)
+REFERENCES Persons(Id_P)
+
+
+撤销 FOREIGN KEY 约束
+如需撤销 FOREIGN KEY 约束，请使用下面的 SQL：
+MySQL:
+ALTER TABLE Orders
+DROP FOREIGN KEY fk_PerOrders
+SQL Server / Oracle / MS Access:
+ALTER TABLE Orders
+DROP CONSTRAINT fk_PerOrders
+
+SQL CHECK 约束
+CHECK 约束用于限制列中的值的范围。
+如果对单个列定义 CHECK 约束，那么该列只允许特定的值。
+如果对一个表定义 CHECK 约束，那么此约束会在特定的列中对值进行限制。
+drop table person  删除表
+My SQL:
+create table person
+(
+idp int  not null,
+city varchar(255),
+check (idp > 0)
+)
+CREATE TABLE Persons
+(
+Id_P int NOT NULL,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255),
+CHECK (Id_P>0)
+)
+
+
+
+SQL Server / Oracle / MS Access:
+CREATE TABLE Persons
+(
+Id_P int NOT NULL CHECK (Id_P>0),
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255)
+)
+
+
+如果需要命名 CHECK 约束，以及为多个列定义 CHECK 约束，请使用下面的 SQL 语法：
+MySQL / SQL Server / Oracle / MS Access:
+CREATE TABLE Persons
+(
+Id_P int NOT NULL,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255),
+CONSTRAINT chk_Person CHECK (Id_P>0 AND City='Sandnes')
+)
+
+
+SQL CHECK Constraint on ALTER TABLE
+如果在表已存在的情况下为 "Id_P" 列创建 CHECK 约束，请使用下面的 SQL：
+MySQL / SQL Server / Oracle / MS Access:
+ALTER TABLE Persons
+ADD CHECK (Id_P>0)
+如果需要命名 CHECK 约束，以及为多个列定义 CHECK 约束，请使用下面的 SQL 语法：
+MySQL / SQL Server / Oracle / MS Access:
+ALTER TABLE Persons
+ADD CONSTRAINT chk_Person CHECK (Id_P>0 AND City='Sandnes')
+
+
+撤销 CHECK 约束
+如需撤销 CHECK 约束，请使用下面的 SQL：
+SQL Server / Oracle / MS Access:
+ALTER TABLE Persons
+DROP CONSTRAINT chk_Person
+MySQL:
+ALTER TABLE Persons
+DROP CHECK chk_Person
+
+SQL DEFAULT 约束
+DEFAULT 约束用于向列中插入默认值。
+如果没有规定其他的值，那么会将默认值添加到所有的新记录。
+下面的 SQL 在 "Persons" 表创建时为 "City" 列创建 DEFAULT 约束：
+
+CREATE TABLE Persons
+(
+Id_P int NOT NULL,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255) DEFAULT 'Sandnes'
+)
+
+create table persons
+(
+idp int  not null,
+city varchar(255) default beijing 这里 或者是’beijing’
+
+)
+
+通过使用类似 GETDATE() 这样的函数，DEFAULT 约束也可以用于插入系统值：
+CREATE TABLE Orders
+(
+Id_O int NOT NULL,
+OrderNo int NOT NULL,
+Id_P int,
+OrderDate date DEFAULT GETDATE()
+)
+
+
+如果在表已存在的情况下为 "City" 列创建 DEFAULT 约束，请使用下面的 SQL：
+MySQL:
+ALTER TABLE Persons
+ALTER City SET DEFAULT 'SANDNES'
+SQL Server / Oracle / MS Access:
+ALTER TABLE Persons
+ALTER COLUMN City SET DEFAULT 'SANDNES'
+
+撤销 DEFAULT 约束
+如需撤销 DEFAULT 约束，请使用下面的 SQL：
+MySQL:
+ALTER TABLE Persons
+ALTER City DROP DEFAULT
+SQL Server / Oracle / MS Access:
+ALTER TABLE Persons
+ALTER COLUMN City DROP DEFAULT
+
+
+CREATE INDEX 语句用于在表中创建索引。
+您可以在表中创建索引，以便更加快速高效地查询数据。
+用户无法看到索引，它们只能被用来加速搜索/查询。
+注释：更新一个包含索引的表需要比更新一个没有索引的表更多的时间，这是由于索引本身也需要更新。因此，理想的做法是仅仅在常常被搜索的列（以及表）上面创建索引。
+
+create index indexhome on home (uTime)
+
+在表上创建一个简单的索引。允许使用重复的值：
+CREATE INDEX index_name
+ON table_name (column_name)
+
+在表上创建一个唯一的索引。唯一的索引意味着两个行不能拥有相同的索引值。
+CREATE UNIQUE INDEX index_name
+ON table_name (column_name)
+
+如果您希望以降序索引某个列中的值，您可以在列名称之后添加保留字 DESC：
+CREATE INDEX PersonIndex
+ON Person (LastName DESC) 
+
+假如您希望索引不止一个列，您可以在括号中列出这些列的名称，用逗号隔开：
+CREATE INDEX PersonIndex
+ON Person (LastName, FirstName)
+
+
+通过使用 DROP 语句，可以轻松地删除索引、表和数据库。
+
+用于 Microsoft SQLJet (以及 Microsoft Access) 的语法:
+DROP INDEX index_name ON table_name
+用于 MS SQL Server 的语法:
+DROP INDEX table_name.index_name
+用于 IBM DB2 和 Oracle 语法:
+DROP INDEX index_name
+用于 MySQL 的语法:
+ALTER TABLE table_name DROP INDEX index_name
+
+
+DROP TABLE 语句用于删除表（表的结构、属性以及索引也会被删除）：
+
+DROP TABLE 表名称
+
+DROP DATABASE 语句用于删除数据库：
+DROP DATABASE 数据库名称
+
+如果我们仅仅需要除去表内的数据，但并不删除表本身，那么我们该如何做呢？
+请使用 TRUNCATE TABLE 命令（仅仅删除表格中的数据）：
+TRUNCATE TABLE 表名称    英文 ：缩短 截断
+
+ALTER TABLE 语句
+alter table home add addcolumn int 添加列
+
+
+ALTER TABLE table_name
+ADD column_name datatype
+
+ALTER TABLE table_name 
+DROP COLUMN column_name
+某些数据库系统不允许这种在数据库表中删除列的方式 (DROP COLUMN column_name)。
+要改变表中列的数据类型，请使用下列语法：
+ALTER TABLE table_name
+ALTER COLUMN column_name datatype
+
+ALTER TABLE Persons
+ALTER COLUMN Birthday year
+请注意，"Birthday" 列的数据类型是 year，可以存放 2 位或 4 位格式的年份。
+
+Auto-increment 会在新记录插入表中时生成一个唯一的数字。
+下列 SQL 语句把 "Persons" 表中的 "P_Id" 列定义为 auto-increment 主键：
+CREATE TABLE Persons
+(
+P_Id int NOT NULL AUTO_INCREMENT,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255),
+PRIMARY KEY (P_Id)
+)
+MySQL 使用 AUTO_INCREMENT 关键字来执行 auto-increment 任务。
+默认地，AUTO_INCREMENT 的开始值是 1，每条新记录递增 1。
+要让 AUTO_INCREMENT 序列以其他的值起始，请使用下列 SQL 语法：
+ALTER TABLE Persons AUTO_INCREMENT=100
+
+用于 SQL Server 的语法
+下列 SQL 语句把 "Persons" 表中的 "P_Id" 列定义为 auto-increment 主键：
+CREATE TABLE Persons
+(
+P_Id int PRIMARY KEY IDENTITY,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255)
+)
+MS SQL 使用 IDENTITY 关键字来执行 auto-increment 任务。
+默认地，IDENTITY 的开始值是 1，每条新记录递增 1。
+要规定 "P_Id" 列以 20 起始且递增 10，请把 identity 改为 IDENTITY(20,10)
+用于 Access 的语法
+下列 SQL 语句把 "Persons" 表中的 "P_Id" 列定义为 auto-increment 主键：
+CREATE TABLE Persons
+(
+P_Id int PRIMARY KEY AUTOINCREMENT,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255)
+)
+MS Access 使用 AUTOINCREMENT 关键字来执行 auto-increment 任务。
+默认地，AUTOINCREMENT 的开始值是 1，每条新记录递增 1。
+要规定 "P_Id" 列以 20 起始且递增 10，请把 autoincrement 改为 AUTOINCREMENT(20,10)
+用于 Oracle 的语法
+在 Oracle 中，代码稍微复杂一点。
+您必须通过 sequence 对创建 auto-increment 字段（该对象生成数字序列）。
+请使用下面的 CREATE SEQUENCE 语法：
+CREATE SEQUENCE seq_person
+MINVALUE 1
+START WITH 1
+INCREMENT BY 1
+CACHE 10
+上面的代码创建名为 seq_person 的序列对象，它以 1 起始且以 1 递增。该对象缓存 10 个值以提高性能。CACHE 选项规定了为了提高访问速度要存储多少个序列值。
+要在 "Persons" 表中插入新记录，我们必须使用 nextval 函数（该函数从 seq_person 序列中取回下一个值）：
+INSERT INTO Persons (P_Id,FirstName,LastName)
+VALUES (seq_person.nextval,'Lars','Monsen')
+
+
+
+SQL VIEW（视图）
+视图是可视化的表。
+
+SQL CREATE VIEW 语法
+CREATE VIEW view_name AS
+SELECT column_name(s)
+FROM table_name
+WHERE condition
+注释：视图总是显示最近的数据。每当用户查询视图时，数据库引擎通过使用 SQL 语句来重建数据。
+create view [current product list] as select pId,uTime from home where pId>(select avg(uTime) from home)
+
+CREATE VIEW [Current Product List] AS
+SELECT ProductID,ProductName
+FROM Products
+WHERE Discontinued=No
+
+SELECT * FROM [Current Product List]
+
+CREATE VIEW [Products Above Average Price] AS
+SELECT ProductName,UnitPrice
+FROM Products
+WHERE UnitPrice>(SELECT AVG(UnitPrice) FROM Products) 
+
+
+
+
+SELECT * FROM [Category Sales For 1997]
+WHERE CategoryName='Beverages'
+
+
+SQL 更新视图
+CREATE OR REPLACE VIEW view_name AS
+SELECT column_name(s)
+FROM table_name
+WHERE condition
+
+
+SQL 撤销视图
+DROP VIEW view_name
+
+SQL Date 函数
+
+SQL NULL 值
+NULL 用作未知的或不适用的值的占位符。
+注释：无法比较 NULL 和 0；它们是不等价的。
+SQL IS NULL
+SELECT LastName,FirstName,Address FROM Persons
+WHERE Address IS NULL
+
+SQL IS NOT NULL
+SELECT LastName,FirstName,Address FROM Persons
+WHERE Address IS NOT NULL
+
+SQL NULL 函数
+SQL Server / MS Access
+SELECT ProductName,UnitPrice*(UnitsInStock+ISNULL(UnitsOnOrder,0))
+FROM Products
+如果是null 设置值为0
+Oracle
+Oracle 没有 ISNULL() 函数。不过，我们可以使用 NVL() 函数达到相同的结果：
+
+在 MySQL 中，我们可以使用 IFNULL() 函数
+或者我们可以使用 COALESCE() 函数，（意思是联合 合并）
+
+函数的类型
+在 SQL 中，基本的函数类型和种类有若干种。函数的基本类型是：
+	•	Aggregate 函数        合计函数 AVG(column) COUNT(column)  COUNT(*)
+
+	·	返回被选行数 MAX(column) MIN(column) SUM(column)
+	•	
+	•	
+	•	Scalar 函数      Scalar 函数的操作面向某个单一的值，并返回基于输入值的一个单一的值。 UCASE(c) 大写  LCASE(c)
+
+
+
+
+SQL COUNT(DISTINCT column_name) 语法
+COUNT(DISTINCT column_name) 函数返回指定列的不同值的数目：
+SELECT COUNT(DISTINCT column_name) FROM table_name
+注释：COUNT(DISTINCT) 适用于 ORACLE 和 Microsoft SQL Server，但是无法用于 Microsoft Access。
+
+
+SELECT SUM(OrderPrice) AS OrderTotal FROM Orders
+
+GROUP BY 语句用于结合合计函数，根据一个或多个列对结果集进行分组。
+
+
+HAVING 子句
+在 SQL 中增加 HAVING 子句原因是，WHERE 关键字无法与合计函数一起使用。
+SELECT Customer,SUM(OrderPrice) FROM Orders
+GROUP BY Customer
+HAVING SUM(OrderPrice)<2000
+
+现在我们希望查找客户 "Bush" 或 "Adams" 拥有超过 1500 的订单总金额。
+我们在 SQL 语句中增加了一个普通的 WHERE 子句：
+SELECT Customer,SUM(OrderPrice) FROM Orders
+WHERE Customer='Bush' OR Customer='Adams'
+GROUP BY Customer
+HAVING SUM(OrderPrice)>1500
+
+
+
+MID() 函数
+MID 函数用于从文本字段中提取字符。
+SQL MID() 语法
+SELECT MID(column_name,start[,length]) FROM table_name
+
+SELECT MID(City,1,3) as SmallCity FROM Persons
+结果：London —》Lon
+
+
+LEN() 函数
+LEN 函数返回文本字段中值的长度。
+ROUND() 函数
+ROUND 函数用于把数值字段舍入为指定的小数位数。
+SELECT ProductName, ROUND(UnitPrice,0) as UnitPrice FROM Products
+
+NOW() 函数
+NOW 函数返回当前的日期和时间。
+提示：如果您在使用 Sql Server 数据库，请使用 getdate() 函数来获得当前的日期时间。
+SELECT NOW() FROM table_name
+
+12/29/2008 11:36:05 AM
+FORMAT() 函数
+FORMAT 函数用于对字段的显示进行格式化。
+SELECT FORMAT(column_name,format) FROM table_name
+
+SELECT ProductName, UnitPrice, FORMAT(Now(),'YYYY-MM-DD') as PerDate
+FROM Products
+结果  时间：12/29/2008
+
+
+
+
+
+
+
