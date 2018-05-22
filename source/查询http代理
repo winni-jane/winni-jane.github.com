@@ -1,0 +1,55 @@
+
+```
+
+//         [request setValue:@"10.1.1.235" forHTTPHeaderField:@"Host"];
+//         [request setValue:@"3128" forHTTPHeaderField:@"Port"];
+//        NSLog(@"%@",request.allHTTPHeaderFields);
+        
+        
+        
+        /*
+        NSString *hostKey;
+        NSString *portKey;
+        NSString *proxyType;
+        proxyType = (NSString *)kCFProxyTypeHTTP;
+        hostKey = (NSString *)kCFStreamPropertyHTTPProxyHost;
+        portKey = (NSString *)kCFStreamPropertyHTTPProxyPort;
+        if ([[[_startUrl scheme] lowercaseString] isEqualToString:@"https"]) {
+            hostKey = (NSString *)kCFStreamPropertyHTTPSProxyHost;
+            portKey = (NSString *)kCFStreamPropertyHTTPSProxyPort;
+        }
+//         CFReadStreamRef readStream;
+//        CFWriteStreamRef writeStream;
+//
+//        CFStreamCreatePairWithSocketToHost(NULL,(__bridge CFStringRef)[_startUrl host], 3128, &readStream, &writeStream);
+         NSInputStream *inputStream;
+          inputStream = (NSInputStream *)CFReadStreamCreateForHTTPRequest(kCFAllocatorDefault, request);
+        NSMutableDictionary *proxyToUse = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"10.1.1.235",hostKey,[NSNumber numberWithInt:3128],portKey,nil];
+        CFReadStreamSetProperty((CFReadStreamRef)inputStream, kCFStreamPropertyHTTPProxy,(__bridge CFTypeRef)(proxyToUse));
+       */
+        //
+  
+        
+        NSDictionary *proxySettings = (__bridge NSDictionary *)(CFNetworkCopySystemProxySettings());
+        NSArray *proxies = (__bridge NSArray *)(CFNetworkCopyProxiesForURL((__bridge CFURLRef _Nonnull)([NSURL URLWithString:@"http://www.baidu.com"]), (__bridge CFDictionaryRef _Nonnull)(proxySettings)));
+        NSLog(@"\n%@",proxies);
+        
+        NSMutableDictionary *settings = proxies[0];
+//        [settings setObject:@"10.1.1.235" forKey:(NSString *)kCFProxyHostNameKey];
+//        [settings setObject:@"3128" forKey:(NSString *)kCFProxyPortNumberKey];
+        NSLog(@"%@",[settings objectForKey:(NSString *)kCFProxyHostNameKey]);
+        NSLog(@"%@",[settings objectForKey:(NSString *)kCFProxyPortNumberKey]);
+        NSLog(@"%@",[settings objectForKey:(NSString *)kCFProxyTypeKey]);
+
+        if ([[settings objectForKey:(NSString *)kCFProxyTypeKey] isEqualToString:@"kCFProxyTypeNone"])
+        {
+            NSLog(@"没代理");
+        }
+        else
+        {
+            NSLog(@"设置了代理");
+        }
+        //
+        
+
+```
