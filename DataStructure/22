@@ -33,9 +33,13 @@ ADT  List{
 2.2 2.2 线性表的顺序表示和实现
 
 顺序表: 位置上的”相邻”关系。
+
 说明：顺序表各元素存储在一块连续的存储单元中，实际对应一个数组。
+
 优点：实现简单方便,可据首地址随机访问各元素
+
 缺点：插入或删除元素时会引起大量的数据元素移动(表尾除外)；对于长度变化较大的线性表，要一次性地分配足够的存储空间，但这些空间常常又得不到充分的利用；顺序表的容量扩充较复杂。
+
 
 ```
 //线性表的动态分配顺序存储结构 
@@ -62,9 +66,12 @@ Status InitList_Sq(SqList &L){
  L.listsize=LIST_INIT_SIZE;//初始化存储容量
  return(OK);
 }//InitList_Sq
+
 ```
 莫忘length与listsize
 复杂度:O(1)
+
+---ListDelete_Sq
 
 ```
 void ListDelete(SqList &L,int i,ElemType &e){
@@ -80,6 +87,7 @@ void ListDelete(SqList &L,int i,ElemType &e){
 
 ```
 最坏复杂度O(n);好O(1)
+
 平均移动
 ![](picture/04.png '')
 ![](picture/05.png '')
