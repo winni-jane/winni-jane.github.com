@@ -1,0 +1,87 @@
+1.逻辑结构+操作集---抽象数据类型
+
+线性表的抽象数据类型定义
+
+```
+ADT  List{
+    数据对象:ai|ai∈ElemSet，i=1,2,…,n,n>=0)
+    数据关系:R={<ai-1,ai>|ai-1,ai∈D,i=1,2,,n-1}。	线性表也可表示作 (a1,a2,…,an)，n为表 	长,n=0时线性表称为空表
+    基本操作：
+        InitList(&L);
+           操作结果：构造一个空表L
+        DestroyList(&L);
+           初始条件:线性表L已存在
+           操作结果：销毁线性表L 
+   加工型操作:改变线性表结构的操作,参数Ｌ应采用引用传递方式
+        ClearList(&L)// 将有效元素个数置0, 			//销毁释放全部空间，清空不然
+        ListInsert(&L,i,e)//注意初始条件及表长改变
+        //1≤i≤ListLength(L)+1;表长加1
+        ListDelete(&L,i,&e)//注意初始条件及表长
+         //1≤i≤ListLength(L);L与e均引用参数;表长减1
+   引用型操作:不改变线性表结构的操作
+          ListEmpty(L)
+          ListLength(L)
+         GetElem(L,i,&e)
+         LocateElem(L,e,compare())
+            //函数作参数,且返回值为位序，找不到则返回0
+         PriorElem(L,cur_e,&pre_e)
+         NextElem(L,cur_e,&next_e)
+         ListTraverse(L,visit())//常用以输出链表
+
+```
+
+2.2 2.2 线性表的顺序表示和实现
+
+顺序表: 位置上的”相邻”关系。
+说明：顺序表各元素存储在一块连续的存储单元中，实际对应一个数组。
+优点：实现简单方便,可据首地址随机访问各元素
+缺点：插入或删除元素时会引起大量的数据元素移动(表尾除外)；对于长度变化较大的线性表，要一次性地分配足够的存储空间，但这些空间常常又得不到充分的利用；顺序表的容量扩充较复杂。
+
+```
+//线性表的动态分配顺序存储结构 
+#define LIST_INIT_SIZE  100 //初始容量
+ #define LISTINCREMENT   10  //空间增量
+ typedef  ????  ElemType;
+ typedef struct{
+     ElemType  *elem;    //存储空间基址
+     int       length;  //表长,元素个数
+     int      listsize;//表容量,空间大小
+ }SqList;
+如SqList La; 则La.elem对应数组名,La.length表长
+
+```
+2.3 
+基本操作的实现---InitList_Sq
+
+```
+Status InitList_Sq(SqList &L){
+//构造空线性表L 
+ L.elem=(ElemType*)malloc(LIST_INIT_SIZE*sizeof(ElemType))
+ if(L.elem==0)exit(OVERFLOW); //常写作if(!L.elem)…
+ L.length=0;   //初始化表长为0，“空”表
+ L.listsize=LIST_INIT_SIZE;//初始化存储容量
+ return(OK);
+}//InitList_Sq
+```
+莫忘length与listsize
+复杂度:O(1)
+
+```
+void ListDelete(SqList &L,int i,ElemType &e){
+//在顺序表Ｌ中删除第ｉ个元素，用ｅ返回其值．
+//i的合法值是[1，ListLength(L)]
+  if(i<1||i>L.length) return ERROR;//删除位置不合理
+  ElemType *p=&L.elem[i-1],*q=L.elem+L.length-1;
+   e=*p;
+   while(p<q){*p=*(p+1); ++p;}  //删除位置后的元素左移
+   --L.length;
+   return Ok;
+}//ListDelete_Sq
+
+```
+最坏复杂度O(n);好O(1)
+平均移动
+![](picture/04.png '')
+![](picture/05.png '')
+
+
