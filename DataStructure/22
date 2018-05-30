@@ -93,3 +93,143 @@ void ListDelete(SqList &L,int i,ElemType &e){
 ![](picture/05.png '')
 
 
+---ListInsert_Sq
+
+```
+Status ListInsert_Sq(SqList &L,int i, ElemType e){
+//在顺序表L的第i个位置前插入元素e,i的合法值为1..L.length+1
+  if(i<1||i>L.length+1) return ERROR;   //插入位置不合法
+  if(L.length>=L.listsize){               //表满，增加存储容量
+      ElemType*newbase=(ElemType *)     
+         realloc(L.elem,(L.listsize+LISTINCREMENT)*sizeof(ElemType)）
+      if(!newbase)exit(OVERFLOW);     
+      L.elem=newbase; L.listsize+=LISTINCREMENT;
+   }
+  ElemType *q=&L.elem[i-1], *p=&L.elem[L.length-1];
+  while(p>=q){ *(p+1)=*p; --p; }  //插入位置后的元素右移
+  *q=e;
+  ++L.length;
+  return OK;
+}//ListInsert_Sq
+
+
+```
+最坏复杂度O(n);最好O(1)
+
+平均移动:
+![](picture/06.png '')
+
+
+函数指针的用法：实参为函数名,形参声明类似函数原型，(*compare) 等同于实参函数名
+
+
+
+----MergeList_Sq
+
+思路:设三个指针,pa pb分别遍历La与Lb中元素，比较当前指向的两个元素，较小的插入Lc中pc位置。
+
+```
+void MergeList_Sq (SqList La,SqList Lb,Sqlist &Lc){
+//归并非降顺序表La与Lb构成非降顺序表Lc
+Lc.listsize=La.length+Lb.length; Lc.length=Lc.listsize;
+Lc.elem=(ElemType*) malloc(Lc.listsize*sizeof(ElemType));
+if(!Lc.elem)exit(OVERFLOW); //存储分配失败
+ElemType *pa=La.elem, *pb=Lb.elem, *pc=Lc.elem;
+ElemType *pa_last=La.elem+La.length-1;
+ElemType *pb_last=Lb.elem+La.length-1;
+while(pa<=pa_last&&pb<=pb_last){    //归并
+    if(*pa<=*pb)*pc++=*pa++;
+    else   *pc++=*pb++;
+}
+while(pa<pa_last) *pc++=*pa++;  //插入La剩余段
+while(pb<pb_last) *pc++=*pb++; //插入Lb剩余段
+}//MergeList_Sq
+
+```
+时空复杂度（有序表）均为 O(La.length+Lb.length)
+
+普通集合求并时间复杂度O(nm)
+
+为提高求并集的效率、可借助有序表表示集合。
+
+---LocateElem_Sq
+复杂度:O(n)
+
+![](picture/07.png '')
+
+2.3  线性表的链式表示和实现
+
+头指针标识整个链表, 链表名即头指针；链表类型即头指针类型.
+
+结点包含数据域和指针域两部分。链表名指向第一个结点 (头指针)，尾结点指针域值为NULL。
+
+```
+
+typedef char ElemType;
+struct LNode{
+    ElemType data;          //数据域
+    struct LNode * next;  //指针域
+};
+struct LNode   node2;//定义一个结点node1
+struct LNode*  La;     //定义一个 链表L
+
+typedef  *****  ElemType;
+typedef struct LNode{
+     ElemType     data;   //数据域
+     struct LNode *   next;   //指针域
+}LNode,*LinkList;
+LNode node1,node2;      LinkList La,Lb；
+
+```
+
+3.单链表
+
+通常在”首元结点”前附设一个额外的“头结点”.头结点数据域不存元素(也可存表长等附加信息),头结点的指针域指向”首元结点”.链表名(头指针) 指向头结点.
+
+![](picture/08.png '')
+
+
+---GetElem_L
+
+```
+
+Status  GetElem_L(LinkList L,int i,ElemType &e){
+ //L为带头结点的单链表的头指针。
+ //第i个元素存在时,其值赋给e并返回OK,否则返回ERROR
+ LNode *p=L; int j=0;//p指向”第0个”元素结点，j是该结点的位序
+ while(p&&j<i){    //顺序查找，只要p不空且未到第i结点就前进
+     p=p->next;    ++j;
+ }
+ if(!p||i<1)return ERROR;    //第i个元素不存在 或 i<1,
+ e=p->data;                   //取第i个元素
+ return OK；
+}
+/*频度在1≤i≤n时为i,i>n时n,故复杂度为O(n)*/
+
+```
+-----ListInsert_L
+
+```
+
+Status ListInsert_L(LinkList &L, int i, ElemType e){
+LNode *p=L;  int j=0;  /*p始终指向第j个结点*/
+while(p&&j<i-1){p=p->next; ++j;}// 只要不空且未到第i-1个结点
+   if(!p||i<1) return  ERROR;  //第i-1个节点不存在或者i<1
+   LNode *temp;
+   temp=(LNode *)Malloc(sizeof(LNode));
+   if(!temp)exit(OVERFLOW);
+   temp->data=e; 
+   temp->next=p->next;
+   p->next=temp;
+   return(OK);
+}//ListInsert_L
+
+复杂度为O(n),同SqList
+
+```
+
+
+
+
+
+
