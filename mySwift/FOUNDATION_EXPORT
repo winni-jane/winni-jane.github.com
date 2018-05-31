@@ -1,0 +1,7 @@
+FOUNDATION_EXPORT 与 ＃define 都可以用来定义常量.
+
+使用FOUNDATION_EXPORT方法在检测字符串的值是否相等的时候效率更快.
+可以直接使用(myString == MyFirstConstant)来比较, 而define则使用的是([myString isEqualToString:MyFirstContant]).
+
+第一种是直接比较指针地址.
+第二种则是一一比较字符串的每一个字符是否相等.
