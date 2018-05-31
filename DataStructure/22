@@ -228,6 +228,117 @@ while(p&&j<i-1){p=p->next; ++j;}// 只要不空且未到第i-1个结点
 
 ```
 
+--------ListDelete_L
+```
+
+Status ListDelete_L(LinkList &L, int i, ElemType &e){
+  LNode *p=L,*q;  int j=0;  /*p始终指向第j个结点*/
+  while(p&&j<i-1){p=p->next; ++j;}//寻找第i-1个结点
+                                             // j 最终为i-1,除非到表尾p空
+  if(!p||!p->next||i<1) return  ERROR;//第i个或更前结点不存在,
+                 //分析教材,掌握找前驱的方法p=L;j=1;while(p->next&&j<i)
+  q=p->next;
+  e=q->data;
+  p->next=q->next;
+  free(q);
+  return(OK);
+}//ListDelete_L
+复杂度为O(n)
+
+
+```
+
+----CreateList_L
+
+```
+
+Status CreateList_L(LinkList &L, int n){
+//逆位序输入n个元素的值，建立带头结点的单链表L。
+LNode  *p; 
+L=(LinkList) malloc(sizeof(LNode));L->next=NULL;
+for(int i=1;i<=n;++i){
+    p=(LNode *)malloc(sizeof(LNode));  //LNode *等同LinkList
+    InputElem(p->data);
+    p->next=L->next;      L->next=p;//插入到表头
+ }
+}//CreateList_L
+
+总时间复杂度O(n)
+单链表就地逆置
+
+```
+-----MergeList_L 
+
+```
+
+void MergeList_L(LinkList &La,LinkList &Lb,LinkList &Lc){
+  //将非降链表La与Lb归并为非降链表Lc，原链表销毁,链表带头结点
+  LNode *pa=La->next, *pb=Lb->next;
+  LNode *pc=Lc=La;//用La的头结点作Lc的头结点
+  while(pa&&pb){
+    if(pa->data<pb->data){ pc->next=pa; pc=pa; pa=pa->next;}
+    else {pc->next=pb; pc=pb; pb=pb->next;}
+  }
+ if(pa)pc->next=pa;if(pb)pc->next=pb;//同pc->next=pa?pa:pb 
+ free(Lb);
+}
+
+时间复杂度O(La.length+Lb.length)
+空间复杂度O(1)
+
+```
+
+单链表优缺点:
+
+优点：空间利用好,插入删除不需移动数据,表头操作快.
+
+缺点：顺序访问,位序概念淡化, 表尾操作、求前驱、求表长慢.
+
+
+2.3.2 循环链表和尾指针
+
+```
+
+typedef LinkList CircularLinkList;
+LinkList R1,R2;
+或者
+typedef struct{
+     LinkList  head;//头指针
+     LinkList  tail;//尾指针
+}CircularLinkList;
+
+
+```
+![](picture/09.png '')
+
+
+2.3.3    双向(循环)链表
+
+```
+
+//---线性表的双向(循环)链表存储结构---
+typedef struct DuLNode{
+   ElemType     data;
+   struct DuLNode *prior;
+   struct DuLNode *next;
+}DuLNode,*DuLinkList;
+
+
+```
+![](picture/10.png '')
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
