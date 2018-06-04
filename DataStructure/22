@@ -377,9 +377,61 @@ typedef struct DuLNode{
  }LinkList;  //链式存储结构的线性表类型
  LinkList La,Lb,Lc;
 
+结点类操作
+Status MakeNode(Link &p,ElemType e);
+ 					//指针值赋空
+void freeNode(Link &p);
+结构初始化与结构销毁类操作
+Status InitList(LinkList  &L);
+	  //开辟头结点,表长赋0,头尾指针指向头结点
+Status DestroyList(LinkList &L);
+    //释放头结点与元素节点,头尾指针与表长赋0,O(n)
+引用型操作
+Position GetHead(LinkList L);//返回L中头结点的位置
+Position GetLast(LinkList L);
+Position PriorPos(LinkList L, Link p);//返回p前驱位置,O(n)
+Position NextPos(LinkList L, Link p);  //O(1)
+Status LocatePos(LinkList L,int i,Link &p);//用p返回第i个结点的位置,O(n)
+Position LocateElem(LinkList L,ElemType e,		                                   			Status (*compare)(ElemType,ElemType))
+//返回L中第一个与元素e满足关系compare()的元素的位置,O(n)
+加工型操作
+Status InsFirst(LinkList &L, Link s);//因L.len要改变故需用L作参数且为引用型参数(书错),注意s为指向结点的指针,表长加1，O(1)
+Status Append(LinkList &L, Link s);//将s所指一串结点接到L末尾,表长与尾指针均要变, 复杂度取决于尾指针和表长的改变
+Status InsAfter(LinkList &L,Link &p,Link s); //p后插入,p后移,表长加1,尾指针可能变,O(1)
+Status InsBefore(LinkList &L,Link &p,Link s);//p前插,p前移,长+1,O(n)
+
+Status DelFirst(LinkList &L, Link &q); //删除首元素结点用q返回,长减1
+Status DelAfter (LinkList &L,Link p,link &q);//删除p后结点以q带回,p不动，长减1，尾指针可能变
+Status  Remove(LinkList &L, Link &q)//删除尾结点以q返回, 尾指针与表长变,O(n)
+Status DelBefore(LinkList &L,Link p)//删除p前结点p不动q带回，O(n)
+//删除类操作中所删除结点不释放，用q带回且q的指针域赋空
+Status SetCurElem(Link &p,ElemType e)//用e更新p所指向结点中元素的值
+Status ClearList(LinkList &L)//释放头结点外的结点,表长置空,头尾指针指向头结点
+
+充分利用已经实现的，抽象数据类型及其基本操作，通过提供的接口解问题,不涉及内部细节
+例子：
+{
+    if(!InitList(Lc))return ERROR;  
+    ha=GetHead(La);hb=GetHead(hb);
+    pa=NextPos(La,ha); pb=NextPos(Lb,hb);
+    while(pa&&pb){    a=GetCurElem(pa); b=GetCurElem(pb);
+        if((*compare)(a,b)){
+             DeleteFirst(La,q);  Append (Lc,q); pa=NextPos(La,ha);
+         }
+         else {
+            DeleteFirst(Lb,q);  Append (Lc,q); pb=NextPos(La,ha);
+        }
+   }
+   if(pa)Append(Lc,pa);
+   else Append(Lc,pb);
+   FreeNode(ha);FreeNode(hb);//因Append不可用DestroyList(La);
+   return OK;
+}//MergeList_L
+
 
 ```
 
+总结：
 
 ![](picture/12.png '')
 
@@ -452,26 +504,32 @@ if(!ListEmpty(Pb) Append(Pa,qb);FreeNode(Lb.head);
 
 ```
 
+2.3.1  静态链表static linklist
+
+引入“游标”来作为指针指示与当前元素有关系的下一个元素的位置，称此种用数组描述的链表为“静态链表”。
 
 
+静态链表克服了顺序存储的部分缺点，如插入/删除时的数据移动，但仍然需要事先分配足够大存储空间，此外，与普通链表相比，静态链表无malloc及free函数，需要自己定义。
 
 
+![](picture/14.png '')
+```
 
+//- -线性表的静态单链表存储结构- -
+#define MAXSIZE 1000  //链表最大长度
+typedef ***  ElemType;
+typedef struct{
+  ElemType data;
+  int      cur;
+}component,SLinkList[MAXSIZE];
 
+//静态链表实现定位操作
+{
+      i=s[0].cur;
+      while(i&&s[i].data!=e)
+                       i=s[i].cur;
+      if(!i)return 0;      
+      return i;
+}//LocateElem_SL
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
