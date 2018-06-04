@@ -327,6 +327,137 @@ typedef struct DuLNode{
 ```
 ![](picture/10.png '')
 
+----ListInsert_DuL(&L,i,e)
+
+
+![](picture/11.png '')
+```
+  Status ListInsert_DuL(DuLinkList &L,int i,ElemType &e){
+//在带头结点的双向链表L的第i个位置插入e,1≤i≤表长+1
+  DuLNode *p=L; int j=0;
+  while(p&&j<i-1){p=p->next;++j;}//DuLNode *GetElemP_DuL(L,i-1)
+  if(!p||i<1) return ERROR;
+  s=(DuLNode *)malloc(sizeof(DuLNode));
+  if(!s)exit(OVERFLOW);
+  s->data=e;
+  s->prior=p; s->next=p->next;   //记:注意分析指针改变
+  p->next->prior =s;  p->next=s;  //次序对结果的影响 
+  return OK;
+}//ListDelete_DuL
+
+
+```
+
+----ListDelete_DuL(&L,i,&e)
+
+```
+
+ Status ListDelete_DuL(DuLinkList &L,int i,ElemType &e){
+//删除带头结点的双向链表L的第i个元素,1≤i≤ListLength(L)
+ if(!(p=GetElemP_Dul(L,i)))//GetElemP_Dul仿前页实现
+           return ERROR;
+  e=p->data;
+  p->prior->next=p->next;
+  p->next->prior=p->prior;
+  free(p);p=NULL;  //教材未写p=NULL;
+  return OK;
+}//ListDelete_DuL
+
+改进的单链表
+
+//从实际应用出发改进的带头结点的线性链表类型定义  
+  typedef struct LNode{ //结点类型
+     ElemType     data;
+     struct LNode   *next;
+ }*Link,*Position//Link与Position均为指向LNode的指针类型
+
+  typedef struct{       
+     Link head,tail;  //分别为指向头结点和尾结点的指针
+     int len;
+ }LinkList;  //链式存储结构的线性表类型
+ LinkList La,Lb,Lc;
+
+
+```
+
+
+![](picture/12.png '')
+
+
+![](picture/13.png '')
+
+
+
+一元多项式：
+```
+
+typedef struct{ float coef;   int expn;}term, ElemType;//起两个别名，包含一个表示系数的实数和一个表示指数的整数}
+typedef   LinkList  Polynomail;     //在单链表的基础上定义并实现
+//---部分基本操作的实现---
+Status CreatePolyn(Polynomial &P,int m){
+//假设用户严格按指数由小到大的顺序输入各项,据此创建多项式
+    InitList_L(P);  LNode* h=GetHead(P) , s;
+    term e;  e.coef=0; e.expn=-1; SetCurElem(h,e);     //头结点初始化
+    for(i=1;i<=m;++i){    //按指数由小到大的顺序输入各个项
+         InputTerm(e);  //scanf(“%f  %d”,&e.coef,&e.expn);
+         if(MakeNode(s,e))   //如果开辟结点成功
+                   Append(P,s);
+         else return ERROR 
+    }
+    return OK;
+}//CreatePolyn   T(n)=O(n)
+//若不按指数由小到大的顺序输入，应修改函数以创建有序链表
+
+若输入无序：
+Status LocateElem(L,e,&q,cmp)： 若L中存在与e指数相等(cmp返回0)的元素，则Locate返回TRUE,q指向第一个相等的元素；否则，Locate返回FALSE，同时，q指向第一个指数大于e(cmp大于0)的元素的前驱，若不存在大于e指数(cmp均小于0)的元素，则q指向尾结点
+int compare(ElemType t,ElemType e){return(t.expn-e.expn);}
+Status LocateElem(LinkList L,ElemType e,Link &q, Status(*cmp)(ElemType,ElemType)){
+   q=L.head;    //找第一个指数大于等于e指数的项
+   while(q->next!=NULL&&(*cmp)(q->next->data, e)<0)q=q->next;
+   if(q->next!=NULL&&cmp(q->next->data,e)==0){q=q->next; return TRUE;}
+   else           return FALSE; 
+}
+Status CreatePolyn(Polynomial &P,int n){
+    InitList_L(P);  Link h=GetHead(P) ,s;
+    term e;  e.coef=0; e.expn=-1; SetCurElem(h,e);   //头结点初始化
+    for(i=1;i<=n;++i){   
+         InputTerm(e);  //scanf(“%f  %d”,&e.coef,&e.expn); 
+         if(!LocateElem(P,e,q,compare)) //多项式P中用q定位插入位置前驱
+	if(MakeNode(s,e))  InsertAfter(P,q,s); 
+}//CreatePolyn
+
+
+```
+
+多项式加Pa=Pa+Pb,求和后销毁Pb.类似单链表归并。
+
+```
+思路:设两指针qa与qb分别遍历Pa与Pb,若均不空则比较当前两项,分三种情况:其一,Pa中项的指数小,则qa后移一项;  其二,两者指数相等,若系数相加和为零,此时从和多项式Pa中将该项删除(需事先设指针prea),同时释放Pb中的当前项(事先设指针preb);若指数相等系数和不为0，则修改Pa中当前项的系数值,同时释放Pb的当前结点;  其三,Pb中指数小,则删除Pb中当前项，插入到Pa中当前项的前边。
+void AddPoly(Polynomial &Pa,Polynomial &Pb){
+  Link prea=GetHead(Pa),preb=GetHead(Pb);
+  Link qa=NextPos(Pa,prea),qb=NextPos(Pb,preb);
+  while(qa&&qb){  //只要两个多项式中还有未处理的项
+      a=GetCurElem(qa);b=GetCurElem(qb);
+      switch(compare(a,b)){
+ case -1:prea=qa;qa=NextPos(Pa,qa);break;
+ case 0: sum=a.coef+b.coef;
+              if(sum){SetCurElem(qa,Add(qa, qb));prea=qa;qa=NextPos(Pa,qa);}                    	else  {DelAfter(Pa,prea,qa);free(qa);qa=NextPos(Pa,prea);}
+              DelAfter(Pb,preb,qb);free(qb);qb=NextPos(Pb,preb);
+             break;
+ case 1: DelAfter(Pb,preb,qb); InsertAfter(Pa,prea,qb);qb=NextPos(Lb,preb);
+     }//switch           
+if(!ListEmpty(Pb) Append(Pa,qb);FreeNode(Lb.head);
+}
+
+
+```
+
+
+
+
+
+
+
 
 
 
