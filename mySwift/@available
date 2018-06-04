@@ -1,0 +1,16 @@
+对于函数，类，协议等，可以使用@available声明这些类型的生命周期依赖于特定的平台和操作系统版本。而#available用在判断语句中（if, guard, while等），在不同的平台上做不同的逻辑。
+
+@available放在函数（方法），类或者协议前面。表明这些类型适用的平台和操作系统。
+@available(iOS 9, *)必须包含至少2个特性参数，其中iOS 9表示必须在 iOS 9 版本以上才可用。
+另外一个特性参数：星号（*），表示包含了所有平台。
+
+@available(*, deprecated, message: "Use 'folioReaderDidClose(_ folioReader: FolioReader)' instead.")
+
+
+
+
+
+
+
+
+
