@@ -1,0 +1,250 @@
+1.概念
+
+零或多个字符组成的有限序列，实际就是元素限定为字符的特殊线性表,记作s=‘a1a2…an’。
+
+串是一个特殊的线性表，但一般线性表的基本操作常以“单个元素”作为处理单位，如插入/删除某元素;而串的操作中多以“多个字符组成的串”为处理单位,如串的连接、求子串等, 因此对串类型及其操作重新进行定义。
+
+
+2.定义
+
+```
+
+ADT   String {
+    数据对象：D={ai|ai∈CharacterSet,i=1,2,…,n,n>=0}
+    数据关系：R={<ai-1,ai>|ai-1,ai∈D,i=2,…n)
+    基本操作：
+       //字符串生成、销毁操作
+         StrAssign(&T,chars)
+            初始条件:chars是字符串常量   
+            操作结果:生成值等于chars的串T
+         StrCopy(&T,S)
+            初始条件:串S存在
+            操作结果:由串S复制得串T
+         Concat(&T,S1,S2)
+            初始条件: 串S1和S2存在
+            操作结果: 由S1与S2连接构成新串T            
+         DestroyString(&S)
+           初始条件:串S已存在
+           操作结果:销毁串S 
+         ClearString(&S)
+            初始条件: 串S已存在
+            操作结果:将S清为空串
+         StrInsert(&S,pos,T)
+            初始条件:串S和T存在,1<=pos<=StrLength(S)+1
+            操作结果:在串S的第pos个字符之前插入串T
+         StrDelete(&S,pos,len)
+             初始条件:串S存在,1<=pos<=StrLength(S)-len+1
+             操作结果:从S中删除第pos个字符开始长len的子串
+          Replace(&S,T,V) 
+               初始条件:串S, T和 V 均已存在, 且 T 是非空串。 操作结果:用V替换主串S中出现的所有与T相等的不重叠子串。
+
+          StrLength(S)
+               初始条件:串S存在
+               操作结果:返回S中元素的个数，即串长
+          StrEmpty(S)
+                初始条件:串S已经存在
+                操作结果:空串返回TRUE,否则返回FALSE
+          SubString(&Sub,S,pos,len)
+                 初始条件:S存在,1≤pos≤StrLength(S),0≤len≤StrLength(S)-pos+1
+                 操作结果:用Sub返回串S中第pos个字符起长度为 len 的子串
+          StrCompare(S,T)
+                  初始条件:栈S已串S和T存在
+                  操作结果:S>T返回值>0,S=T返回0,S<T返回值<0
+          Index(S,T,pos)
+                  初始条件：主串S和模式串T存在,T非空,1≤pos≤StrLength(S)。
+                  操作结果：若主串S中第pos个字符后存在与T相等的子串则返回“该子串在主串s中的位置”(子串第一个字符的位序,pos后),否则返回0.
+
+```
+
+除串清空和销毁外StrAssign、Strcopy、Concat、 StrLength、 SubString、StrCompare六种操作构成一个最小操作子集。其他串操作可在这个最小操作子集上实现,如Index(S,T,pos)，实现如下：
+```
+int Index (String S, String T, int pos) {
+// T为非空串。若主串S中第pos个字符之后存在与 T相等的子串则返回第一个这样的子串在S中的位置，否则返回0
+  if (pos > 0) {   
+        n = StrLength(S);  m = StrLength(T);  i = pos;
+        while ( i <= n-m+1) {
+               SubString (sub, S, i, m);
+               if (StrCompare(sub,T) != 0)   ++i ;
+               else return i ;
+        } // while
+  } // if
+  return 0;
+} // Index
+
+
+```
+
+对字符串常量类似C语言直接以顺序存储方式存放各字符，末尾加\0,对串变量则要分情况考虑
+
+```
+串的定长顺序存储表示
+串的堆分配存储表示
+串的块链存储表示
+
+```
+
+1、串的定长顺序存储表示—静态字符数组
+#define MAXSTRLEN  255//至多255字符,多则截断
+
+typedef unsigned char SString[MAXSTRLEN+1];
+              // 0号单元不放字符元素而存放串长度,最大255
+
+
+ C语言中以’\0’作字符串结束符，而Pascal中根据串的0号单元判定字符串是否结束，本门课程为快速执行求长度等操作而采用后面一种方式；如此则S[0]或*S为串长，第i个字符为S[i]或者*(S+i)
+
+```
+
+Status StrAssign(SString &S,char*T){//T为字符串常量\0结束
+    char *p=T, *q=S+1;   int i=0;  
+    while(*p&&i<=MAXSTRLEN){*q++=*p++;  ++i; }
+    *S=i;  //赋串长，等同S[0]=i，不过前者快
+    return OK;
+} //若串T长度大于MAXSTRLEN则被截断,只取前MAXSTRLEN个字符
+
+Status StrLength(SString s){  return s[0];  }
+
+Status Concat(SString &T, SString S1, SString S2){
+//记:先复制S1到T, 求T长度，逐个复制S2中字符到T直到达到T的长度
+    char *p1=S1+1,  *p2=S2+1, *q=T; 
+    int  len_1=StrLength(S1),len_2=StrLength(S2), len, i;
+    for(i=1;i<=len_1;i++)*q++=*p1++; //结束后q指向待插入位置
+    len=(MAXSTRLEN-len_1)>=len_2?     //len为T的长度 		 	           len_1+len_2  : MAXSTRLEN;
+    while(i++<=len) *q++=*p2++;  //可能会发生截断
+    *T=len;   //赋串长
+    return OK;
+}//注意书中是算法描述,重易读,非程序,无法直接执行
+
+
+```
+
+2、串的堆分配存储表示—动态分配顺序存储
+
+```
+typedef struct {
+     char *ch;   // 存储区首地址或为NULL
+     int  length;   // 串长度
+ } HString; 
+//定长顺序存储结构下数组首元素存放串长，堆分配存储结构下数组各元素均存放有效字符
+
+
+Status StrAssign(HString &T, char *chars){ //chars为常量
+    char *p=chars,q;  int i=0;
+    if(T.ch) free(T.ch);
+    while(*p++)i++;    //求chars的长度
+  T.length=i;
+    if (!i)  T.ch=NULL;  
+    else { 
+             T.ch=(char *)malloc(i*sizeof(char));
+              if (!(T.ch)) exit OVERFLOW;
+              p=chars;  q=T.ch;
+              while(*p)*q++=*p++;
+     }
+     return OK;
+}//注意，p->data当p为NULL时非法
+
+Status StrInsert(HString S,int pos,HString T){
+    if(pos<1||pos>S.length+1)return ERROR;   //pos值非法
+    if(T.length){
+        S.ch=(char *)realloc(S.ch,(S.length+T.length)*sizeof(char));
+        if(!S.ch)exit(OVERFLOW);
+        for(i=S.length-1;i>=pos-1;--i)  //pos及其以后的元素后移
+              S.ch[i+T.length]=S.ch[i];
+       S.ch[pos-1..pos-1+T.length-1]=T.ch[0..T.length-1];//两实现
+        S.length+=T.length;
+     }
+    return OK;
+}
+
+
+int StrCompare(HString S,HString T) {
+     int i;
+     for(i=0;i<S.length && i< T.length;++i )
+          if (S.ch[i]!=T.ch[i]) 
+                return s.ch[i]-T.ch[i];
+     return S.length – T.length;//C语言中如何？
+ }
+
+Status Concat(HString &T, HString S1, HString S2) 
+{   // 用T返回由S1和S2联接而成的新串
+   if (T.ch)  free(T->ch);        // 释放旧空间
+   T.ch = (char *) malloc((S1->length+S2->length)*sizeof(char));
+   if(!T.ch) exit (OVERFLOW);
+   T->length = S1.length + S2.length;
+   T.ch[0..S1.length-1] = S1.ch[0..S1.length-1];//用下标和指针法实现
+   T.ch[S1->length..T->length-1] = S2->ch[0..S2->length-1];
+   return OK;
+}// Concat
+
+ Status SubString(HString &Sub, HString S, int pos, int len)
+ {  // 用Sub返回串S的第pos个字符起长度为len的子串
+   if (pos < 1 || pos>S.length || len<0 || len > S.length-pos+1)  
+                    return ERROR;
+   if (Sub.ch)  free (Sub.ch);    // 释放旧空间
+   if (!len) {Sub.ch=NULL;  Sub.length = 0; } // 空子串
+   else {
+            Sub.ch=(char *)malloc(len*sizeof(char));
+       Sub.ch[0..len-1]=S.ch[pos-1..pos+len-2];
+       Sub.length = len;
+    } // 完整子串
+   return OK;
+}
+
+```
+
+3.串的块链存储表示
+
+```
+
+#define  CHUNKSIZE  80  // 块大小
+  typedef  struct Chunk {  // 结点结构
+    char  ch[CUNKSIZE];
+    struct Chunk  *next;
+  } Chunk;
+  typedef struct {  // 串的链表结构
+    Chunk *head, *tail; // 串的头和尾指针
+     int   curlen;     // 串的当前长度
+  } LString;
+
+```
+
+
+
+![](picture/4/1.png '')
+
+
+4.3	串的模式匹配算法
+
+```
+一、蛮力算法(Brute Force)/简单算法
+二、KMP算法(D.E.Knuth,J.H.Morris,V.R.Pratt)  (克努特-莫里斯-普拉特算法)
+假设串采用定长顺序存储结构
+#define MAXSTRLEN  255
+typedef unsigned char SString[MAXSTRLEN+1];// 0号单元放串长
+
+```
+一、BF算法
+算法思想:从主串第pos个字符起(i),//逐个字符与T中当前字符(j)比较，若相同则比较下一个(i++,j++),不同则i回溯到S中“下一个开始比较的地方”,重新比较//如此重复直到匹配成功(j>T[0])或者i越界(i>S[0])
+说明:在第i个时失配如何将i后退到“下一个开始比较的地方”?
+    S到到目前已匹配了j-1个，故第一个匹配的位序是i-(j-1),故“下一个开始匹配的是i-j+2
+
+假设pos=1且已改进,则最坏情况下每次都部分匹配到子串的最后一位，这样每次都比较T[0]次，共S[0]-T[0]+1次，复杂度O(T[0]*S[0])
+
+```
+
+int Index(SString S, SString T, int pos) {
+   i = pos;     j = 1;
+   while (i <= S[0] && j <= T[0]) {
+        if (S[i] == T[j]) {   ++i;  ++j;   }
+        else {   i = i-j+2;   j = 1;   } 
+   }
+   if (j>T[0]) return i-T[0];  else return 0;
+}
+
+
+```
+
+
+
+
+
+
