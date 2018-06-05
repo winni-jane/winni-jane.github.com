@@ -137,6 +137,11 @@ Status StackTraverse(SqStack S,Status (*visit)(ElemType)){
 
 ```
 栈的链式存储结构定义:
+typedef struct SNode{  //链栈
+      datatype data;
+      struct SNode *next;
+}SNode,*LinkStack;
+LinkStack S3;//栈名S为栈顶元素指针
 
 Status InitStack(LinkStack &S){
      S=NULL;
@@ -163,6 +168,315 @@ Status Pop(LinkStack &S，SElemType &e){
 
 3.2 栈的应用
 
+十进制整数转换为八进制：
+```
+
+void conversion(  ) {
+        scanf (“%d”,&n);
+        Initstack(s);
+        while(n){
+             Push(s,n%8);
+             n=n/8;
+         }
+         while(!StackEmpty(s)){
+            Pop(s,e);
+            printf(“%d”,e);
+          }
+      } 
+
+
+```
+括号匹配检验：
+
+思路(补):依次扫描各符号,每遇一结束符都找最近的开始符来匹配,不匹配或未找到则报错.最后应左右括号完全匹配。
+
+初始化一个空栈，
+逐个扫描符号，
+如果当前符号是开始符则入栈。
+如果是结束符号则分两种情况，
+如果栈空则报告出错 //右多，
+否则,出栈,若弹出元素与当前元素不匹配则报告出错//不匹配。
+扫描结束,若栈不空则出错  //左多。
+
+```
+
+Status match(  ) {
+initstack(S);hasErr=0;
+   while((c=getchar())!=‘\n’ 			&&hasErr==0){
+     switch(c){
+       case ‘(’:
+       case ’[’:
+       case ‘{’:
+           push(S,c);  break;
+       case ’]’:
+           if(StackEmpty(S))                  	   {hasErr=1;break;}
+            else{
+                 pop(S,e);
+                 if(e!=‘[’){hasErr=1;break;}
+            }
+        case …………//类似处理)与}
+     }//switch
+   } 
+  if(hasErr==0&&StackEmpty(S))
+             Return TRUE;
+    else return FALSE;
+
+
+```
+
+行编辑程序：
+
+思路:为提高数据输入效率设置输入缓冲区.对于输入的一行数据,行结束时方将缓冲区剩余的数据存入用户数据区,中间过程允许编辑;若最近的一个字符出错则用退格符#表示删去,若当前行不要则用退行符@则将当前行清空.
+遇到文件结束符或行结束符前，每遇到一个符号，若它不是#或@则入栈,若是#则出栈,若是@则清空栈，一旦遇到行结束符或全文结束符则将缓冲区中数据保存到用户数据区。如此直到全文结束。
+
+```
+void LineEdit(){
+    InitStack(S); ch=getchar();
+    while(ch!=EOF){//全文未结束
+        while(ch!=‘\n’ &&ch!=EOF){//行未结束
+            switch(ch){
+                case ‘#’: Pop(S,c);  break;
+                case’@’: ClearStack(S);  break;
+                default: Push(S,ch);
+             }//switch;
+             ch=getchar();
+        }//行结束
+        Save(S)//传送栈中数据到用户数据区
+        ClearStack(S);//清空栈
+        if(ch==‘\n’)ch=getchar();
+     }
+}
+
+```
+迷宫求解。
+表达式求值：
+设操作符栈和操作数栈,运算符栈最初压入#,逐个扫描符号:{遇操作数则直接入栈,继续读下一字符；遇运算符则与栈顶运算符比较优先级,当前运算符优先级高(前面的运算还不应执行)则当前运算符入栈,读下一符号;否则栈顶运算符出栈,两操作数出栈,进行运算,所得结果入数栈,重新比较当前运算符(注意此时不读新运算符)与新栈顶运算符。}如此重复直到栈顶运算符与当前符号均为(#)。
+
+
+3.4 队列
+
+元素的插入和删除分别在表的两端进行。类似日常生活中排队,允许插入的一端为队尾(rear),允许删除端称队头(front)。
+特性:First In First Out先进先出，如操作系统中的作业队列和打印任务队列、日常生活中各类排队业务等均可用队列模拟。
+
+
+![](picture/3/3.png '')
+
+```
+ADT   Queue {
+       数据对象：D={ai|ai∈ElemSet,i=1,2,…,n,n>=0}
+       数据关系：R={<ai-1,ai>|ai-1,ai∈D，约定a1为队头，an为对尾部}
+       基本操作：
+           InitQueue (&Q)
+              操作结果:构造一个空队列
+           DestroyQueue(&Q)
+               初始条件: 队列Q已存在
+	 操作结果：销毁队列Q
+
+           ClearQueue(&Q)
+ 	      初始条件:队列Q已存在
+	       操作结果:将Q清为
+           EnQueue(&Q,e)
+ 	        初始条件: 队列Q已存在
+	        操作结果：插入e到队尾
+           DeQueue(&Q,&e)
+ 	         初始条件: 队列Q已存在且非空
+	         操作结果：删除队头元素用e返回其值
+           QueueEmpty(Q)
+                   初始条件:队列Q已经存在
+                   操作结果:空队列返回TRUE,否则返回FALSE
+           QueueLength(Q)
+                  初始条件:队列Q已经存在
+                  操作结果:返回Q中元素的个数
+            GetHead(Q,&e)
+                    初始条件:栈Q存在且非空
+                    操作结果:用e带回Q队头元素的值,队头不变
+            QueueTraverse(Q,visit())
+                     初始条件:队列Q存在且非空
+                     操作结果:从队头到队尾对Q中各元素执行visit操作，一般与PrintElem()结合用于输出队列中元素
+
+}  ADT  Queue
+
+
+```
+2、链队列的定义和基本操作实现
+
+
+![](picture/3/4.png '')
+
+
+```
+typedef  ???  QElemType 
+typedef struct QNode {
+    QElemType      data;
+    struct QNode  *next;
+  } QNode, *QueuePtr;
+
+typedef struct {
+  QueuePtr  front;//队头指针
+  QueuePtr  rear; //队尾指针
+} LinkQueue;// 链队列
+
+Q.front和Q.rear都指向空的头结点
+Status InitQueue (LinkQueue &Q) {
+   // 构造一个空队列Q
+   Q.front=Q.rear=(QueuePtr)malloc(sizeof(QNode));
+   if (!Q.front) exit (OVERFLOW);
+   Q.front->next = NULL;  //莫忘！！
+   return OK;
+   }//时间复杂度O(1)
+
+Status DestroyQueue (LinkQueue &Q) {
+ //销毁队列Q，此处不同于教材,先清空元素结点，后释放头结点
+  QueuePtr p=Q.front->next;
+	while(p){//依次释放首元素至最后一个元素
+		Q.front->next=p->next;free(p);p=Q.front->next;
+	}
+	free(Q.front);
+	Q.front=NULL;Q.rear=NULL; 
+	return OK;
+}//类此可写置空操作, 复杂度O(n)   
+
+Status EnQueue (LinkQueue &Q, QElemType e) {
+    // 插入元素e为Q的新的队尾元素
+     QueuePtr p;
+     p=(QueuePtr)malloc(sizeof(QNode));
+     if(!p)  exit(OVERFLOW);//存储分配失败
+     p->data = e;   p->next = NULL;//莫忘！！
+     Q.rear->next = p;    Q.rear = p;
+     return OK;
+  }//复杂度O(1)
+
+Status DeQueue (LinkQueue &Q, QElemType &e) {
+  // 若队列不空，则删除Q的队头元素，用 e 返回其“值”
+   if (Q.front ==Q.rear) return ERROR;//空队列
+   QueuePtr p= Q.front->next;   e = p->data;
+   Q.front->next = p->next;
+   if(Q.rear == p) Q.rear = Q.front;//只1个结点时改尾指针
+   free (p);
+   return OK;
+}//复杂度O(1)
+
+```
+3、循环队列（顺序队列）
+
+![](picture/3/6.png '')
+
+
+
+  假溢出是由于队尾rear的值和队头front的值不能由所定义数组下界值自动转为数组上界值而产生的。因此，解决的方法是把顺序队列所使用的存储空间构造成一个逻辑上首尾相连的循环队列。 
+
+![](picture/3/5.png '')
+
+![](picture/3/7.png '')
+
+解决顺序循环队列的队列满和队列空状态判断问题通常有三种方法：
+```
+
+    （1）少用一个存储空间
+       当少用一个存储空间时，以队尾rear加1等于队头 front为队列满的判断条件，即队列满的判断条件此时为：
+     (rear + 1) % maxSize == front
+     队列空的判断条件仍然为：
+       rear = = front
+
+（2）设置一个标志位
+     添加一个标志位。设标志位为tag，初始时置tag=0；每当入队列操作成功就置tag=1；每当出队列操作成功就置tag=0。则队列空的判断条件为：
+     rear == front && tag==0
+     队列满的判断条件为：
+     rear = = front && tag= =1
+（3）设置一个计数器
+     添加一个计数器。设计数器为count，初始时置count=0；每当入队列操作成功就使count加1；每当出队列操作成功就使count减1。这样，该计数器不仅具有计数功能，而且还具有像标志位一样的标志作用，则此时队列空的判断条件为：
+     count == 0
+     队列满的判断条件为：
+     count > 0 && rear == front 
+
+```
+类型定义：
+
+```
+#define MAXQSIZE  100  //最大队列长度
+typedef struct {
+    QElemType  *base;// 动态分配存储空间
+    int  front; // 头指针,队列不空则指向队列头元素
+    int  rear;  // 尾指针,队列不空则指向队列尾元素下一位置
+} SqQueue;
+
+ Status InitQueue (SqQueue &Q) {
+   // 构造一个空队列Q
+     Q.base=(QElemType*)malloc(MAXQSIZE*sizeof (QElemType));
+    if (!Q.base) exit (OVERFLOW);   // 存储分配失败
+    Q.front = Q.rear = 0;//
+    return OK;
+}//复杂度O(1)
+
+ Status DestroyQueue(SqQueue &Q) {
+   // 销毁队列Q
+     free(Q.base);
+    Q.front = Q.rear = 0; return OK;
+}//时间复杂度O(1)，比链队列快
+
+Status ClearQueue(SqQueue &Q) {
+   // 将队列Q置空
+  Q.front=Q.rear=0;
+    //只要相等即可
+  return OK;
+}//复杂度O(1)比链队列快
+
+Status EnQueue (SqQueue &Q, QElemType e) {  
+ // 插入元素e为Q的新的队尾元素,无法插入(已满)则返回ERROR
+  if((Q.rear+1)%MAXQSIZE==Q.front)return ERROR;
+  Q.base[Q.rear] = e;
+  Q.rear = (Q.rear+1) % MAXQSIZE; //加便可能越界,故取余 
+  return OK;
+}//时间复杂度O(1)
+
+Status DeQueue (SqQueue &Q, ElemType &e){ 
+ // 队列不空则删除队头元素, 用e带回其值并返OK; 否则返ERROR
+    if (Q.rear==Q.front) return ERROR;
+    e = Q.base[Q.front];
+    Q.front = (Q.front+1) % MAXQSIZE;    //加就可能越界,故取余
+    return OK;
+} //时间复杂度O(1)
+
+int QueueLength(SqQueue Q) {  
+    return(Q.rear-Q.front+MAXQSIZE)%MAXQSIZE;//减可能为负
+}//时间复杂度O(1)，比链队列快，可修改链队列定义
+
+Status QueueEmpty(SqQueue Q){ 
+    if (Q.rear==Q.front) return TRUE;
+    else  return FALSE;
+}//O(1)
+
+
+Status GetHead(SqQueue Q,QElemType &e){ 
+    if (Q.rear==Q.front) return ERROR;
+    e=Q.base[front];return OK;
+}// O(1)若要修改对头元素的值可新设SetHead(&Q,e)
+
+Status QueueTraverse(SqQueue Q, Status (*visit)(ElemType)){ 
+//从队头元素到队尾元素依次执行函数(*visit)
+ for(int i=Q.front;  i!=Q.rear;  i=(i+1)%MAXQSIZE ) (*visit)(Q.base[i]);
+  return  OK;
+}//O(n),常用于输出，如语句QueueTraverse(Q,PrintElem)
+
+
+```
+可根据实际情况对队列的结构加以修改,如定义双端队列(两头均可插入/删除)、输入受限的双端队列(一侧只允许删除、另一侧插入删除均可)、输出受限的双端队列等。
+
+3.4 优先级队列
+
+优先级队列是带有优先级的队列。 
+用顺序存储结构实现的优先级队列称作顺序优先级队列。 
+用链式存储结构存储的优先级队列称作链式优先级队列。 
+
+3.4.1 顺序优先级队列类
+
+   顺序优先级队列和顺序循环队列相比主要有两点不同：
+
+（1）对于顺序优先级队列来说，出队列操作不是把队头数据元素出队列，而是把队列中优先级最高的数据元素出队列。 
+
+（2）对于顺序优先级队列来说，数据元素由两部分组成，一部分是原先意义上的数据元素，另一部分是优先级。通常设计优先级为int类型的数值，并规定数值越小优先级越高。
+
+操作系统中的进程管理软件中就使用了优先级队列。
 
 
 
