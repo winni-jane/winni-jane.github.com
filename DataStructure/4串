@@ -263,7 +263,7 @@ public static int bf(String ts, String ps) {
   }
 ```
 二、KMP算法
-其实就是对子串进行分析 看子串中左右两部分是不是有重叠的部分。
+其实就是对子串进行分析 看子串中左右两部分是不是有重叠的部分（两部分可以重叠 不一定非得从中间分隔）。
 
 ![](picture/4/2.png '')
 
@@ -285,18 +285,89 @@ P[0 ~ k-1] == P[j-k ~ j-1]
 
 ![](picture/4/4.png '')
 
-next数组：
 
-next[j] = k，表示当T[i] != P[j]时，j指针的下一个位置。
+课本教材：下标从1开始,S代表主串，T代表子串：
 
-1. j已经在最左边了，不可能再移动了，这时候要应该是i指针后移。所以在代码中才会有next[0] = -1;
+  ![](picture/4/5.png '')
 
-2.j为1的时候，j指针一定是后移到0位置的。因为它前面也就只有这一个位置了。
+若S[i]与T[1]不配,则S[i]不应再与T中元素比较,next[1]=0,i后移
+若S[i]与T[2]不配,只能再拿S[i]与T[1]比;故next[2]=1  
 
-3.当P[k] == P[j]时，有next[j+1] == next[j] + 1
+二、KMP算法
 
-![](picture/4/5.png '')
+```
 
-4.如果P[k] != P[j],
+int Index_KMP(SString S, SString T, int pos) 
+{
+    i=pos;      j=1;
+    while ( i<=S[0] && j<=T[0] ) {
+        if (S[i]==T[j] || j==0 ) { ++i, ++j  } //匹配或next==0则后移
+        else { j=next[j]; } //特点：S的i指针不回溯,S[i]重新与T[j]比较
+    }
+    if (j>T[0] ) return i-T[0];  //子串结束，说明匹配成功
+    else return 0;
+} //Index_KMP
 
-https://www.cnblogs.com/yjiyjige/p/3263858.html
+```
+
+1.next算法（递推法求next函数值）：
+
+```
+void get_next(SString &T, int &next[] ) {
+  // 求模式串T的next函数值并存入数组next
+    i = 1;   next[1] = 0;   j = 0;
+   while (i < T[0]) {      //共有T[0]个next值需要求取
+      if (j==0 || T[i]==T[j]){     //第一种情况或者第二种情况下j=0
+	   ++i;  ++j; next[i] = j;   
+      }
+     else  j = next[j];         //第二种情况下j变成next[j]
+   }
+ } // get_next
+复杂度：O(T[0])
+
+
+```
+
+
+示例：
+
+  ![](picture/4/6.png '')
+
+
+2.实例与改进的nenxtval函数
+
+  ![](picture/4/7.png '')
+
+模式 aaaab 和主串aaabaaaab 匹配时，当i = 4,j=4时 next指示还需进行j = 3,j =2,j =1三次比较，实际上，因为模式中第1、2、3个字符和第4个字符都相等，可以将模式一气向右滑动4个字符的位置直接进行i=5、j=1的字符比较。发生问题的原因在于P[j] == P[next[j]]。
+
+nextval算法：
+
+```
+
+void get_nextval(SString &T, int &next[] ) {
+  // 求模式串T的nextval函数值并存入数组nextval
+    i = 1;   nextval[1] = 0;   j = 0;
+   while (i < T[0]) {      //共有T[0]个next值需要求取
+      if (j==0 || T[i]==T[j]){     //第一种情况或者第二种情况下j=0
+	   ++i;  ++j; 
+           if (T[i]!=T[j])nextval[i] = j;
+       else  nextval[i] = nextval[j];
+      }
+     else  j = nextval[j];         //第二种情况下j编程next[j]
+   }
+ }
+
+
+```
+三、模式匹配算法复杂度分析
+
+BF的最坏情况,S与T之间存在大量的部分匹配，比较总次数为 (S[0]-T[0]+1)*T[0]＝O(S[0]*T[0])
+
+Next函数与nextval函数的求取：复杂度O(T[0])，且模式串一般很短
+
+KMP算法：由于指针i无须回溯，对主串仅需从头到尾扫描一遍,尤其适于处理从外设输入的庞大文件,因无需回头读,更何况有些存储设备如磁带不能随机回溯.此外,KMP算法比较次数有所降低,复杂度为O(S[0]+T[0]).注意子串指针每右移一次则主串指针也移
+
+
+
+
+
