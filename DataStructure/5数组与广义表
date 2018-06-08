@@ -1,0 +1,267 @@
+5.1 数组的定义
+
+
+```
+ADT Array {
+  数据对象:D＝{aj1,j2,...jn|n为维数,设第i维长度为bi,则ji =0..bi-1}
+  数据关系：R＝{R1, R2, ..., Rn}  //Ri代表第i维上的相邻关系
+      Ri＝{<aj1,.(ji),.jn    ,   aj1..(ji+1)..jn >  |  0≤jk≤ bk-1, 0≤ji≤bi-2…}
+  基本操作：
+   InitArray(&A,n,bound1,...,boundn)
+       		   //n为维数，boundi为第i维长度
+   DestroyArray(&A)
+   Assign(&A, e, index1, ..., indexn)
+                   //将指定下标的元素赋值为e
+   Value(A, &e, index1, ..., indexn)
+                   //用e返回指定下标的元素的值
+}//ADT Array
+
+```
+
+5.3 矩阵的压缩存储
+
+5.3.1 特殊矩阵---对称矩阵
+
+
+```
+
+压缩:n*n对称矩阵实际需存储的元素数为1+2+…+n=n(n+1)/2，记录的是下三角矩阵。
+存储结构:{动态分配的一维数组+矩阵阶数}
+typedef struct{
+           ElemType* elem;  int n;
+  }SymMatrix;
+
+操作示例—初始化对称矩阵:
+Status InitSymMatrix(SymMatrix M,int n){
+    M.elem=(ElemType*)malloc(n*(n+1)/2*sizeof(ElemType));
+    if(!M.elem)exit(OVERFLOW);
+    M.n=n;  return OK;
+}
+
+GetElem(M,i,j,&e)
+//取i行j列元素用e返回,i≥1,j≥1,i与j要合法
+i>=j时为k=(1+2+…+ i-1) +  j  -1 =(i*(i-1)/2)+j-1
+     i<j时转换为求a[j][i]，如上 k=(j*(j-1)/2)+i-1
+（数组下标从0开始，对称矩阵为a11,a21,a22,……）
+
+```
+
+5.3.2 稀疏矩阵
+
+稀疏矩阵:稀疏因子=t/(m*n) <= 0.05的矩阵 
+
+用二维数组存储稀疏矩阵，一方面空间利用率低，实际只存储非零元素即可，其余默认为“零”;另一方面，很多操作可仅处理非零元素，如转置
+
+1) 尽可能少存或不存“零值”元素；
+
+2) 尽可能减少没有实际意义的运算
+
+
+![](picture/5/1.png '')
+
+1、静态分配的三元组顺序表存储结构
+
+
+```
+
+ #define  MAXSIZE  12500
+ typedef struct {
+     int  i, j; //非零元的下标
+     ElemType  e; //非零元的值
+ } Triple;  // 三元组类型
+
+typedef struct{
+     Triple  data[MAXSIZE + 1];//0不用,从1始
+      int   mu,nu,tu;//行列阶数与非零元个数 
+} TSMatrix;  // 三元组顺序表存储的稀疏矩阵类型
+
+
+```
+
+2.矩阵转置在三元组顺序表中的实现B=AT
+
+
+![](picture/5/2.png '')
+
+列号col 从1变到n,每次从头至尾扫描M.data,对列标等于col的三元组，将其行标、列标互换后依次放入T.data[ ]中
+
+
+TransposSMatrix(M,&T)
+
+```
+Status TransposSMatrix(TSMatrix M,TSMatrix &T) { 
+//列号col 从1变到n,每次从头至尾扫描M.data,对列标等于col的三元组，将其行标、列标互换后依次放入T.data[ ]中
+     T.mu=M.nu;   T.nu=M.mu;    T.tu=M.tu; //行列阶数与非零元个数
+     if(T.tu){
+          q=1;    //对目标三元素顺序表中的当前元素计数
+          for(col=1;col<=M.nu;++col)  //原A中列号由小变大
+              for(p=1;p<=M.tu;++p) //遍历A中所有非零元素
+                 if( M.data[p].j==col ) {  //找列标等于col元素修改后入B
+                     T.data[q].e=M.data[p].e;                       
+                     T.data[q].i=M.data[p].j; T.data[q].j=M.data[p].i;
+                     ++q;
+                  }
+      return OK;      
+ }//复杂度O(M.nu*M.tu).二维数组转置O(M.nu*M.mu).当足够稀疏以致M.tu<M.mu时当前算法更有效,否则不然,最坏O(M.mu*M.nu^2)
+
+上述代码，关键原因在于要重复遍历多次顺序表,能否先遍历一次求出A中的元素在B中”应有”的位置，之后直接放入呢？
+
+```
+FastTransposSMatrix(M,&T)
+
+num[col] 表示M中第col列中非零元的个数，cpot[col]指示M中第col列的第一个非零元在T中的位置。
+
+```
+Status FastTransposeSMatrix(TSMatrix M,TSMatrix&T){
+  T.mu = M.nu;  T.nu = M.mu;  T.tu = M.tu;
+  if (T.tu) {
+    //求原矩阵各列非零元个数
+    for (col=1; col<=M.nu; ++col)  num[col] = 0;
+    for(t=1;t<=M.tu;++t)  ++num[M.data[t].j];
+   //求原矩阵各列第一个非零元在目标矩阵中的位序
+    cpot[1]=1; //M中第1个列标为1的非零元必在T的第1位置
+    for (col=2; col<=M.nu; ++col) //求col列第1非零元在T中位置
+       cpot[col] = cpot[col-1] + num[col-1]; 
+   //逐个放入目标矩阵，同时cpot[col]++
+    for (p=1;p<=M.tu; ++p){    
+        col = M.data[p].j;//求列号
+         q = cpot[col];       //求插入位置
+	T.data[q].i = M.data[p].j;
+	T.data[q].j = M.data[p].i;
+	T.data[q].e = M.data[p].e;
+	++cpot[col];     //插入位置自增
+    }
+  } // if
+  return OK;
+} // FastTransposeSMatrix
+
+时间复杂度为: O(M.nu+M.tu)
+空间多num[col]与cpot[col],O(M.nu)
+
+```
+
+如图：
+
+![](picture/5/3.png '')
+
+
+3.稀疏矩阵的十字链表表示：
+
+
+```
+ typedef  Struct{
+     OLink *rhead,*chead;   //行、列链表头指针数组
+     int  mu, nu, tu
+ }CrossList
+
+```
+
+![](picture/5/4.png '')
+
+
+5.4 广义表
+
+概念：线性表的推广，元素既可以是单个元素(原子)，也可以是一个表(子表)。
+
+示例：注意表长及表元素
+	  A=()    B=(e)    C=(a,(b,c,d))    
+     D=(A,B,C)即D=((),(e),(a,(b,c,d)))
+
+
+5.5    行逻辑链接的顺序表
+
+
+```
+ #define  MAXSIZE  12500
+ typedef struct {     int  i, j;  ElemType  e; } Triple;
+
+  typedef struct {
+     Triple  data[MAXSIZE + 1]; //三元组表,data[0]不用,下同
+     int   rpos[MAXMN + 1]; //记录各行第1个非零元的位置
+     int     mu, nu, tu;              
+ } RLSMatrix;// 行逻辑链接顺序表类型
+
+
+例如：给定下标，求矩阵的元素值
+r是行，c是列
+ElemType value(RLSMatrix M,int r, int c){
+  k= M.rpos[r];
+  while (M.data[k].i==r &&M.data[k].j < c) 
+      k++;
+  if (M.data[k].i==r && M.data[k].j==c)
+     return M.data[k].e;
+  else return 0;
+} 
+
+```
+
+1. 矩阵乘法经典算法Q=MN
+Q= M*N，其中M是m1*n1矩阵，N是m2*n2矩阵，当n1=m2时，算法如下
+
+```
+
+  for (i=1; i<=m1; ++i)
+     for (j=1; j<=n2; ++j) {
+       Q[i][j] = 0;
+       for (k=1; k<=n1; ++k) 
+           Q[i][j] += M[i][k] * N[k][j];
+     }
+
+
+```
+
+2. 稀疏矩阵相乘（Q=M*N）
+
+
+![](picture/5/5.png '')
+
+
+```
+Status MultSMatrix(RLSMatrix M, RLSMatrix N,RLSMatrix&Q)
+{//求矩阵乘积采用行逻辑链接存储表示
+   if (M.nu != N.mu) return ERROR;
+   Q.mu = M.mu; Q.nu = N.nu; Q.tu = 0;  
+   if (M.tu*N.tu != 0) {   // Q是非零矩阵
+      for(arow=1;arow<=M.mu;++arow){//逐行求积
+           ctemp[] = 0;                 // 当前行各元素累加器清零,每个arow求出的是 ctemp[1,2,3,……]
+         
+           for (p=M.rpos[arow]; p<M.rpos[arow+1];++p) {
+                //对当前行中每一个非零元
+                 brow=M.data[p].j;          
+                if (brow < N.nu )  t = N.rpos[brow+1];
+                 else  { t = N.tu+1 }
+                 for (q=N.rpos[brow];  q< t;  ++q) {
+                       ccol = N.data[q].j;            // 乘积元素在Q中列号
+                        ctemp[ccol] += M.data[p].e * N.data[q].e;
+        } // for q
+      } // 求得Q中第crow( =arow)行的非零元
+
+      for (ccol=1; ccol<=Q.nu; ++ccol) if (ctemp[ccol]) {
+        if (++Q.tu > MAXSIZE) return ERROR;
+        Q.data[Q.tu] = {arow, ccol, ctemp[ccol]};
+      } // if
+         Q.rpos[arow] = Q.tu+1;      //行逻辑链接存储表示需要的，这里的tu循环之后会变
+       } //for  arrow
+   } // if    
+   return OK;
+  }
+
+累加器ctemp初始化的时间复杂度为O(M.mu*N.nu)，
+求Q的所有非零元的时间复杂度为O(M.tu*N.tu/N.mu)，
+进行压缩存储的时间复杂度为O(M.mu*N.nu)，
+总的时间复杂度就是O(M.mu*N.nu+M.tu*N.tu/N.mu)。
+
+```
+
+![](picture/5/6.png '')
+
+
+
+
+
+
+
+
+
+
+
