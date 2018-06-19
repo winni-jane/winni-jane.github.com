@@ -561,7 +561,7 @@ Status HuffmanCoding(HuffmanTree &HT,HuffmanCode &HC,int *w,int n){
  for(i=1;i<=n;++i){ //逐个叶结点求其编码
    start=n-1;
    for(f=HT[i].parent,c=i; f!=0; c=f,f=HT[f].parent)//叶到根逆向求编码
-      if(HT[f].lchild==c)cd[--start]=‘0’;  else cd[--start]=‘1’;
+     { if(HT[f].lchild==c)cd[--start]=‘0’;  else cd[--start]=‘1’;}
    HC[i]=(char *)malloc((n-start))*sizeof(char));
    strcpy(HC[i],&cd[start]);//复制到HC的相应位置
  }
