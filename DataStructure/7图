@@ -1,0 +1,455 @@
+7.1 图的定义和术语
+
+图Graph;顶点Vertex;序偶<A,B>;弧Arc;弧头B/弧尾A
+
+网NetWork:弧或边含权的图,分有向网DN、无向网UDN
+
+用n表示图中顶点数目，用e表示边或弧的数目。若<vi,vj>∈VR，则vi≠vj，那么，对于无向图，e的取值范围是0到n(n-1)/2，有n(n-1)/2条边的无向图称为完全图。
+
+(无向)完全图:边数最大的无向简单图,满足e=n*(n-1)/2
+有向完全图:弧数最大的有向简单图, e=n*(n-1)
+稀疏图(如e<nlogn)   稠密图
+
+子图：指节点集和边集分别是某一图的节点集的子集和边集的子集的图。若这个节点子集或边子集是真子集，则称这个子图为真子图；若图G的每一个节点也是它的子图H的节点，则称H是G的支撑子图。设S是V(G)的子集，以S为节点集，以G的所有那些两端点都在S内的边组成边集，所得到的G的子图称为S在G中的导出子图，或更确切地，节点导出子图。设B是E(G)的子集，由G的所有与B内至少有一条边关联的节点组成节点集，以B为边集，所得到的G的子图称为B在G中的边导出子图；对于某种性质P，若一个图的具有P的子图不是任何具有P的子图的真子图，则称它为具有P的极大子图，在所有极大子图中，边数最多的那个称为最大子图。 
+
+简单路径：如果路径上的各顶点均不互相重复，称这样的路径为简单路径。如果路径上的第一个顶点与最后一个顶点重合，这样的路径称为回路(cycle)或环或圈。
+
+邻接点:无向图如A与B互为邻接点,有向图如A邻接到B
+
+无向图顶点的度,如TD(A)=2；
+
+有向图分入/出度,度为两者之和
+           ID(A)=1,OD(A)=2,TD(A)=3
+
+
+连通图,连通分量 (无向图)：
+若无向图G中任意两个顶点之间都有路径相通，则称此图为连通图。
+如能找到一条含全部顶点的路径则说明是连通图
+
+连通分量：无向图中的极大连通子图称作此图的连通分量。
+极大指顶点尽量多,顶点连同其关联的边构成连通分量.
+图本身连通则连通分量唯一,是自身
+
+若任意两顶点间都存在一条有向路径，则称此有向图为强连通图。
+
+有向图的极大强连通子图称作它的强连通分量。
+
+
+![](picture/7/1.png '')
+
+
+黄色线标识的是原连通图的生成树。
+
+
+图的逻辑结构：
+
+```
+CreatGraph(&G, V, VR);
+       // 按定义(V, VR) 构造图G，v是对象，VR是关系
+DestroyGraph(&G);  // 销毁图G
+InsertVex(&G, v); //在图G中增添新顶点v。
+DeleteVex(&G, v);// 删除G中顶点v及其相关的弧。
+InsertArc(&G, v, w); //在G中增添弧<v,w>，若G是无向的，则还增添对称弧<w,v>
+DeleteArc(&G, v, w); //在G中删除弧<v,w>，若G是无向的，则还删除对称弧<w,v>
+LocateVex(G, u);  
+ // 若G中存在顶点与u”相等”，则返回该顶点在图中“位置”(下标或指针)
+GetVex(G, v);       // 返回G中顶点v的值。
+PutVex(&G, v, value);//为G中顶点v赋值value。
+FirstAdjVex(G, v); 
+//返回G中顶点v的“第一个邻接点”。若该顶点
+//在 G 中没有邻接点，则返回“空”。
+NextAdjVex(G, v, w); 
+// w是v的一个邻接点,返回v的“下一个邻接点”。
+//若w是v的最后一个邻接点，则返回“-1”。
+
+```
+
+```
+深度优先遍历
+DFSTraverse(G, v, Visit()); 
+//从顶点v起深度优先遍历图G,对每个顶点执行一次Visit
+规则:访问起始顶点v,然后选取与v邻接的未访问的第一个顶点w,访问之，再选取与w邻接的未访问的第一个顶点，访问之。重复进行至当前节点的所有邻接点都被访问过，此时后退到最近访问过的定点，找其下一个未访问的邻接点访问，依次类推。
+说明:一次可遍历所有与v连通的顶点。若尚有顶点未访问(非连通图),则从其开始重复上述过程.对应树的先根遍历。可得深度优先生成树或森林以及连通分量
+递归描述：访问v, 逐个从v未访问的邻接点出发递归遍历.
+
+广度优先遍历
+BFSTraverse(G, v, Visit()); 
+//从v起广度优先遍历图G，每个顶点调用一次函数Visit
+规则:访问v,访问v的全部未访问的邻接点,再逐个从这些邻接点出发重复.一次可遍历所有与v连通的顶点,若尚有顶点未访问则从其开始重复开始上述过程.
+对应树层序遍历,可得广度优先生成树/森林,可得连通分量
+
+```
+
+1. 邻接矩阵
+
+邻接矩阵:行、列各对应一个顶点,若第i行对应的顶点到第j列对应的顶点有弧相连则A[i][j]=1,否则为0。n*n阶
+
+
+![](picture/7/2.png '')
+
+
+```
+
+//----图的数组(邻接矩阵)存储表示----
+typedef char VertexType;
+#define  INFINITY   10000    //最大值∞ 
+#define MAX_VERTEX_NUM  20  //最大顶点个数
+typedef enum{DG, DN, UDG, UDN}  GraphKind;//图类型 
+//邻接矩阵
+typedef struct ArcCell {   // 弧的定义
+    VRType  adj;    //邻接数,0/1或w（权值）/∞。VRType为int/double…
+    InfoType  *info;  //弧的附加信息数组
+}ArcCell,AdjMatrix[MAX_VERTEX_NUM][MAX_VERTEX_NUM];
+
+typedef struct { // 图的定义
+     VertexType  vexs[MAX_VERTEX_NUM]; //顶点信息 
+     AdjMatrix    arcs;      // 邻接矩阵,存储弧信息,静态数组                     
+     int    vexnum, arcnum;   // 顶点数，弧数      
+     GraphKind   kind;     // 图的类型标记             
+} MGraph;   //矩阵图
+
+
+
+
+Status CreateUDN(Mgraph &G){ //建立无向网G
+   输入G.vexnum,G.arcnum, IncInfo;//IncInfo为0表各弧无附加信息
+    for (i=0 ; i< G.vexnum; ++i) scanf(“%c”,G.vexs[i]);
+    for (i=0 ; i< G.vexnum; ++i)
+        for(j=0 ; j< G->vexnum; ++j)
+             G.arcs[i][j]={INFNITY,NULL};  //各弧初始化
+    for (k=0;k< G.arcnum;++k){
+        scanf(“%c %c %lf”,&v1,&v2,&w);   //输入一条“边”及其权值
+        i=LocateVex(G,v1);j= LocateVex(G,v2) ;//确定顶点下标
+       G.arcs[i][j].adj = w;
+       if (IncInfo)  输入G.arcs[i][j].info;
+       G.arcs[j][i]= G.arcs[i][j]; //无向网需将对称弧加入
+    }
+} //END
+
+```
+
+邻接矩阵优缺点：
+易于求顶点度(区分有/无向图)、求邻接点，易判断两点间是否有弧或边相连,但不利于稀疏图的存储，因弧不存在时也要存储相应信息，且要预先分配足够大空间
+
+2. 邻接表存储表示
+
+
+![](picture/7/3.png '')
+
+
+
+```
+
+邻接表举例
+typedef struct ArcNode {  
+  int        adjvex;
+ struct ArcNode *nextarc; 
+ InfoType  *info;
+} ArcNode;
+
+typedef struct VNode { 
+  VertexType  data; 
+  ArcNode  *firstarc; 
+}VNode, AdjList[MAX_VERTEX_NUM];
+
+typedef struct {  
+     AdjList  vertices;
+     int    vexnum, arcnum; 
+     GraphKind   kind;
+  } ALGraph;  //邻接表图
+
+
+```
+
+建立有向网邻接表
+
+```
+
+Status CreateDN(ALGraph &G){ //建立有向网
+    scanf(“%d%d%d”,&G.vexnum,&G.arcnum,&IncInfo);
+    for (i=0 ; i< G.vexnum; ++i) 
+     { scanf(G.vertices[i].data); G.vertices[i].firstarc=NULL;}
+    for (k=0;k< G.arcnum;k++) {
+        arc=(ArcNode *)malloc(sizeof(ArcNode));
+        scanf(“%c%c%f”,&v1,&v2,&w);
+        i=LocateVex(G,v1); j= LocateVex(G,v2);
+        arc->adjvex=j; 
+        if (IncInf) 输入(arcn->info);
+        arc->nextarc = G.vertices[i].firstarc; 
+        G.vertices[i].firstarc=arcn;//邻接点与输入逆序排列P164,正序?
+    }                               //邻接点顺序依赖输入顺序和创建程序，“不给”默认正序
+    Return OK；
+ } 
+
+
+```
+
+![](picture/7/4.png '')
+
+
+多重链表：链表中的节点可能同时隶属于多个链
+
+多重链表中结点的指针域会有多个，但包含多个指针域的链表不一定是多重链表。如：双向链表。
+
+3. “有向图”的十字链表存储表示
+
+![](picture/7/5.png '')
+
+即：
+
+![](picture/7/51.png '')
+
+
+![](picture/7/6.png '')
+
+
+![](picture/7/7.png '')
+
+
+代码：
+
+```
+typedef struct ArcBox {
+   int tailvex, headvex; InfoType  *info;
+   struct ArcBox *hlink,*tlink;//指向同弧头/尾的下一弧   
+ }ArcBox;
+
+typedef struct VexNode { // 顶点的结构表示
+     VertexType  data;
+     ArcBox  *firstin, *firstout;   
+} VexNode;
+
+typedef struct { 
+   VexNode  xlist[MAX_VERTEX_NUM];
+   int   vexnum, arcnum;
+} OLGraph;
+
+
+
+
+Status CreateDG(OLGraph G){
+    scanf(&G.vexnum, &G.arcnum, &IncInf);
+     for(i=0;i< G.vexnum; ++i) {
+          scanf(&G.xlist[i].data);
+          G.xlist[i].firstin=NULL;G.xlist[i].firstout=NULL;
+     }
+     for(k=0;k< G.arcnum; ++k) {
+           scanf(&v1, &v2);
+           i=LocateVex(G,v1);  j=LocateVex(G,v2);//直接输下标可略
+           p=(ArcBox *)malloc(sizeof(ArcBox));
+         *p={ i, j, G.xlist[j].firstin, G.xlist[i].firstout,  NULL};//逆序
+        G.xlist[j].firstin=G.xlist[i].firstout = p;//邻接点顺序与例图反  
+           if (IncInf) input(p->info); 
+     }
+ }//END  
+
+```
+
+4、“无向图”的邻接多重表存储表示
+
+
+
+![](picture/7/8.png '')
+
+
+
+```
+typedef struct Ebox {
+    VisitIf       mark;      // 访问标记
+    int      ivex, jvex;   //该边依附的两个顶点的位置
+    struct EBox *ilink,*jlink;//指向对应顶点为i,j的下一边
+    InfoType     *info;
+} EBox;
+
+typedef struct VexBox {
+   VertexType  data;
+   EBox  *firstedge; // 指向第一条依附该顶点的边
+} VexBox;
+
+typedef struct {
+     VexBox  adjmulist[MAX_VERTEX_NUM];
+     int   vexnum, edgenum;    
+  } AMLGraph; // 邻接多重表
+
+
+
+```
+
+7.3图的遍历—深度优先遍历
+
+规则:访问v,逐个从v未访问的邻接点出发递归遍历，如此可遍历所有与v连通的顶点.
+
+每个顶点调用一次DFS,DFS主要操作是查找邻接点,当用邻接矩阵存储时查找某顶点的邻接点复杂度为O(n),总复杂度O(n^2);当邻接表存储时查找邻接点总复杂度为O(e),总复杂度为O(n+e)
+DFSTraverse每调用一次DFS所访问的顶点连通这些顶点关联的边构成一个连通分量.只保留走过的边得生成树或生成森林
+
+
+```
+void  DFS(G，v){ 
+ VisitFunc(v); visited[v]=TRUE;
+  for(w=FirstAdjVex(G,v);w>=0;w=NextAdjVex(G,v,w)) 
+      if（!visited[w]）DFS(G，w)；
+}
+
+void DFSTraverse(Graph G,  Status (*Visit)(int v)) {
+    VisitFunc = Visit;   
+    for (v=0; v<G.vexnum; ++v)   visited[v] = FALSE; 
+    for (v=0; v<G.vexnum; ++v) 
+            if (!visited[v]) DFS(G, v);
+}//visited数组和VisitFunc函数为全局
+
+
+
+```
+
+求图的连通分量、深度优先生成树或生成森林
+
+DFSTraverse每调用一次DFS所访问的顶点连同这些顶点关联的边构成一个连通分量.只保留走过的边得生成树或生成森林
+
+![](picture/7/9.png '')
+
+
+7.3 图的遍历—广度优先遍历 （breadth-first search）
+
+BFSTraverse(G, v, Visit()); 
+
+规则:访问v, 访问v的各未访问的邻接点,之后逐个从这些邻接点出发重复上述操作。待与v连通的顶点访问毕再从另一顶点出发. 如ABEHFCD
+实现：对各个顶点v：{  若其尚未访问则访问v,之后v入队。 【队顶元素出队，逐个访问其尚未访问的邻接点，没访问完一个便入队】。重复【】中内容到队空  ｝
+
+
+每个顶点进一次队,出队时主要操作是查找邻接点,当用邻接矩阵存储时查找某顶点的各邻接点复杂度的为O(n),总复杂度O(n2); 当用邻接表存储时查找邻接点复杂度为O(e),总复杂度为O(n+e)
+
+```
+void BFSTraverse(Graph G, Status (*Visit)(int v)){
+     for (v=0; v<G.vexnum; ++v)visited[v] = FALSE;
+     InitQueue(Q);
+     for ( v=0;  v<G.vexnum;  ++v )
+         if ( !visited[v]) {
+            Visit(v);visited[v] = TRUE; EnQueue(Q, v);             
+             while (!QueueEmpty(Q))  {
+               DeQueue(Q, v); 
+               for(w=FirstAdjVex(G,v); w>=0; w=NextAdjVex(G,v,w))
+               if ( ! visited[w] )  {             //注意NextAdjVex返回值约定
+                    Visit(w); visited[w]=TRUE;  EnQueue(Q, w); 
+               }
+            }
+
+           
+       } 
+  }
+
+
+
+```
+
+7.4.3 最小生成树
+
+一个有 n 个结点的连通图的生成树是原图的极小连通子图，且包含原图中的所有 n 个结点，并且有保持图连通的最少的边。
+1.
+Kruskal（克鲁斯卡尔）算法求最小生成树：
+
+
+Kuaskal算法直接找权值最小的边,若并入后构成回路则舍弃。总O(eloge)，与n无关，适合稀疏图
+
+
+![](picture/7/10.png '')
+
+黄色数组代表的线为选出的Kuaskal算法
+
+
+2.
+Prim算法是逐个顶点并入，再据顶点找最小边；最初任选一点放入U。之后找U杠到U最小边，将对应新顶点并入，共N-1轮即可。
+
+```
+构造下表对应的数组,每个元素对应一个顶点,元素取值是当前轮从U到该点最小边的信息(出发点下标和代价),顶点被并入U后代价置0
+struct {
+      VertexType  adjvex; //出发点名称
+      VRType     lowcost; //代价
+}closedge[MAX_VERTEX_NUM];
+
+将初始点u并入U,初始化表;{之后找小边并入,赋0+更新}重复
+普里姆算法
+
+void MiniSpanTree_Prim(MGraph G, VertexType u) {
+//用普里姆算法从u出发求网G(邻接矩阵表示) 最小生成树,输出各边
+   k=LocateVex (G, u); closedge[k].lowcost = 0; //将u并入U,赋0
+   for ( j=0; j<G.vexnum;++j ) //据u更新数组元素代价,adj代表权值
+       if (j!=k)closedge[j] = { u,  G.arcs[k][j].adj };   
+   for (i=1; i<G.vexnum; ++i) {  //共n-1轮,每轮找最小边输出,赋0更新
+      k=minimum(closedge);//代价非零的元素中找最小元素,返下标
+      printf(“%c->%c”,closedge[k].adjvex , G.vexs[k]);  //输出边u->k
+      closedge[k].lowcost=0;  //将k号结点并入U，赋0
+      for(j=0;j<G.vexnum;++j)//据k号结点更新数组元素代价
+         if (G.arcs[k][j]).adj<closedge[j].lowcost
+              closedge[j]={G.vexs[k],G.arcs[k][j].adj};
+    }
+}
+复杂度为O(n2),与边数无关，适合稠密图
+
+
+```
+
+7.5.1 拓扑排序
+
+AOV-网:顶点表示活动,弧表示活动间先后(依赖)关系的有向图.
+AOV-网用以表示工程或系统的施工计划，可据此判断工程是否可以顺利进行
+AOV-网中应存在一个覆盖全部顶点的序列(全序),在该序列中顶点出现的顺序满足网中的先后关系(偏序)。一个全序就对应一个合法的完整工序
+
+
+拓扑排序：由某个集合上的一个偏序得到该集合上的一个全序,该操作称为拓扑排序。若得到一个含全部顶点的拓扑有序序列(全序)则说明工程可顺利开展,不存在则说明图中存在有向回路,不合理
+
+![](picture/7/11.png '')
+
+
+
+如何进行拓扑排序
+
+从有向图中选取一没有前驱的顶点(入度为0)并输出之；
+从图中“删除”此顶点及所有从其出发的弧
+重复上述两步，至图空(得一全序)或图不空但不存在无前驱的顶点(得一有向环)。
+
+```
+将入度为0的顶点入栈,出栈并据此更新入度,如此重复
+拓扑排序：
+Status TopologicalSort(ALGraph G){
+//G用邻接表存储,若G无回路则输出拓扑有序序列,返OK, 否则返ERROR.
+  FindInDegree(G,indegree);//求各顶点入度存入数组indegree
+ InitStack(S);
+  for(i=0;i<G.vexnum;++i)
+       if(!indegree[i]) Push(s,i);
+  count=0;  //用以对输出的顶点进行计数
+  while (!StackEmpty(S)){
+       Pop(S,i);  printf(G.vertices[i].data);  ++count;
+             for(p=G.vertices[i].firstarc;p!=NULL;p=p->nextarc){
+               k=p->adjvex;     
+                - -indegree[k];  //更新入度
+               if(!indegree[k]) Push(S,w);//新的入度为零的顶点入栈
+              }
+
+
+  }
+  if(count<G.vexnum)return ERROR; else return OK;}
+最初求入度O(e); 第一波顶点入栈O(n)；若为DAG图则每个顶点入栈、出栈各一次,O(n);入度减1的操作执行e次,故总复杂的度O(n+e)
+
+（e是边数）
+
+```
+
+7.5.2 关键路径
+
+AOE网：顶点表示状态，弧表示活动，弧权表示完成活动所需时间。用以估算工程的完成时间
+问:最短工期多长？哪些活动是影响工期的“关键活动”
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
