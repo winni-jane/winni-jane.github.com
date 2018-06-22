@@ -1,0 +1,64 @@
+查找表：通常用于查找的数据集合称为查找表,集合中一个元素称为元素或记录
+
+关键字：能唯一标识元素的属性称为关键字。基于关键字查找则查找结果唯一
+
+静态查找与动态查找：创建后仅查找或检索、不允许插入或删除的查找表称为静态查找表；允许插入、删除操作的查找表称为动态查找表
+
+平均查找长度ASL：查找过程中关键字的平均比较次数
+
+1、顺序表的查找--用顺序表表示静态查找表
+
+![](picture/8/1.png '')
+
+
+```
+
+int Search_Seq(SSTable ST, KeyType key) { //返下标,找不到返0 
+    int i;
+   ST.elem[0].key=key;  //监视哨，哨兵
+   for(i=ST.length ;!EQ(ST.elem[i].key, key);--i);
+   return i;
+  }//指针法:for(p=ST.elem+ST.length; !EQ(p->key, key);--p);
+
+设第i个元素被查找的概率为Pi, 则静态查找表平均查找长度ASLSS=n*P1+(n-1)*P2+..+Pi*(n-i+1)+..+1*Pn   +(n+1)*P0
+    
+通常所查找元素均在ST中，此时P0=0
+若查找保证成功且各元素几率同(1/n)则ASLSS=(n+1)/2
+若成功与否各50%，且各元素被找到概率同(1/2n)则
+	ASLSS=(n+1)/4  +  (n+1)/2=  3*(n+1)/4 
+概率越大越靠后放则ASL越小,事先不知概率可动态调整
+
+```
+
+2、有序表的查找—有序顺序表表示查找表
+
+```
+typedef struct{
+     ElemType *elem; //空间基址,0号留空它用，数组元素有序
+     int       length;   //表长
+}SSTable
+
+```
+有序表的折半查找(二分查找):low=1;high=ST.length; while(low<=high){与中间元素mid比较，若比中间元素小则高边界high=mid-1；若比中间元素大则低边界low=mid+1；若相等则返回mid}。如找64
+
+```
+折半查找（二分查找）
+int Search_Bin ( SSTable ST, KeyType key ) {
+//low=1,high=n,只要low<=high则比较中间元素,后改low或high
+   low = 1;  high = ST.length;
+   while (low <= high) {
+       mid = (low + high) / 2;
+       if (  EQ(key , ST.elem[mid].key)  )
+             return  mid;        
+      else if( LT(key , ST.elem[mid].key) )
+             high=mid-1; 
+      else low = mid + 1;
+  }
+   return 0;     // 顺序表中不存在待查元素
+}
+
+```
+
+
+
+
