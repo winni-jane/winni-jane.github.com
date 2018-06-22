@@ -407,6 +407,9 @@ AOV-网中应存在一个覆盖全部顶点的序列(全序),在该序列中顶�
 从图中“删除”此顶点及所有从其出发的弧
 重复上述两步，至图空(得一全序)或图不空但不存在无前驱的顶点(得一有向环)。
 
+
+![](picture/7/111.png '')
+
 ```
 将入度为0的顶点入栈,出栈并据此更新入度,如此重复
 拓扑排序：
@@ -439,17 +442,179 @@ Status TopologicalSort(ALGraph G){
 AOE网：顶点表示状态，弧表示活动，弧权表示完成活动所需时间。用以估算工程的完成时间
 问:最短工期多长？哪些活动是影响工期的“关键活动”
 
+关键路径(长度最长的路径)决定工期
+
+关键活动:工程正常开展最早开始时间等于最迟开始时间的活动
+
+ee(act) =ve(头) 与 el(act)=vl(尾) - dur(act)
+
+ve为节点最早到达时间  vl为节点最晚到达时间  ee为活动的最早开始时间  el是活动的最晚开始时间
+
+
+![](picture/7/12.png '')
+
+
+```
+{各点ve初始化为零,无前驱顶点入栈,出栈并据其更新后继ve,“删除”}重复
+求各点最早到达时间（带权值的拓扑排序）
+Status TopologicalOrder(ALGraph G，Stack  &T){
+//求各顶点最早到达时间计入全局数组ve,T按访问顺序存储各顶点
+ ve[0..G.vexnum-1]=0;
+  FindInDegree(G,indegree); //求各顶点入度存入数组indegree
+  InitStack(S);
+  InitStack T;
+  for(i=0;i<G.vexnum;++i)
+       if(!indegree[i]) Push(s,i);
+  count=0;  //对输出的顶点进行计数
+  while (!StackEmpty(S)){//出栈S、入栈T、”删除”、更新
+      Pop(S,j);  Push(T,j);  ++count;
+   for(p=G.vertices[j].firstarc; p;  p=p->nextarc){
+     k=p->adjvex;  --indegree(k); 
+     if(indegree[k]= =0) Push(S, w);
+     if(ve[j]+*(p->info)>ve[k])ve[k]=ve[j]+*(p->info)
+    }
+ }
+  if(count<G.vexnum)return ERROR; else return OK;}
 
 
 
+```
+用算法实现的例子如下，（for循环里面 b c d全部入栈之后d再出栈）
+
+
+![](picture/7/13.png '')
+
+
+关键活动求取—求最晚到达时间vl(x)
+
+vl(汇点)=ve(汇点)
+
+普通顶点v,设W为其后继顶点集合，则			   vl(v)=min{ vl(w)-dut(v,w)  |  w∈W }
+
+如何保证求vl(v)时vl(w)已求出？
+
+各顶点vl初始化成工期，按拓扑逆序(T的出栈顺序)逐个更新该元素的vl
+
+```
+关键活动:调用函数求Ve,按拓扑逆序求Vl,求ee/el并输出
+Status CriticalPath(ALGraph G){
+//求个顶点最晚到达时间计入全局数组vl,同时输出各活动的最早、迟时间等信息
+  InitStack(T);  if(!TopologicalOrder(G,T))return ERROR;
+  vl[0..G.vexnum-1]=ve[G.vexnum-1];
+  while(!StackEmpty(T)){
+     Pop(T,j); 
+      for(p=G.vertices[j].firstarc; p!=NULL; p=p->nextarc){
+          k=p->adjvex;    dut=*(p->info);   //对应活动<j,k>的持续时间 (这里可以用逆邻接表？)
+          if( vl[k]-dut < vl[j] ) vl[j]= vl[k]-dut;
+      }
+   }
+   for(j=0;j<G.vexnum;++j)
+       for(p=G.vertices[j].firstarc;p;p=p->nextarc){
+      k=p->adjvex; dut=*(p->info);
+      ee=ve[j];  el=vl[k]-dut//活动<j,k>的最早/迟开始时间
+     if(ee==el) printf(j,k,dut,ee,el, √ );
+     else       printf(j,k,dut,ee,el, × );
+    }
+}
+
+
+```
+
+
+![](picture/7/14.png '')
+
+
+7.6 最短路径
+
+7.6.1单源最短路径--Dijkstra算法
+
+
+![](picture/7/15.png '')
+
+
+上图中还未进行完毕 只进行了3轮。
+
+
+迪杰斯特拉算法实现：
+
+```
+
+设辅助数组D,D[k]存储当前所得从源到顶点k的最短路长度
+final[k]标记k号顶点已并入S
+P[v][w]标记源到v的最短路上w是否出现  等于1应该是代表0-V路径是否通吧
+
+初始化:初始化各数组,源点并入并更新
+void ShortestPath_DIJ(MGraph G,int v0,PathMatrix &P,ShortPathTable &D){
+  for(v=0;v<G.vexnum;++v){ //初始化数组，并入v0并更新 
+    final[v]=FALSE;
+    for(w=0;w<G.vexnum;++w)
+       p[v][w]=FALSE;
+    D[v]=G.arcs[v0][v]; 
+    if(D[v]<InFINITY){p[v][v0]=TRUE;p[v][v]=TRUE;}
+  }
+  D[v0]=0; final[v0]=0;
+
+ for(i=1;i<G.vexnum;++i){//重n-1轮,每轮找最小的,并入更新
+   min=INFINITY;
+   for(w=0;w<G.vexnum;++w)  //找
+每一轮的最小
+     if(!final[w]&&D[w]<min){ v=w; min=D[w]  } //此for循环完毕
+   final[v]=TRUE;
+   for(w=0;w<G.vexnum;++w)   //更新距离值 v为当前刚选入集合S中的点
+     if( !final[w] && (min+G.arcs[v][w]<D[w]) ){
+         D[w]= min+G.arcs[v][w];
+         P[w][0..G.vexnum]=P[v][0..G.vexnum];P[w][w]=TRUE;
+     }
+   }
+}//复杂度O(n^2),单源单终点问题也是O(n^2)
+
+```
+
+7.6.2 任意一对顶点间的最短路径（Floyd算法）
+
+![](picture/7/16.png '')
+
+
+![](picture/7/17.png '')
+
+
+下面这个未给出具体算法 只给出一个大概
+
+![](picture/7/18.png '')
+
+
+```
+求一条从顶点 i 到顶点 s  的简单路径（有向图中是否存在由顶点vi到顶点vj的路径）
+void DFSearch( int v, int s, char *PATH)  {
+ // 从第v个顶点出发递归地深度优先遍历图G，
+ // 求得一条从v到s的简单路径，并记录在PATH中  
+  visited[v] = TRUE;   //访问第 v 个顶点
+  Append(PATH, v);//第v个顶点加入路径           
+  for (w=FirstAdjVex(v); w!=0; w=NextAdjVex(v) ){
+        if (w==s) { found = TRUE;  Append(PATH, w); }
+        else  if (!visited[w])  DFSearch(w, s, PATH);
+        if (!found)  
+             Delete (PATH);//从路径上删除顶点 v 
+  }
+}
 
 
 
+```
 
+按深度优先搜索策略遍历一个强连通图的非递归形式的算法
+```
+void  DFS（G，v）{
+     访问顶点 v ;顶点 v 入栈；
+      while(栈不空){
+            if（找到第一个与栈顶元素邻接的、未访问的顶点    w）
+                       {访问顶点 w ;顶点 w 入栈；}
+           else
+                       栈顶元素出栈；
+      }
+}
 
-
-
-
+```
 
 
 
