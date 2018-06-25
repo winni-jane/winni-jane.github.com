@@ -39,6 +39,8 @@ typedef struct{
 }SSTable
 
 ```
+折半查找要求线性表必须采用顺序存储结构，而且表中元素按关键字有序排列。
+
 有序表的折半查找(二分查找):low=1;high=ST.length; while(low<=high){与中间元素mid比较，若比中间元素小则高边界high=mid-1；若比中间元素大则低边界low=mid+1；若相等则返回mid}。如找64
 
 ```
@@ -47,7 +49,7 @@ int Search_Bin ( SSTable ST, KeyType key ) {
 //low=1,high=n,只要low<=high则比较中间元素,后改low或high
    low = 1;  high = ST.length;
    while (low <= high) {
-       mid = (low + high) / 2;
+       mid = (low + high) / 2;   //下取整
        if (  EQ(key , ST.elem[mid].key)  )
              return  mid;        
       else if( LT(key , ST.elem[mid].key) )
@@ -58,6 +60,239 @@ int Search_Bin ( SSTable ST, KeyType key ) {
 }
 
 ```
+折半查找的判定树:比较时生成根,到左侧区间比较时生成左孩子,右侧比较生成右孩子，如此递归
+
+
+![](picture/9/2.png '')
+
+
+
+![](picture/9/3.png '')
+
+
+因为二叉树的第i层上最多有2^(i-1)个结点（i≥1），含n个结点的完全二叉树深度为 log2n +1 （以2为底）。
+
+假定每个元素的查找概率相等，则，pi=1/n (pi为第i个节点的查找概率) 
+那么平均查找长度为 1/n*（1*2^0+2*2^1+3*2^2+……+j*2^(j-1)）
+则经过化简计算（第j层上的查找长度为j乘以这一层上节点数量），得平均查找长度为：(（n+1）/n  ) *log2(n+1)-1  (其中对数中的2为底数：即log以2为底（n+1)的对数）
+注  : 当n很大时 ，可近似为 log2(n+1)-1
+
+
+9.2  动态查找表
+
+定义:允许插入、删除操作的查找表
+
+1.1 二叉排序树（二叉查找树）的定义
+
+二叉排序树或者是一棵空树；或者是具有如下特性的二叉树：
+
+（1）若左子树不空，则左子树所有结点的值均小于根结点的值；
+
+（2）若右子树不空，则右子树上 所有结点的值均大于根结点的值；
+
+（3）左、右子树也都分别是二叉排序树。
+ 
+折半查找的判定树是二叉排序树，特殊的二叉排序树
+
+1.2 二叉排序树（二叉查找树）的查找
+
+ 若二叉排序树为空，则查找不成功；否则:
+
+  1）若根结点的关键字等于给定值则查找成功,返根
+  2）若给定值小于根结点关键字则递归找左子树并返回查找结果
+  3）若给定值大于根结点关键字则递归找右子树并返回查找结果
+
+```
+BiTree SearchBST(BiTree T,KeyType key){
+   if(!T) return NULL;
+   else if(EQ(key,T->data.key))return T;
+   else if(LT(key,T->data.key))return(SearchBST(T->lchild,key));
+   else return(SearchBST(T->rchild,key));
+}
+
+```
+附加：图的深度优先遍历DFSTraverse 对应树的先根遍历。
+
+
+1.3 二叉排序树的插入与构造
+
+插入：T是二叉排序树,当T中不存在关键字等于e.key的数据元素时插入e并返回TRUE；存在时返回FALSE。
+注意:插入后T仍要满足二叉排序树的性质,为此，首先在图中查找关键字与e相等的元素,若找到则返回FALSE，不必插入；否则，设查找路径上最后一个访问的结点为f,则e应该是f的孩子(左右孩子由e与f的大小关系定)
+构造：从空树依次插入各结点,如输入20,10,25,23或者20,10,23,25得树为：
+
+![](picture/9/4.png '')
+
+
+插入算法子函数-定位
+
+Status SearchBST(BiTree T,KeyType key, 
+                                      BiTree f, BiTree &p ) 
+  // 在二叉排序树T中查找关键字等于 key 的数据元素，若查找成功p带回该数据元素结点的地址,函数返回值为 TRUE; 否则查找不成功,p带回查找路径中最后一个结点，函数返回FALSE.程序执行过程中，T始终为当前比较结点(通过不断递归实现),f始终指向当前访问结点T的双亲结点，初次调用时f为空.
+
+
+
+```
+Status SearchBST(BiTree T,KeyType key,BiTree f, BiTree &p ) {
+   if (!T) 
+         { p = f;  return FALSE; }  // 查找不成功
+
+   else  if ( EQ(key, T->data.key) )
+         { p = T;  return TRUE; }  // 查找成功
+
+   else  if ( LT(key, T->data.key) )
+         return SearchBST (T->lchild, key, T, p );  
+                     // 在左子树中继续查找
+
+    else
+         return SearchBST (T->rchild, key, T, p ); 
+                   // 在右子树中继续查找
+}
+
+
+```
+
+插入算法：
+
+```
+Status Insert BST(BiTree &T,ElemType e ) {
+    if (!SearchBST ( T, e.key, NULL, p )) {
+         s=(BiTree)malloc(sizeof(BiTNode));
+         s->data=e;s->lchild=NULL;s->rchild=NULL;
+         if(!p)  T=s;   //未找到插入位置,意味着原树空
+         else if( LT(e.key,p->data.key) )p->lchild=s;
+         else p->rchild=s;
+         return TRUE;  //插入成功
+    }
+   else return FALSE;//原树中存在元素关键字与e等
+}//
+
+```
+
+1.4 二叉排序树的删除算法
+
+```
+Status DeleteBST(BiTree &T,KeyType key){
+ //找到关键字为key元素则删除并返回删除结果,否则返回FALSE
+  if(!T)return FALSE;
+  else{
+     if( EQ(key,T->data.key))  
+          return( delete(T) );
+     else if(LT(key,T->data.key))
+          return DeleteBST(T->lchild, key);
+     else 
+          return( DeleteBST(T->rchild,key) );
+}}如删除23,由T为引用型知最后执行实为delete(T->rchild->lchild)
+
+Status DeleteChild(BiTree &T,TElemType e){
+   if(!T)  return FALSE;
+   else if( T.data==e)
+        { DestroyBiTree(T); return OK; }
+   else if( DeleteChild(T->lchild,e) ) return OK;
+   else if( DeleteChild(T->rchild,e) ) return OK;
+   else return FALSE;
+}
+
+```
+
+删除某结点后仍保持二叉排序树的特性,分三情况:
+
+(1)被删除的结点是叶子；
+
+(2)被删除的结点只有左子树或者只有右子树；
+
+(3)被删除的结点既有左子树也有右子树。
+
+
+（1）被删除的结点是叶子结点P,if(!p->lchild&&!p->rchild)p=NULL;
+
+（2）被删结点只有左子树或右子树
+
+
+![](picture/9/5.png '')
+
+
+（3）被删结点既有左子树也有右子树
+
+![](picture/9/6.png '')
+
+
+```
+Status Delete(&p){
+//从二叉排序树中删除结点p,并重接其左右子树.p含双亲信息
+if(!p->rchild){   //包含p为叶子结点的情况
+     q=p; p=p->lchild; free(q);}  //删除p结点，注意p与q不同 
+else if(!p->lchild){
+     q=p;  p=p->rchild; free(q);}//q为普通指针,p是双亲指针别名
+else{//结点p左右子树均不空,书中是下述两种情况合并,会分析
+   if(!p->lchild->rchild){//p的左孩子无右子树时,p左孩子最大
+          s=p->lchild;   p->data=s->data; //用s取代p
+         p->lchild=s->lchild; free(s);s=NULL;
+   }
+   else {//p的左孩子有右子树,最大元素是该右子树中第一个无							//右孩子的结点
+          s=p->lchild->rchild; q=p->lchild;
+          while(s->rchild){ q=s; s=s->rchild; }
+          p->data=s->data;   q->rchild=s->lchild;free(s);s=NULL;
+   }}//二叉排序树的中序遍历序列严格有序,书中据此得算法
+
+
+```
+1.5 二叉排序树查找性能分析(查找成功等概率)
+
+
+每个结点的Ci为该结点的层次数。最好的情况是二叉排序树的形态和折半查找的判定树相同，其平均查找长度和logn成正比（O(log2(n))）（以2为底）。最坏情况下，当先后插入的关键字有序时，构成的二叉排序树为一棵斜树，树的深度为n，其平均查找长度为(n + 1) / 2。也就是时间复杂度为O(n)，等同于顺序查找。因此，如果希望对一个集合按二叉排序树查找，最好是把它构建成一棵平衡的二叉排序树（平衡二叉树）。
+
+平衡二叉树:任意结点左右子树深度差(平衡因子)绝对值不超过1
+
+
+3、B-树
+
+    B-树可看作平衡二叉排序树的推广,是一种平衡(叶子结点在同一层)的多路查找树。如下图是一个4阶(结点最多含4个指针和3个关键字)的B-树
+
+![](picture/9/8.png '')
+
+
+9.3    哈  希  表
+
+前述查找表的各种存储结构,无法根据所查找关键字计算元素位置，因记录在表中的位置和它的关键字取值无任何关系。通过比较进行查找，至少比较1次, 查找长度均不为零
+
+
+根据设定的哈希函数和处理冲突的方法,将一组关键字映象到一组有限的连续的存储空间上，以关键字对应的Hash函数值作存储地址，如此所得表称为哈希表。
+映像过程称为哈希造表或散列,存储地址称为哈希地址或散列地址。
+关键是构造合适的Hash函数和找合适的冲突处理方法
+
+
+二、构造哈希函数的方法
+
+   对数值型的关键字常见构造方法有：
+1. 直接定址法
+2. 数字分析法
+3. 平方取中法
+4. 折叠法
+5. 除留余数法
+6. 随机数法
+
+若非数字关键字，则需先对其进行数字化处理
+
+1. 直接定址法
+
+哈希函数为关键字的线性函数
+ H(key) = key 或 H(key) = a * key + b
+
+特点：无冲突,但地址集合大小需要与关键字集合大小相同,不常用
+
+2.  数字分析法
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
