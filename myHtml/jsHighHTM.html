@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script>
+var test = "hi", age = 25;//同一个 var 语句定义的变量不必具有相同的类型
+</script>
+</head>
+<body>
+1.区分大小写
+2.定义变量时只用 var 运算符，可以将它初始化为任意值。
+3.每行结尾的分号可有可无，最好的代码编写习惯是总加入分号。
+4. ECMAScript 是弱类型的，无需明确的类型声明。
+5.变量可以存放不同类型的值,不建议这么做。
+6.命名变量 第一个字符必须是字母、下划线（_）或美元符号（$） 余下的字符可以是下划线、美元符号或任何字母或数字字符。
+7.Camel 标记法  首字母是小写的，接下来的字母都以大写字符开头。
+  Pascal 标记法  首字母是大写的，接下来的字母都以大写字符开头。
+  匈牙利类型标记法  在以 Pascal 标记法命名的变量前附加一个小写字母（或小写字母序列），说明该变量的类型。例如，i 表示整数，s 表示字符串，如下所示“
+                  var iMyTestValue = 0, sMySecondValue = "hi";
+8.原始类型，即 Undefined、Null、Boolean、Number 和 String 型。由于这些原始类型占据的空间是固定的，所以可将他们存储在较小的内存区域 - 栈中。
+9.typeof 运算符  
+
+    undefined - 如果变量是 Undefined 类型的，当声明的变量未初始化时，该变量的默认值是 undefined。
+    			当函数无明确返回值时，返回的也是值 "undefined"，function testFunc() {} alert(testFunc() == undefined);  //输出 "true"
+    boolean - 如果变量是 Boolean 类型的
+    number - 如果变量是 Number 类型的
+    string - 如果变量是 String 类型的
+    object - 如果变量是一种引用类型或 Null 类型的
+	注释：您也许会问，为什么 typeof 运算符对于 null 值会返回 "Object"。这实际上是 JavaScript 最初实现中的一个错误，然后被 ECMAScript 沿用了。现在，null 被认为是对象的占位符，从而解释了这一矛盾，但从技术上来说，它仍然是原始值。
+
+
+	alert(null == undefined);  //输出 "true"
+	尽管这两个值相等，但它们的含义不同。undefined 是声明了变量但未对其初始化时赋予该变量的值，null 则用于表示尚未存在的对象（在讨论 typeof 运算符时，简单地介绍过这一点）。如果函数或方法要返回的是对象，那么找不到该对象时，返回的通常是 null。
+
+	var fNum = 5.0;
+	对于浮点字面量的有趣之处在于，用它进行计算前，真正存储的是字符串。
+	可以对任何数调用 isFinite() 方法，以确保该数不是无穷大。
+ 	NaN，表示非数（Not a Number）。一般说来，这种情况发生在类型（String、Boolean 等）转换失败时。
+	alert(NaN == NaN);  //输出 "false"
+	alert(isNaN("blue"));  //输出 "true"
+	alert(isNaN("666"));  //输出 "false"
+9.String 类型的独特之处在于，它是唯一没有固定大小的原始类型。由双引号（"）或单引号（'）声明
+	ECMAScript 的 Boolean 值、数字和字符串的原始值的有趣之处在于它们是伪对象，这意味着它们实际上具有属性和方法。
+	var sColor = "red";alert(sColor.length);	//输出 "3"  3 种主要的原始类型 Boolean 值、数字和字符串都有 toString() 方法，可以把它们的值转换成字符串。
+	ECMAScript 定义所有对象都有 toString() 方法
+	var iNum = 10;
+	alert(iNum1.toString());	//输出 "10"
+	alert(iNum.toString(2));	//输出 "1010"
+	alert(iNum.toString(8));	//输出 "12"
+	alert(iNum.toString(16));	//输出 "A"
+    String 类型把非数字的原始值转换成数字的方法，即 parseInt() 和 parseFloat()。
+    var iNum1 = parseInt("12345red");	//返回 12345
+	var iNum1 = parseInt("0xA");	//返回 10
+	var iNum1 = parseInt("56.9");	//返回 56
+	var iNum1 = parseInt("red");	//返回 NaN
+	var iNum1 = parseInt("AF", 16);	//返回 175  基是由 parseInt() 方法的第二个参数指定的，解析十六进制的值，
+	var iNum1 = parseInt("10", 2);	//返回 2
+	var iNum1 = parseInt("010");	//返回 8   八进制
+
+	Number() 将判断是调用 parseInt() 方法还是 parseFloat() 方法。
+	强制转换成字符串和调用 toString() 方法的唯一不同之处在于，对 null 和 undefined 值强制类型转换可以生成字符串而不引发错误
+10.引用类型通常叫做类（class），也就是说，遇到引用值，所处理的就是对象。
+	var o = new Object();
+11.Boolean对象：var oFalseObject = new Boolean(false);
+	var bResult = oFalseObject && true;	//输出 true
+	Boolean 对象将覆盖 Object 对象的 ValueOf() 方法，返回原始值，即 true 和 false。ToString() 方法也会被覆盖，返回字符串 "true" 或 "false"。
+12.Number对象的toFixed() 方法返回的是具有指定位数小数的数字的字符串表示。ar oNumberObject = new Number(68);
+	alert(oNumberObject.toFixed(2));  //输出 "68.00"
+	与格式化数字相关的另一个方法是 toExponential()，它返回的是用科学计数法表示的数字的字符串形式。
+	如果不知道要用哪种形式（预定形式或指数形式）表示数字怎么办？可以用 toPrecision() 方法。
+	toPrecision() 方法根据最有意义的形式来返回数字的预定形式或指数形式。它有一个参数，即用于表示数的数字总数（不包括指数）。
+	var oNumberObject = new Number(68);alert(oNumberObject.toPrecision(1));  //输出 "7e+1"
+13.var oStringObject = new String("hello world");
+	alert(oStringObject.valueOf() == oStringObject.toString());	//输出 "true"
+	oStringObject.length
+	首先，两个方法 charAt() 和 charCodeAt() 访问的是字符串中的单个字符。这两个方法都有一个参数，即要操作的字符的位置。
+	charAt() 方法返回的是包含指定位置处的字符的字符串，如果想得到的不是字符，而是字符代码，那么可以调用 charCodeAt() 方法。
+	concat() 方法：oStringObject.concat("world")       oStringObject + "world";
+	indexOf() 和 lastIndexOf() 方法返回的都是指定的子串在另一个字符串中的位置，如果没有找不到子串，则返回 -1。
+	这两个方法的不同之处在于，indexOf() 方法是从字符串的开头（位置 0）开始检索字符串，而 lastIndexOf() 方法则是从字符串的结尾开始检索子串。
+	var oStringObject = new String("yellow");
+	alert(oStringObject.localeCompare("brick"));		//输出 "1"
+	alert(oStringObject.localeCompare("yellow"));		//输出 "0"
+	alert(oStringObject.localeCompare("zoo"));		//输出 "-1"
+	 slice() 和 substring()：第一个参数是要获取的子串的起始位置，第二个参数（如果使用的话）是要获取子串终止前的位置。
+	 var oStringObject = new String("hello world");
+	alert(oStringObject.slice("3"));		//输出 "lo world"
+	alert(oStringObject.substring("3"));		//输出 "lo world"
+	alert(oStringObject.slice("3", "7"));		//输出 "lo w"
+	alert(oStringObject.substring("3", "7"));	//输出 "lo w"
+	对于负数参数，slice() 方法会用字符串的长度加上参数，substring() 方法则将其作为 0 处理（也就是说将忽略它）。
+	var oStringObject = new String("hello world");
+	alert(oStringObject.slice("-3"));		//输出 "rld"
+	alert(oStringObject.substring("-3"));	//输出 "hello world"
+
+
+    toLowerCase()
+    toLocaleLowerCase()
+    toUpperCase()
+    toLocaleUpperCase()
+在使用 typeof 运算符时采用引用类型存储值会出现一个问题，无论引用的是什么类型的对象，它都返回 "object"。
+instanceof 运算符与 typeof 运算符相似，用于识别正在处理的对象的类型。与 typeof 方法不同的是，instanceof 方法要求开发者明确地确认对象为某特定类型。
+var oStringObject = new String("hello world");
+alert(oStringObject instanceof String);	//输出 "true"
+
+14.delete 运算符删除对以前定义的对象属性或方法的引用。
+	var o = new Object;
+	o.name = "David";
+	alert(o.name);	//输出 "David"
+	delete o.name;
+	alert(o.name);	//输出 "undefined"
+
+	尽管一元加法对数字无作用，但对字符串却有有趣的效果，会把字符串转换成数字。
+	var sNum = "20";
+	alert(typeof sNum);	//输出 "string"
+	var iNum = +sNum;
+	alert(typeof iNum);	//输出 "number"
+
+	var iNum = -18;
+	alert(iNum.toString(2));	//输出 "-10010"
+	注意：所有整数字面量都默认存储为有符号整数。只有 ECMAScript 的位运算符才能创建无符号整数。
+
+	位运算 NOT 由否定号（~）表示，位运算 NOT 实质上是对数字求负，然后减 1，因此 25 变 -26。
+	左移运算由两个小于号表示（<<）。左移运算保留数字的符号位。例如，如果把 -2 左移 5 位，得到的是 -64，而不是 64。
+	Boolean 运算符有三种：NOT、AND 和 OR。
+15.如果只有一个运算数是字符串，把另一个运算数转换成字符串，结果是两个字符串连接成的字符串。
+	var result = 5 + 5;	//两个数字
+	alert(result);		//输出 "10"
+	var result2 = 5 + "5";	//一个数字和一个字符串
+	alert(result);		//输出 "55"
+
+16.无论何时比较一个数字和一个字符串，ECMAScript 都会把字符串转换成数字，然后按照数字顺序比较它们。
+	任何包含 NaN 的关系运算符都要返回 false
+
+17.ECMAScript 提供了两套等性运算符：等号和非等号用于处理原始值，全等号和非全等号用于处理对象。
+	有符号右移/赋值（>>=）    无符号右移/赋值（>>>=）
+
+18.有标签的语句 label : statement
+
+	outermost:
+	for (var i=0; i<10; i++) {
+  	for (var j=0; j<10; j++) {
+  	  if (i == 5 && j == 5) {
+  	  break outermost;
+  	}
+ 	 iNum++;
+ 	 }
+	}
+
+19.
+	var sMessage = "hello";
+	with(sMessage) {
+	  alert(toUpperCase());	//输出 "HELLO"
+	}
+
+在这个例子中，with 语句用于字符串，所以在调用 toUpperCase() 方法时，解释程序将检查该方法是否是本地函数。如果不是，它将检查伪对象 sMessage，看它是否为该对象的方法。然后，alert 输出 "HELLO"，因为解释程序找到了字符串 "hello" 的 toUpperCase() 方法。
+提示：with 语句是运行缓慢的代码块，尤其是在已设置了属性值时。大多数情况下，如果可能，最好避免使用它。
+在 ECMAScript 中，switch 语句可以用于字符串，而且能用不是常量的值.
+var BLUE = "blue", RED = "red", GREEN  = "green";
+
+switch (sColor) {
+  case BLUE: alert("Blue");
+    break;
+  case RED: alert("Red");
+    break;
+  case GREEN: alert("Green");
+    break;
+  default: alert("Other");
+}
+
+20.函数
+function sayHi(sName, sMessage) {
+  alert("Hello " + sName + sMessage);
+}
+在函数代码中，使用特殊对象 arguments，开发者无需明确指出参数名，就能访问它们。
+function sayHi() {
+  if (arguments[0] == "bye") {
+    return;
+  }
+
+  alert(arguments[0]);
+}
+
+还可以用 arguments 对象检测函数的参数个数，引用属性 arguments.length 即可。
+function howManyArgs() {
+  alert(arguments.length);
+}
+
+howManyArgs("string", 45);
+howManyArgs();
+howManyArgs(12);
+
+用 Function 类直接创建函数的语法如下：
+var function_name = new function(arg1, arg2, ..., argN, function_body)
+在上面的形式中，每个 arg 都是一个参数，最后一个参数是函数主体（要执行的代码）。这些参数必须是字符串。
+var doAdd = new Function("iNum", "alert(iNum + 10)");
+var alsodoAdd = doAdd;
+doAdd(10);	//输出 "20"
+alsodoAdd(10);	//输出 "20"
+
+注意：尽管可以使用 Function 构造函数创建函数，但最好不要使用它，因为用它定义函数比用传统方式要慢得多。不过，所有函数都应看作 Function 类的实例。
+ECMAScript 定义的属性 length 声明了函数期望的参数个数。例如：
+
+function doAdd(iNum) {
+  alert(iNum + 10);
+}
+
+function sayHi() {
+  alert("Hi");
+}
+
+alert(doAdd.length);	//输出 "1"
+alert(sayHi.length);	//输出 "0"
+
+Function 对象也有与所有对象共享的 valueOf() 方法和 toString() 方法。
+
+
+
+
+ECMAScript 最易让人误解的一点是，它支持闭包（closure）。
+闭包，指的是词法表示包括不被计算的变量的函数，也就是说，函数可以使用函数之外定义的变量。
+
+var iBaseNum = 10;
+
+function addNum(iNum1, iNum2) {
+  function doAdd() {
+    return iNum1 + iNum2 + iBaseNum;
+  }
+  return doAdd();
+}
+doAdd() 函数根本不接受参数，它使用的值是从执行环境中获取的。
+
+ECMAScript 面向对象技术
+
+21.把对象的所有引用都设置为 null，可以强制性地废除对象。例如：
+
+var oObject = new Object;
+// do something with the object here
+oObject = null;
+
+ECMAScript 中只存在一种作用域 - 公用作用域。
+
+由于缺少私有作用域，开发者确定了一个规约，说明哪些属性和方法应该被看做私有的。这种规约规定在属性前后加下划线：
+obj._color_ = "blue";
+这段代码中，属性 color 是私有的。注意，下划线并不改变属性是公用属性的事实，它只是告诉其他开发者，应该把该属性看作私有的。
+有些开发者还喜欢用单下划线说明私有成员，例如：obj._color。
+
+严格来说，ECMAScript 并没有静态作用域。不过，它可以给构造函数提供属性和方法。还记得吗，构造函数只是函数。函数是对象，对象可以有属性和方法。例如：
+
+function sayHello() {
+  alert("hello");
+}
+
+sayHello.alternate = function() {
+  alert("hi");
+}
+
+sayHello();		//输出 "hello"
+sayHello.alternate();	//输出 "hi"
+
+混合的构造函数/原型方式
+function Car(sColor,iDoors,iMpg) {
+  this.color = sColor;
+  this.doors = iDoors;
+  this.mpg = iMpg;
+  this.drivers = new Array("Mike","John");
+}
+
+Car.prototype.showColor = function() {
+  alert(this.color);
+};
+
+var oCar1 = new Car("red",4,23);
+var oCar2 = new Car("blue",3,25);
+
+oCar1.drivers.push("Bill");
+
+alert(oCar1.drivers);	//输出 "Mike,John,Bill"
+alert(oCar2.drivers);	//输出 "Mike,John"
+
+
+动态原型方法
+function Car(sColor,iDoors,iMpg) {
+  this.color = sColor;
+  this.doors = iDoors;
+  this.mpg = iMpg;
+  this.drivers = new Array("Mike","John");
+  
+  if (typeof Car._initialized == "undefined") {
+    Car.prototype.showColor = function() {
+      alert(this.color);
+    };
+	
+    Car._initialized = true;
+  }
+}
+
+
+
+
+<script type="text/javascript">
+
+Array.prototype.enqueue = function(vItem) {
+  this.push(vItem);
+};
+
+Array.prototype.dequeue = function() {
+  return this.shift();
+};
+
+var arr = new Array(3)
+arr[0] = "George"
+arr[1] = "John"
+arr[2] = "Thomas"
+
+arr.enqueue("Bill");
+document.write(arr);
+
+document.write("<br />")  //George,John,Thomas,Bill
+
+arr.dequeue();
+document.write(arr);     //John,Thomas,Bill 
+
+</script>
+
+
+也许你还记得，Function 对象这一章中介绍过 Function 的 toString() 方法通常输出的是函数的源代码。覆盖该方法，可以返回另一个字符串（在这个例子中，可以返回 "Function code hidden"）。不过，toString() 指向的原始函数怎么了呢？它将被无用存储单元回收程序回收，因为它被完全废弃了。没有能够恢复原始函数的方法，所以在覆盖原始方法前，比较安全的做法是存储它的指针，以便以后的使用。有时你甚至可能在新方法中调用原始方法：
+
+Function.prototype.originalToString = Function.prototype.toString;
+
+Function.prototype.toString = function() {
+  if (this.originalToString().length > 100) {
+    return "Function too long to display.";
+  } else {
+    return this.originalToString();
+  }
+};
+
+极晚绑定（Very Late Binding）
+
+从技术上讲，根本不存在极晚绑定。本书采用该术语描述 ECMAScript 中的一种现象，即能够在对象实例化后再定义它的方法。例如：
+
+var o = new Object();
+
+Object.prototype.sayHi = function () {
+  alert("hi");
+};
+
+o.sayHi();
+
+
+创建的子类将继承超类的所有属性和方法，包括构造函数及方法的实现。记住，所有属性和方法都是公用的，因此子类可直接访问这些方法。子类还可添加超类中没有的新属性和方法，也可以覆盖超类的属性和方法。
+
+
+
+继承：
+call方法
+function ClassB(sColor, sName) {
+    //this.newMethod = ClassA;
+    //this.newMethod(color);
+    //delete this.newMethod;      对象冒充方法
+    ClassA.call(this, sColor);
+
+    this.name = sName;
+    this.sayName = function () {
+        alert(this.name);
+    };
+}
+
+apply方法：
+function ClassB(sColor, sName) {
+    //this.newMethod = ClassA;
+    //this.newMethod(color);
+    //delete this.newMethod;
+    ClassA.apply(this, new Array(sColor));
+
+    this.name = sName;
+    this.sayName = function () {
+        alert(this.name);
+    };
+}
+
+参考网址：http://www.w3school.com.cn/js/pro_js_inheritance_implementing.asp
+
+同样的，第一个参数仍是 this，第二个参数是只有一个值 color 的数组。可以把 ClassB 的整个 arguments 对象作为第二个参数传递给 apply() 方法：
+
+function ClassB(sColor, sName) {
+    //this.newMethod = ClassA;
+    //this.newMethod(color);
+    //delete this.newMethod;
+    ClassA.apply(this, arguments);
+
+    this.name = sName;
+    this.sayName = function () {
+        alert(this.name);
+    };
+}
+当然，只有超类中的参数顺序与子类中的参数顺序完全一致时才可以传递参数对象。如果不是，就必须创建一个单独的数组，按照正确的顺序放置参数。此外，还可使用 call() 方法。
+
+原型链（prototype chaining）
+
+在原型链中，instanceof 运算符的运行方式也很独特。对 ClassB 的所有实例，instanceof 为 ClassA 和 ClassB 都返回 true。
+原型链的弊端是不支持多重继承。记住，原型链会用另一类型的对象重写类的 prototype 属性。对象冒充可以实现多重继承
+
+我们曾经讲解过创建类的最好方式是用构造函数定义属性，用原型定义方法。这种方式同样适用于继承机制，用对象冒充继承构造函数的属性，用原型链继承 prototype 对象的方法。
+function ClassA(sColor) {
+    this.color = sColor;
+}
+
+ClassA.prototype.sayColor = function () {
+    alert(this.color);
+};
+
+function ClassB(sColor, sName) {
+    ClassA.call(this, sColor);
+    this.name = sName;
+}
+
+ClassB.prototype = new ClassA();       //把 ClassB 的 prototype 属性设置成 ClassA 的实例。因为想要 ClassA 的所有属性和方法，但又不想逐个将它们 ClassB 的 prototype 属性。
+
+ClassB.prototype.sayName = function () {
+    alert(this.name);
+};
+
+
+</body>
+</html>

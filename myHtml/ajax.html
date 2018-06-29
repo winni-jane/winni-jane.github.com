@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="js/jquery.js"></script>
+<!-- AJAX 不是新的编程语言，而是一种使用现有标准的新方法。
+AJAX 是一种用于创建快速动态网页的技术。
+通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
+XMLHttpRequest 是 AJAX 的基础。XMLHttpRequest 用于在后台与服务器交换数据。所有现代浏览器（IE7+、Firefox、Chrome、Safari 以及 Opera）均内建 XMLHttpRequest 对象。
+创建 XMLHttpRequest 对象的语法：
+variable=new XMLHttpRequest();
+老版本的 Internet Explorer （IE5 和 IE6）使用 ActiveX 对象：
+variable=new ActiveXObject("Microsoft.XMLHTTP");
+为了应对所有的现代浏览器，包括 IE5 和 IE6，请检查浏览器是否支持 XMLHttpRequest 对象。如果支持，则创建 XMLHttpRequest 对象。如果不支持，则创建 ActiveXObject ：
+
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+如需将请求发送到服务器，我们使用 XMLHttpRequest 对象的 open() 和 send() 方法：
+xmlhttp.open("GET","test1.txt",true);
+xmlhttp.send();
+open(method,url,async)  
+    method：请求的类型；GET 或 POST
+    url：文件在服务器上的位置
+    async：true（异步）或 false（同步）
+send(string)   	将请求发送到服务器。  string：仅用于 POST 请求
+与 POST 相比，GET 更简单也更快，并且在大部分情况下都能用。
+然而，在以下情况中，请使用 POST 请求：
+
+    无法使用缓存文件（更新服务器上的文件或数据库）
+    向服务器发送大量数据（POST 没有数据量限制）
+    发送包含未知字符的用户输入时，POST 比 GET 更稳定也更可靠
+
+ -->
+ <script type="text/javascript">
+function loadXMLDoc()
+{
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","http://www.w3school.com.cn/ajax/demo_get.asp",true);
+xmlhttp.send();
+}
+</script>
+
+<!-- 在上面的例子中，您可能得到的是缓存的结果。
+为了避免这种情况，请向 URL 添加一个唯一的 ID：
+
+xmlhttp.open("GET","demo_get.asp?t=" + Math.random(),true);
+xmlhttp.send();
+如果您希望通过 GET 方法发送信息，请向 URL 添加信息：
+
+xmlhttp.open("GET","demo_get2.asp?fname=Bill&lname=Gates",true);
+xmlhttp.send();
+
+ -->
+<!-- 
+POST 请求
+
+一个简单 POST 请求：
+
+xmlhttp.open("POST","demo_post.asp",true);
+xmlhttp.send();
+如果需要像 HTML 表单那样 POST 数据，请使用 setRequestHeader() 来添加 HTTP 头。然后在 send() 方法中规定您希望发送的数据：
+
+xmlhttp.open("POST","ajax_test.asp",true);
+xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+xmlhttp.send("fname=Bill&lname=Gates");
+
+setRequestHeader(header,value) 	
+向请求添加 HTTP 头。
+
+    header: 规定头的名称
+    value: 规定头的值
+
+注释：当您使用 async=false 时，请不要编写 onreadystatechange 函数 - 把代码放到 send() 语句后面即可：
+xmlhttp.open("GET","test1.txt",false);
+xmlhttp.send();
+document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+
+ -->
+<!-- AJAX - 服务器响应
+如需获得来自服务器的响应，请使用 XMLHttpRequest 对象的 responseText 或 responseXML 属性。
+responseText 	获得字符串形式的响应数据。
+responseXML 	获得 XML 形式的响应数据。  http://www.w3school.com.cn/tiy/t.asp?f=ajax_responsexml
+
+xmlDoc=xmlhttp.responseXML; x=xmlDoc.getElementsByTagName("");
+for (i=0;i<x.length;i++)
+  {
+  txt=txt + x[i].childNodes[0].nodeValue + "<br />";
+  }
+ -->
+ <!-- AJAX - onreadystatechange 事件
+每当 readyState 改变时，就会触发 onreadystatechange 事件。
+
+readyState 	
+存有 XMLHttpRequest 的状态。从 0 到 4 发生变化。
+
+    0: 请求未初始化
+    1: 服务器连接已建立
+    2: 请求已接收
+    3: 请求处理中
+    4: 请求已完成，且响应已就绪
+
+
+status 	
+200: "OK"
+404: 未找到页面
+
+当 readyState 等于 4 且状态为 200 时，表示响应已就绪：
+
+注释：onreadystatechange 事件被触发 5 次（0 - 4），对应着 readyState 的每个变化。
+
+如果您的网站上存在多个 AJAX 任务，那么您应该为创建 XMLHttpRequest 对象编写一个标准的函数，并为每个 AJAX 任务调用该函数。
+该函数调用应该包含 URL 以及发生 onreadystatechange 事件时执行的任务（每次调用可能不尽相同）：
+  -->
+<script type="text/javascript">
+var xmlhttp;
+function loadXMLDoc(url,cfunc)
+{
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=cfunc;
+xmlhttp.open("GET",url,true);
+xmlhttp.send();
+}
+function myFunction()
+{
+loadXMLDoc("http://www.w3school.com.cn/ajax/test1.txt",function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("myDiv2").innerHTML=xmlhttp.responseText;
+    }
+  });
+}
+</script>
+
+
+<!-- 
+输入字母显示提示 类似于百度的输入联想   用onkeyup触发
+	<input type="text" id="txt1" onkeyup="showHint(this.value)" /> -->
+
+<!-- AJAX 可用来与数据库进行动态通信。 数据库查询由服务器来做 -->
+
+
+
+
+
+</head>
+<body>
+
+<h2>AJAX</h2>
+<button type="button" onclick="loadXMLDoc()">请求数据</button>
+<div id="myDiv"></div>
+
+
+<div id="myDiv2"><h2>Let AJAX change this text</h2></div>
+<button type="button" onclick="myFunction()">通过 AJAX 改变内容</button>
+
+
+</body>
+</html>
