@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<!-- 脚本可位于 HTML 的 <body> 或 <head> 部分中，或者同时存在于两个部分中。
+
+通常的做法是把函数放入 <head> 部分中，或者放在页面底部。这样就可以把它们安置到同一处位置，不会干扰页面的内容。
+提示：我们把 JavaScript 放到了页面代码的底部，这样就可以确保在 <p> 元素创建之后再执行脚本。
+ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>javH</title>
+</head>
+
+
+<body onload = "checkCookies()"> <!-- //onload 和 onunload 事件会在用户进入或离开页面时被触发。 -->
+
+<script src="demoJS.js"></script>
+<!-- 您只能在 HTML 输出流中使用 document.write。 如果您在文档已加载后使用它（比如在函数中），会覆盖整个文档。  -->
+
+<button type="button" onclick="alert('Welcome!')">点击这里</button>
+
+<img id="myimage" onclick="changeImage()" src="1.jpg" with = "100" height = "100">
+<!-- isNaN(x)  返回false代表是数字-->
+
+
+<div id = "main">
+<p >123</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- 错误 -->
+<script>
+function myFunction3()
+{
+try
+{ 
+var x=document.getElementById("demo").value;
+if(x=="")    throw "值为空";
+if(isNaN(x)) throw "不是数字";
+if(x>10)     throw "太大";
+if(x<5)      throw "太小";
+}
+catch(err)
+{
+var y=document.getElementById("mess");
+y.innerHTML="错误：" + err + "。";
+}
+}
+</script>
+
+
+<!-- 表单验证 
+必需的 action 属性规定当提交表单时，向何处发送表单数据。
+ with 语句可以方便地用来引用某个特定对象中已有的属性，但是不能用来给对象添加属性。要给对象创建新的属性，必须明确地引用该对象。
+
+-->
+<form action="submitpage.htm" onsubmit="return validate_form(this)" method="post">
+Email: <input type="text" name="email" size="30">
+<input type="submit" value="Submit"> 
+</form>
+<script type="text/javascript">
+
+function validate_required(field,alerttxt)
+{
+with (field)
+  {
+  if (value==null||value=="")
+    {alert(alerttxt);return false}
+  else {return true}
+  }
+}
+
+function validate_form(thisform)
+{
+with (thisform)
+  {
+  if (validate_required(email,"Email must be filled out!")==false)
+    {email.focus();return false}
+  //Checkbox 对象代表一个 HTML 表单中的 一个选择框。
+     //focus 选中  blur() 方法用于从 checkbox 上移开焦点。 focus()   为 checkbox 赋予焦点。
+  // click()   模拟在 checkbox 中的一次鼠标点击。
+  }
+}
+function validate_email(field,alerttxt)
+{//输入的数据必须包含 @ 符号和点号(.)。同时，@ 不可以是邮件地址的首字符，并且 @ 之后需有至少一个点号
+with (field)
+{
+apos=value.indexOf("@")
+dotpos=value.lastIndexOf(".")
+if (apos<1||dotpos-apos<2) 
+  {alert(alerttxt);return false}
+else {return true}
+}
+}
+</script>
+
+<p id="p1">这是一段文本。</p>
+
+<input type="button" value="隐藏文本" onclick="document.getElementById('p1').style.visibility='hidden'" />
+<input type="button" value="显示文本" onclick="document.getElementById('p1').style.visibility='visible'" />
+
+<h1 onclick="this.innerHTML='谢谢!'">请点击该文本</h1>
+
+<h1 onclick="changetext(this)">请点击该文本</h1>
+<script>
+function changetext(id)
+{
+id.innerHTML="谢谢!";
+}
+</script>
+
+
+
+
+<script>
+function checkCookies()
+{
+if (navigator.cookieEnabled==true)
+	{
+	alert("已启用 cookie")
+	}
+else
+	{
+	alert("未启用 cookie")
+	}
+}
+</script>
+
+<!-- onchange -->
+请输入英文字符：<input type="text" id="fname" onchange="myFunction()">
+<p>当您离开输入字段时，会触发将输入文本转换为大写的函数。</p>
+<script>
+function myFunction()
+{
+var x=document.getElementById("fname");
+x.value=x.value.toUpperCase();
+}
+</script>
+
+<div onmouseover="mOver(this)" onmouseout="mOut(this)" style="background-color:green;width:120px;height:20px;padding:40px;color:#ffffff;">把鼠标移到上面</div>
+
+<!-- onmousedown、onmouseup 以及 onclick 事件
+
+onmousedown, onmouseup 以及 onclick 构成了鼠标点击事件的所有部分。首先当点击鼠标按钮时，会触发 onmousedown 事件，当释放鼠标按钮时，会触发 onmouseup 事件，最后，当完成鼠标点击时，会触发 onclick 事件。 -->
+
+<!-- 创建新的 HTML 元素 -->
+<div id="div1">
+<p id="p1">这是一个段落。</p>
+<p id="p2" style="color: red; margin-left: 20px">这是另一个段落。</p>
+</div>
+<script>
+var para=document.createElement("p");
+var node=document.createTextNode("这是新段落。");
+para.appendChild(node);
+
+var element=document.getElementById("div1");
+element.appendChild(para);
+ </script>
+
+
+<script>
+// var parent=document.getElementById("div1");
+// var child=document.getElementById("p1");
+// parent.removeChild(child);
+// 或者
+// var child=document.getElementById("p1");
+// child.parentNode.removeChild(child);
+</script>
+
+
+
+<!-- 创建 JavaScript 对象实例 -->
+<script>
+function person(firstname,lastname,age,eyecolor)
+{
+this.firstname=firstname;
+this.lastname=lastname;
+this.age=age;
+this.eyecolor=eyecolor;
+}
+
+myFather=new person("Bill","Gates",56,"blue");
+
+document.write(myFather.firstname + " is " + myFather.age + " years old."+"<br />");
+</script>
+<!-- 把方法添加到 JavaScript 对象 -->
+<script>
+function person(firstname,lastname,age,eyecolor)
+{
+this.firstname=firstname;
+this.lastname=lastname;
+this.age=age;
+this.eyecolor=eyecolor;
+ 
+this.changeName=changeName1;
+function changeName1(name)
+{
+this.lastname=name;
+}
+}
+myMother=new person("Steve","Jobs",56,"green");
+myMother.changeName("Ballmer" +"<br />");
+document.write(myMother.lastname);
+</script>
+
+
+<!-- match() 方法
+    如何使用 match() 来查找字符串中特定的字符，并且如果找到的话，则返回这个字符。 -->
+
+
+<script type="text/javascript">
+var str="Visit Microsoft!"
+document.write(str.replace(/Microsoft/,"W3School") +"<br />")
+</script>
+
+<script type="text/javascript">
+
+document.write(Date()+"<br />")
+var d=new Date();
+document.write("从 1970/01/01 至今已过去 " + d.getTime() + " 毫秒"+"<br />");
+</script>
+
+<script type="text/javascript">
+
+var d = new Date()
+d.setFullYear(1992,10,3)
+document.write(d+"<br />")
+// var d=new Date()
+// var day=d.getDate()   //day
+// var month=d.getMonth() + 1 //month
+// var year=d.getFullYear()  // year
+// var birthday = new Date("July 21, 1983 01:15:00")
+
+// var d = new Date()
+// d.setDate(15)
+// document.write(d)
+
+</script>
+
+
+<script type="text/javascript">
+
+var d = new Date()
+document.write (d.toUTCString())
+
+</script>
+
+
+
+<br/>
+<script type="text/javascript">
+
+var d=new Date()
+// var weekday=new Array(7)
+// weekday[0]="星期日"
+// weekday[1]="星期一"
+// weekday[2]="星期二"
+// weekday[3]="星期三"
+// weekday[4]="星期四"
+// weekday[5]="星期五"
+// weekday[6]="星期六"
+
+// document.write("今天是" + weekday[d.getDay()])
+document.write("今天是星期" + d.getDay())
+</script>
+
+<br/>
+
+
+
+<button onclick = "startTime()">
+显示时钟
+</button>
+<div id="txt"></div>
+
+
+
+
+<script type="text/javascript">
+
+var arr = new Array(3);
+arr[0] = "George"
+arr[1] = "John"
+arr[2] = "Thomas"
+
+document.write(arr.join()); //George,John,Thomas
+
+document.write("<br />");
+
+document.write(arr.join(".")+"<br />"); //George.John.Thomas 
+
+</script>
+
+
+<!-- 文本排序  按照ascii码升序排列-->
+
+<script type="text/javascript">
+
+var arr = new Array(6)
+arr[0] = "George"
+arr[1] = "John"
+arr[2] = "Thomas"
+arr[3] = "James"
+arr[4] = "Adrew"
+arr[5] = "Martin"
+
+document.write(arr + "<br />")
+document.write(arr.sort()+"<br />")
+
+</script>
+
+
+<!-- 数字排序 -->
+<script type="text/javascript">
+
+function sortNumber(a, b)
+{
+return a - b
+}
+
+var arr = new Array(6)
+arr[0] = "10"
+arr[1] = "5"
+arr[2] = "40"
+arr[3] = "25"
+arr[4] = "1000"
+arr[5] = "1"
+
+document.write(arr + "<br />")
+document.write(arr.sort(sortNumber))
+
+</script>
+
+
+
+
+
+<script>
+function newDoc()
+  {
+  window.location.assign("http://www.w3school.com.cn")
+  // location.assign() 方法加载新的文档。
+  }
+</script>
+</head>
+<body>
+
+<input type="button" value="加载新文档" onclick="newDoc()">
+
+
+
+<script>
+function goBack()
+  {
+  window.history.back()
+  }
+</script>
+
+<input type="button" value="Back" onclick="goBack()">
+<!-- history.back() 方法加载历史列表中的前一个 URL。
+这与在浏览器中点击后退按钮是相同的： -->
+
+<script>
+function goForward()
+  {
+  window.history.forward()
+  }
+</script>
+<input type="button" value="Forward" onclick="goForward()">
+
+
+<div id="example"></div>
+<script>
+
+txt = "<p>Browser CodeName: " + navigator.appCodeName + "</p>";
+txt+= "<p>Browser Name: " + navigator.appName + "</p>";
+txt+= "<p>Browser Version: " + navigator.appVersion + "</p>";
+txt+= "<p>Cookies Enabled: " + navigator.cookieEnabled + "</p>";
+txt+= "<p>Platform: " + navigator.platform + "</p>";
+txt+= "<p>User-agent header: " + navigator.userAgent + "</p>";
+txt+= "<p>User-agent language: " + navigator.systemLanguage + "</p>";
+
+document.getElementById("example").innerHTML=txt;
+
+</script>
+
+
+
+<input type="button" onclick="show_confirm()" value="Show a confirm box" />
+
+
+<input type="button" onclick="disp_prompt()" value="显示提示框" />
+
+
+
+
+<form>
+<input type="button" value="显示定时的警告框" onClick = "timedMsg()">
+</form>
+<p>请点击上面的按钮。警告框会在 5 秒后显示。</p>
+
+<script type="text/javascript">
+function timedMsg()
+{
+var t=setTimeout("alert('5 秒！')",5000) 
+// 计时
+}
+</script>
+
+<!-- t=setTimeout("timedCount()",1000)
+clearTimeout(t);
+ -->
+
+
+<!-- // 引用 jQuery -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+ </script> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

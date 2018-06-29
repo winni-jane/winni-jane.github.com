@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>test</title>
+</head>
+
+<body>
+
+<button onClick="alertId()">click</button>
+
+<script type="text/javascript">
+
+var n=0;
+var i=0;
+function alertId()
+{
+	var number = Math.random();
+	number = Math.ceil(number * 100); 
+	
+	if (number < 50) {
+
+		document.write("  n="+ (n++)+"\n");
+		t=setTimeout("alertId()",0.1)
+	}else{
+
+		alertId();
+		// document.write("  i="+ (i++));
+		t=setTimeout("alertId()",0.1)
+
+	}
+
+}
+
+
+// file:///Users/bfmac001/Desktop/%E6%88%91%E7%9A%84/HTML/test
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

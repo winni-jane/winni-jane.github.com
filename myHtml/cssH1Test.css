@@ -1,0 +1,644 @@
+/*派生选择器*/
+li strong {
+    font-style: italic;
+    font-weight: normal;
+  }
+
+ /*id 选择器*/
+#red1 {color:red;}
+#green1 {color:green;}
+
+/*id 选择器和派生选择器
+在现代布局中，id 选择器常常用于建立派生选择器。
+与页面中的其他 p 元素明显不同的是，sidebar 内的 p 元素得到了特殊的处理，
+同时，与页面中其他所有 h2 元素明显不同的是，sidebar 中的 h2 元素也得到了不同的特殊处理。
+*/
+#sidebar p {
+	font-style: italic;
+	text-align: right;
+	margin-top: 0.5em;
+	}
+/*p.normal {font-weight:normal;}
+p.thick {font-weight:bold;}
+p.thicker {font-weight:900;
+
+  p.normal {font-style:normal;}
+p.italic {font-style:italic;}
+p.oblique {font-style:oblique;}}*/
+
+#sidebar h2 {
+	font-size: 1em;
+	font-weight: normal;
+	font-style: italic;
+	margin: 0;
+	line-height: 1.5;
+	text-align: right;
+	}
+div#sidebar {
+	border: 1px dotted #000;
+	padding: 10px;
+	}
+
+/*在 CSS 中，类选择器以一个点号显示：*/
+.center {text-align: center}
+
+/*和 id 一样，class 也可被用作派生选择器：*/
+.fancy td {
+	color: #f60;
+	background: #666;
+	}
+
+td.fancy {
+	color: #f60;
+	background: #666;
+	}
+/*属性选择器
+
+下面的例子为带有 title 属性的所有元素设置样式：*/
+
+[title]
+{
+color:red;
+}
+/*属性和值选择器*/
+[title=W3School]
+{
+border:5px solid blue;
+}
+
+/*属性和值选择器 - 多个值
+包含指定值的 title 属性的所有元素设置样式。适用于由空格分隔的属性值：
+*/
+
+[title~=hello]
+{
+color:orange;
+} 
+
+/*下面的例子为带有包含指定值的 lang 属性的所有元素设置样式。适用于由连字符分隔的属性值：*/
+[lang|=en] { color:black; }
+
+/*属性选择器在为不带有 class 或 id 的表单设置样式时特别有用：*/
+input[type="text"]
+{
+  width:150px;
+  display:block;
+  /*none表示不显示在网页上,但是代码存在;bolck是此元素将显示为块级元素,此元素前后会带有换行符*/
+  margin-bottom:10px;
+  background-color:yellow;
+  font-family: Verdana, Arial;
+}
+
+/*[attribute^=value] 	匹配属性值以指定值开头的每个元素。
+[attribute$=value] 	匹配属性值以指定值结尾的每个元素。
+[attribute*=value] 	匹配属性值中包含指定值的每个元素。
+*/
+div[class*="test"]
+{
+background:#ffff00;
+font-size: 20pt;
+}
+
+body {background-image: url(1.jpg);background-repeat: repeat-x;background-position:center;
+background-attachment:fixed;font-family: Georgia, serif;
+}
+/*属性值 repeat 导致图像在水平垂直方向上都平铺，就像以往背景图像的通常做法一样。
+repeat-x 和 repeat-y 分别导致图像只在水平或垂直方向上重复，no-repeat 则不允许图像在任何方向上平铺。
+为 background-position 属性提供值有很多方法。首先，可以使用一些关键字：top、bottom、left、right 和 center。
+通常，这些关键字会成对出现，
+不过也不总是这样。还可以使用长度值，如 100px 或 5cm，最后也可以使用百分数值。不同类型的值对于背景图像的放置稍有差异。
+图像放置关键字最容易理解，其作用如其名称所表明的。例如，top right 使图像放置在元素内边距区的右上角。
+
+根据规范，位置关键字可以按任何顺序出现，只要保证不超过两个关键字 - 一个对应水平方向，另一个对应垂直方向。
+
+如果只出现一个关键字，则认为另一个关键字是 center。 例如：background-position:top; 
+background-position:50% 50%;  如果图像位于 0% 0%，其左上角将放在元素内边距区的左上角。如果图像位置是 100% 100%，会使图像的右下角放在右边距的右下角。
+background-attachment 属性的默认值是 scroll，也就是说，在默认的情况下，背景会随文档滚动。
+*/
+/*通用字体
+    Serif 字体
+    Sans-serif 字体
+    Monospace 字体
+    Cursive 字体
+    Fantasy 字体
+我们建议在所有 font-family 规则中都提供一个通用字体系列。
+这样就提供了一条后路，在用户代理无法提供与规则匹配的特定字体时，就可以选择一个候选字体
+    */
+p.tinde {text-indent: 5em;}
+/*缩进文本*/
+/*注意：一般来说，可以为所有块级元素应用 text-indent，但无法将该属性应用于行内元素，图像之类的替换元素上也无法应用 text-indent 属性。
+不过，如果一个块级元素（比如段落）的首行中有一个图像，它会随该行的其余文本移动。*/
+/*不过在为 text-indent 设置负值时要当心，如果对一个段落设置了负值，那么首行的某些文本可能会超出浏览器窗口的左边界。
+为了避免出现这种显示问题，建议针对负缩进再设置一个外边距或一些内边距：
+text-indent 可以使用所有长度单位，包括百分比值。*/
+/*百分数要相对于缩进元素父元素的宽度。*/
+/*text-indent 属性可以继承，*/
+
+p.tindep {text-indent: -5em; padding-left: 5em;}
+
+
+/*text-align:center 与 <CENTER>
+
+您可能会认为 text-align:center 与 <CENTER> 元素的作用一样，但实际上二者大不相同。
+
+<CENTER> 不仅影响文本，还会把整个元素居中。在 HTML 5 中，不支持该标签。请使用 CSS 代替。
+text-align 不会控制元素的对齐，而只影响内部内容。元素本身不会从一段移到另一端，只是其中的文本受影响。
+justify 	实现两端对齐文本效果。
+*/
+
+p.spread {word-spacing: 30px;} /*字符间隔*/
+
+h1.letspa {letter-spacing: 0.5em}  /*字母间隔*/
+
+h1.textran {text-transform: uppercase}  /* 
+    none
+    uppercase
+    lowercase
+    capitalize
+*/
+
+a.textdec {text-decoration: none;}
+/* 
+    none
+    underline
+    overline
+    line-through
+    blink
+none 值会关闭原本应用到一个元素上的所有装饰。
+*/
+/*还可以在一个规则中结合多种装饰。如果希望所有超链接既有下划线，又有上划线，*/
+a.textdecq:link,a.textdecq:visited {text-decoration: underline overline;}
+
+/*
+a:link {color: #FF0000}未访问时的状态 
+a:visited {color: #00FF00} 已访问过的状态 
+a:hover {color: #FF00FF}  鼠标移动到链接上时的状态 
+a:active {color: #0000FF}  鼠标按下去时的状态 
+当为链接的不同状态设置样式时，请按照以下次序规则：
+
+    a:hover 必须位于 a:link 和 a:visited 之后
+    a:active 必须位于 a:hover 之后
+a:link {background-color:#B2FF99;}
+a:link {color:#ff0000;}
+*/
+
+p.whispa{
+  white-space: nowrap
+ }
+
+/*normal 	默认。空白会被浏览器忽略。
+pre 	空白会被浏览器保留。其行为方式类似 HTML 中的 <pre> 标签。
+nowrap 	文本不会换行，文本会在在同一行上继续，直到遇到 <br> 标签为止。
+pre-wrap 	保留空白符序列，但是正常地进行换行。
+pre-line 	合并空白符序列，但是保留换行符。
+inherit 	规定应该从父元素继承 white-space 属性的值。*/
+
+/*pre 元素可定义预格式化的文本。被包围在 pre 元素中的文本通常会保留空格和换行符。而文本也会呈现为等宽字体。
+
+<pre> 标签的一个常见应用就是用来表示计算机的源代码。*/
+
+
+div.direc
+  {
+  direction: rtl
+  }
+
+/*
+ltr 	默认。内容从左向右流动。
+rtl 	内容从右向左流动。
+inherit 	内容流动从父元素继承。
+于行内元素，只有当 unicode-bidi 属性设置为 embed 或 bidi-override 时才会应用 direction 属性。
+unicode-bidi ：normal、embed、
+bidi-override
+*/
+p.normal {font-style:normal;}
+  /*normal - 文本正常显示
+    italic - 文本斜体显示
+    oblique - 文本倾斜显示*/
+
+/*font-variant 属性可以设定小型大写字母。*/
+p.fonvar {font-variant:small-caps;}
+
+/*关键字 100 ~ 900 为字体指定了 9 级加粗度。
+如果一个字体内置了这些加粗级别，那么这些数字就直接映射到预定义的级别，
+100 对应最细的字体变形，900 对应最粗的字体变形。数字 400 等价于 normal，而 700 等价于 bold。*/
+p.normal {font-weight: normal}
+p.thick {font-weight: bold}  /*关键词 lighter 会导致浏览器将加粗度下移而不是上移。*/
+p.thicker {font-weight: 900}
+
+p.fonsi {font-size:14px;} 
+/*注意：如果您没有规定字体大小，普通文本（比如段落）的默认大小是 16 像素 (16px=1em)。*/
+
+/*normal 	默认值。定义标准的字符。
+bold 	定义粗体字符。
+bolder 	定义更粗的字符。
+lighter 	定义更细的字符。
+
+    100
+    200
+    300
+    400
+    500
+    600
+    700
+    800
+    900
+
+	定义由粗到细的字符。400 等同于 normal，而 700 等同于 bold。
+inherit 	规定应该从父元素继承字体的粗细。*/
+
+
+/*列表：*/
+ul {list-style-type : square}
+/*"none" 类型  Disc 类型  Circle 类型  Square 类型  Decimal 类型  Decimal-leading-zero 类型  
+Lower-roman 类型  Upper-roman 类型  Lower-alpha 类型  Upper-alpha 类型  Lower-greek 类型
+Lower-latin 类型  Upper-latin 类型  Hebrew 类型  Armenian 类型  Georgian 类型  Cjk-ideographic 类型
+Hiragana 类型  Katakana 类型  Hiragana-iroha 类型  Katakana-iroha 类型*/
+/*图像*/
+ul {list-style-image: url('/i/eg_arrow.gif')}
+/*list-style-position 标志位置*/
+/*简写列表样式*/
+ul {list-style : url(example.gif) square inside}
+
+ul.inside {list-style-position: inside}
+ul.outside {list-style-position: outside}
+
+/*表格*/
+
+/*table,th,td
+{
+border:1px solid black;
+border-collapse:collapse;
+}*/
+/*上例中的表格具有双线条边框。这是由于 table、th 以及 td 元素都有独立的边框。*/
+/*如果需要把表格显示为单线条边框，请使用 border-collapse 属性：separate、collapse、inherit。
+collapse ：如果可能，边框会合并为一个单一的边框。会忽略 border-spacing 和 empty-cells 属性。*/
+
+/*border-spacing: 10px;      border-spacing: 10px 50px*/
+/*empty-cells 属性设置是否显示表格中的空单元格（仅用于“分离边框”模式）。默认值：  show     empty-cells: hide;*/
+
+
+table.table1
+  {
+  width:100px;
+  border:1px solid black;
+  }
+
+
+
+
+
+table.table2
+  {
+    width:300px;
+    height: 100px;
+  border-collapse:separate;
+  empty-cells:hide;
+  table-layout:fixed;
+  }
+/*empty-cells 属性设置是否显示表格中的空单元格（仅用于“分离边框”模式）。
+hide  不在空单元格周围绘制边框。
+show  在空单元格周围绘制边框。默认。*/
+
+
+/*tableLayout 属性用来显示表格单元格、行、列的算法规则。
+automatic   默认。列宽度由单元格内容设定。
+fixed   列宽由表格宽度和列宽度设定
+*/
+/*table
+  {
+  table-layout:fixed;
+  }*/
+
+table.table2 td
+  {
+  text-align:right;
+  vertical-align:bottom;
+  padding:15px;
+  border:1px solid blue;
+  }
+
+/*text-align 属性设置水平对齐方式，比如左对齐、右对齐或者居中：*/
+/*vertical-align 属性设置垂直对齐方式，比如顶部对齐、底部对齐或居中对齐：*/
+/*表格中内容与边框的距离*/
+
+/*border-spacing  设置分隔单元格边框的距离。*/
+
+/*规定表格标题的放置方式：
+top   默认值。把表格标题定位在表格之上。
+bottom  把表格标题定位在表格之下。
+*/
+table.table2 caption
+  {
+  caption-side:bottom;
+  }
+
+
+/*轮廓*/
+p.outlineClass
+{
+border:red solid thin;
+outline:black dotted thick;
+}
+/*outline-style:dotted;
+outline-color:#00ff00;
+outline-width:thin; outline-width:3px;
+{outline-style: dotted dashed  solid  double groove  ridge  inset  outset
+*/
+
+
+/*按照上、右、下、左的顺序分别设置各边的内边距，各边均可以使用不同的单位或百分比值 和如下效果是一样的：*/
+h1.padd {
+  padding-top: 10px;
+  padding-right: 0.25em;
+  padding-bottom: 2ex;
+  padding-left: 20%;
+  border:red solid thin;
+  }
+/*h1 {padding: 10px 0.25em 2ex 20%;}*/
+
+/*下面这条规则把段落的内边距设置为父元素 width 的 10%：
+上下内边距与左右内边距一致；即上下内边距的百分数会相对于父元素宽度设置，而不是相对于高度。
+*/
+/*p {padding: 10%;}*/
+
+td.test1 {padding: 1.5cm}
+td.test2 {padding: 0.5cm 2.5cm}
+
+/*border-style:dotted solid double dashed;
+点状 实线  双线  虚线  还有groove ridge inset outset
+
+border-bottom   简写属性，用于把下边框的所有属性设置到一个声明中。
+border-bottom-color   设置元素的下边框的颜色。
+border-bottom-style   设置元素的下边框的样式。
+border-bottom-width   设置元素的下边框的宽度。
+border-left   简写属性，用于把左边框的所有属性设置到一个声明中。
+border-right  简写属性，用于把右边框的所有属性设置到一个声明中。
+border-top  简写属性，用于把上边框的所有属性设置到一个声明中。
+
+
+ */
+
+
+/*您可以为把一幅图片的边框定义为 outset，使之看上去像是“凸起按钮”：*/
+a:link img {border-style: outset;}
+
+/*border-width
+
+p {border-style: solid; border-width: 15px 5px 15px 5px;}
+上面的例子也可以简写为（这样写法称为值复制）：
+p {border-style: solid; border-width: 15px 5px;}
+为边框指定宽度有两种方法：可以指定长度值，比如 2px 或 0.1em；
+或者使用 3 个关键字之一，它们分别是 thin 、medium（默认值） 和 thick。
+您也可以通过下列属性分别设置边框各边的宽度：
+
+    border-top-width
+    border-right-width
+    border-bottom-width
+    border-left-width
+
+*/
+
+/*CSS 使用一个简单的 border-color 属性，它一次可以接受最多 4 个颜色值。
+还有一些单边边框颜色属性。它们的原理与单边样式和宽度属性相同：
+
+    border-top-color
+    border-right-color
+    border-bottom-color
+    border-left-color */
+
+p.ww {
+  border-style: solid;
+  border-color: blue rgb(25%,35%,45%) #909090 red;
+  }
+
+/*border-color  引入了边框颜色值 transparent。这个值用于创建有宽度的不可见边框。*/
+a.borctra:link, a.borctra:visited {
+  border-style: solid;
+  border-width: 5px;
+  border-color: transparent;
+  }
+a.borctra:hover {border-color: gray;}
+
+/*
+外边距 margin
+下面的声明在 h1 元素的各个边上设置了 1/4 
+margin: top right bottom left*/
+p.marg {margin : 10%;}
+/*
+p {margin: auto auto auto 20px;} 或者使用单边外边距
+
+    margin-top
+    margin-right
+    margin-bottom
+    margin-left
+
+*/
+
+h1.biaoti {
+  margin : 0.25in; /* in为英寸*/
+
+}
+
+/*外边距合并
+
+http://www.w3school.com.cn/css/css_margin_collapsing.asp
+外边距合并指的是，当两个垂直外边距相遇时，它们将形成一个外边距。
+合并后的外边距的高度等于两个发生合并的外边距的高度中的较大者。
+只有普通文档流中块距的垂直外边距才会发生外边距合并。行内框。浮动框或绝对定位之间的外边距不会合并
+*/
+
+/*相对定位*/
+h2.pos_left
+{
+position:relative;
+left:-20px
+}
+h2.pos_right
+{
+position:relative;
+left:20px
+}
+/*绝对定位*/
+h2.pos_abs
+{
+position:absolute;
+left:100px;
+top:150px
+}
+
+/*固定定位*/
+p.one
+{
+position:fixed;
+left:5px;
+top:5px;
+}
+p.two
+{
+position:fixed;
+top:30px;
+right:5px;
+}
+
+
+div.oFlow 
+{
+background-color:#00FFFF;
+width:150px;
+height:150px;
+overflow: scroll
+}
+/*
+如何隐藏溢出元素中溢出的内容：
+overflow: hidden
+
+如何设置浏览器来自动地处理溢出：
+overflow: auto
+*/
+
+
+/*clip 属性剪切了一幅图像：*/
+img.class1a
+{
+position:relative;  /*设置absolute 则和下面的图像在一行内*/
+clip:rect(0px 50px 200px 0px)
+}
+
+  /*设置元素的垂直对齐方式。*/
+img.topa {vertical-align:text-top}
+img.bottom {vertical-align:text-bottom}
+
+
+/*
+  设置元素的堆叠顺序。
+Z-index可被用于将在一个元素放置于另一元素之后。
+z-index:-1   默认的 z-index 是 0。Z-index -1 拥有更低的优先级   Z-index 1 拥有更高的优先级
+注释：Z-index 仅能在定位元素上奏效（例如 position:absolute;）！
+*/
+
+
+img.zind
+{
+position:absolute;
+left:0px;
+z-index:-1;
+clear:both;
+}
+
+
+img.hzind
+{
+position:absolute;
+left:0px;
+z-index:1;
+clear:both; /*图像的左侧和右侧均不允许出现浮动元素：*/
+}
+
+
+/*
+img
+  {
+  float:right;
+  }
+float 属性定义元素在哪个方向浮动。以往这个属性总应用于图像，使文本围绕在图像周围，
+不过在 CSS 中，任何元素都可以浮动。浮动元素会生成一个块级框，而不论它本身是何种元素。
+注释：假如在一行之上只有极少的空间可供浮动元素，那么这个元素会跳至下一行，这个过程会持续到某一行拥有足够的空间为止。
+*/
+
+span.fl
+{
+float:left;
+width:0.7em;
+font-size:400%;
+font-family:algerian,courier;
+line-height:80%;
+
+}
+
+
+.news {
+  background-color: gray;
+  border: solid 1px black;
+  float: left;
+  }
+
+.news img {
+  float: left;
+  }
+
+.news p {
+  float: right;
+  }
+
+/*通配选择器 下面的规则可以使文档中的每个元素都为红色
+* {color:red;} 
+*.important {color:red;} 相当于.important {color:red;}*/
+
+/*
+类选择器
+结合元素选择器*/
+p.important {color:red;}
+
+
+.important {font-weight:bold;}
+.warning {font-style:italic;}
+/* class 为 important 的所有元素都是粗体，
+ 而 class 为 warning 的所有元素为斜体，
+ class 中同时包含 important 和 warning 的所有元素还有一个银色的背景 
+在 HTML 中，一个 class 值中可能包含一个词列表，各个词之间用空格分隔。
+例如，如果希望将一个特定的元素同时标记为重要（important）和警告（warning）
+这两个词的顺序无关紧要，写成 warning important 也可以。
+下面这个可以匹配这个：class="important urgent warning"
+
+在 IE7 之前的版本中，不同平台的 Internet Explorer 都不能正确地处理多类选择器。
+ */
+.important.warning {background:silver;}
+
+/*ID选择器*/
+#intro {font-weight:bold;}  /*和这个的效果是一样的：*#intro {font-weight:bold;}*/
+
+
+/*ID和类的区别
+区别 1：只能在文档中使用一次
+
+与类不同，在一个 HTML 文档中，ID 选择器会使用一次，而且仅一次。
+区别 2：不能使用 ID 词列表
+
+不同于类选择器，ID 选择器不能结合使用，因为 ID 属性不允许有以空格分隔的词列表。
+区别 3：ID 能包含更多含义
+您只知道每个文档都会有这么一个最重要的内容，它可能在任何元素中，而且只能出现一个。
+
+类选择器和 ID 选择器可能是区分大小写的。这取决于文档的语言。HTML 和 XHTML 将类和 ID 值定义为区分大小写，
+所以类和 ID 值的大小写必须与文档中的相应值匹配
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,373 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="UTF-8">
+	 <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> -->
+	<style type="text/css">
+	h1 {color: red}
+	p {color: blue}
+	</style><!--//内部样式表-->
+<link rel="stylesheet" type="text/css" href="/html/csstest1.css" ><!--外部样式表-->
+<title>我的第一个 HTML 页面</title>
+</head>
+
+<body bgcolor="#ffffff" text="purple" background="http://www.w3school.com.cn/clouds.gif">
+ <!-- bgcolor="rgb(0,0,0)" background背景图片 图像文件不应超过 10k。 body标签中这几个属性已被废弃 应用层叠样式表-->
+
+<bdo dir="rtl">
+Here is some Hebrew text
+</bdo>
+<!-- //文字方向 -->
+<blockquote>
+这是长的引用。这是长的引用。这是长的引用。这是长的引用。这是长的引用。这是长的引用。这是长的引用。这是长的引用。这是长的引用。这是长的引用。这是长的引用。
+</blockquote>
+
+这是短的引用：
+<q>
+这是短的引用。
+</q>
+<p>
+使用 blockquote 元素的话，浏览器会插入换行和外边距，而 q 元素不会有任何特殊的呈现。
+</p>
+<p>一打有 <del>二十</del> <ins>十二</ins> 件。</p>
+<pre>
+这是
+预格式文本。
+它保留了      空格
+和换行。
+</pre>
+<a href="" style="text-decoration:none">
+这是一个没有下划线的链接！
+</a>
+<p style="color: red; margin-left: 20px">
+This is a paragraph
+</p>
+<!-- //内联样式 -->
+<a href="http://www.w3school.com.cn/" target="_blank">Visit W3School!</a>
+<!-- //新窗口打开链接 -->
+
+<!-- //链接 -->
+<p>
+<a href="#C4">查看 Chapter 4。</a>
+</p>
+<h2><a name="C4">Chapter 4</a></h2>
+<p>This chapter explains ba bla bla</p>
+
+<a href="/index.html"
+target="_top">请点击这里！</a>
+ <!-- //跳出框架 -->
+
+<p>
+这是邮件链接：
+<a href="mailto:someone@microsoft.com?subject=Hello%20again">发送邮件</a>
+</p>
+<p>
+这是另一个 mailto 链接：
+<a href="mailto:someone@microsoft.com?cc=someoneelse@microsoft.com&bcc=andsomeoneelse2@microsoft.com&subject=Summer%20Party&body=You%20are%20invited%20to%20a%20big%20summer%20party!">发送邮件！</a>
+</p>
+<p>
+一幅动画图像：
+<img src="/i/eg_cute.gif" width="50" height="50" />
+</p>
+<img src="boat.gif" alt="Big Boat">
+<!-- //替换文本 把鼠标指针移动到图像上，大多数浏览器会显示 "alt" 文本。 无法显示图片会显示文本 -->
+
+
+<!-- //body background="/i/eg_background.jpg">背景图片 -->
+<p>图像 <img src="/i/eg_cute.gif" align="bottom"> 在文本中</p>
+<p>请注意，bottom 对齐方式是默认的对齐方式。</p>
+
+<p>
+<img src ="/i/eg_cute.gif" align ="left"> 
+带有图像的一个段落。图像的 align 属性设置为 "left"。图像将浮动到文本的左侧。
+</p>
+
+<!-- //创建图像映射 
+http://www.w3school.com.cn/tiy/t.asp?f=hdom_document_links
+-->
+<img
+src="/i/eg_planets.jpg"
+border="0" usemap="#planetmap"
+alt="Planets" />
+
+<map name="planetmap" id="planetmap">
+
+<area
+shape="circle"
+coords="180,139,14"
+href ="/example/html/venus.html"
+target ="_blank"
+alt="Venus" />
+
+<area
+shape="circle"
+coords="129,161,10"
+href ="/example/html/mercur.html"
+target ="_blank"
+alt="Mercury" />
+
+<area
+shape="rect"
+coords="0,0,110,260"
+href ="/example/html/sun.html"
+target ="_blank"
+alt="Sun" />
+
+</map>
+ <!-- //表 -->
+<table border="1" 
+cellpadding="10" cellspacing="10" bgcolor="red" background="/i/eg_bg_07.gif">
+<!-- cellpadding单元格边距  cellspacing单元格间距 -->
+<tr><!--行 -->
+  <td>100</td><!--列 -->
+  <td>100</td>
+</tr>
+</table>
+
+<table border="1">
+	<caption>我的标题</caption>
+	<!-- //标题 -->
+<tr>
+<th>Heading</th>
+<!-- //表头 -->
+<th align="left">Another Heading</th>
+<!-- 对齐方式  tr是一行,td是一行中的一列,th是标题列,-->
+</tr>
+<tr>
+<td>row 1, cell 1</td>
+<td>row 1, cell 2</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<!-- //空格占位符 -->
+<td>row 2, cell 2</td>
+</tr>
+</table>
+
+<table frame="box">
+	<!--frame是 box above below hsides vsides等-->
+  <tr>
+    <th>Month</th>
+    <th>Savings</th>
+  </tr>
+  <tr>
+    <td>January</td>
+    <td>$100</td>
+  </tr>
+</table>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Month</th>
+      <th>Savings</th>
+    </tr>
+  </thead>
+
+  <tfoot>
+    <tr>
+      <td>Sum</td>
+      <td>$180</td>
+    </tr>
+  </tfoot>
+
+  <tbody>
+    <tr>
+      <td>January</td>
+      <td>$100</td>
+    </tr>
+    <tr>
+      <td>February</td>
+      <td>$80</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table width="100%" border="1">
+<!--   <col align="left" />
+  <col align="left" /> 没看出有用来-->
+   <!-- <colgroup span="2" align="left"></colgroup>   前两列被划分到这个group
+ col 元素为表格中的三个列规定了不同的对齐方式： -->
+  <col align="left" />
+  <tr>
+    <th>ISBN</th>
+    <th>Title</th>
+    <th>Price</th>
+  </tr>
+  <tr>
+    <td>3476896</td>
+    <td>My first HTML</td>
+    <td>$53</td>
+  </tr>
+</table>
+
+<!-- <h4>一个无序列表：</h4> -->
+<ul type="square">
+	<!-- type="circle" type="disc" -->
+  <li>咖啡</li>
+  <li>茶</li>
+  <li>牛奶</li>
+</ul>
+
+
+<ol start="50" type="A">
+	 <!-- type="a" type="I" 罗马字符大写  type="i"罗马字符小写 -->
+  <li>咖啡</li>
+  <li>牛奶</li>
+  <li>茶</li>
+</ol>
+
+<dl>
+   <dt>计算机</dt>
+   <dd>用来计算的仪器 ... ...</dd>
+   <dt>显示器</dt>
+   <dd>以视觉方式显示信息的装置 ... ...</dd>
+</dl>
+
+<p><span>some text.</span>some other text.</p>
+
+
+<form>
+名：
+<input type="text" name="firstname">
+<!-- 文本域 -->
+<br />
+姓：
+<input type="text" name="lastname">
+</form>
+
+<form>
+用户：
+<input type="text" name="user">
+<br />
+密码：
+<input type="password" name="password">
+</form>
+
+<form>
+<input type="radio" name="sex" value="male"  checked="checked" /> 
+<!-- 单选框   checked="checked" 选中-->
+<br />
+<input type="radio" name="sex" value="female" /> 
+</form>
+
+<form>
+<input type="checkbox" name="bike" />
+<!-- 复选框 -->
+I have a bike
+<br />
+<input type="checkbox" name="car" />
+I have a car
+</form>
+
+<form name="input" action="html_form_action.asp" method="get">
+Username: 
+<input type="text" name="user" />
+<input type="submit" value="Submit" />
+</form>
+
+
+
+<form>
+<select name="cars">
+<option value="volvo">Volvo</option>
+<option value="saab">Saab</option>
+<option value="fiat" selected="selected">Fiat</option>
+<!-- 下拉列表 选中 -->
+<option value="audi">Audi</option>
+</select>
+</form>
+
+<textarea rows="10" cols="30">
+	<!-- 文本域 -->
+The cat was playing in the garden.
+</textarea>
+
+<form>
+<input type="button" value="Hello world!">
+<!-- 创建按钮 -->
+</form>
+
+<form>
+  <fieldset>
+  	<!-- fieldset 带标题的框 -->
+    <legend>健康信息</legend>
+    身高：<input type="text" />
+    体重：<input type="text" />
+  </fieldset>
+</form>
+
+
+<select>
+  <optgroup label="Swedish Cars">
+    <option value="volvo">Volvo</option>
+    <option value="saab">Saab</option>
+  </optgroup>
+  <optgroup label="German Cars">
+    <option value="mercedes">Mercedes</option>
+    <option value="audi">Audi</option>
+  </optgroup>
+</select>
+<!-- for 属性规定 label 与哪个表单元素绑定。
+显式的联系：
+<label for="SSN">Social Security Number:</label>
+<input type="text" name="SocSecNum" id="SSN" />
+
+隐式的联系：
+<label>Date of Birth: <input type="text" name="DofB" /></label>
+ -->
+<form>
+<label for="male">Male</label>
+<input type="radio" name="sex" id="male" />
+<br />
+<label for="female">Female</label>
+<input type="radio" name="sex" id="female" />
+</form>
+
+<frameset cols="25%,50%,25%">
+<!-- 垂直框架 -->
+<!--水平框架 <frameset rows="25%,50%,25%">  -->
+  <frame src="/example/html/frame_a.html">
+  <!-- noresize="noresize"设置不能拖动 -->
+  <frame src="/example/html/frame_b.html">
+  <frame src="/example/html/frame_c.html">
+<!-- frameset 元素可定义一个框架集。它被用来组织多个窗口（框架）。每个框架存有独立的文档。在其最简单的应用中，frameset 元素仅仅会规定在框架集中存在多少列或多少行。您必须使用 cols 或 rows 属性。 -->
+</frameset>
+
+<!-- 不能将 <body></body> 标签与 <frameset></frameset> 标签同时使用！不过，假如你添加包含一段文本的 <noframes> 标签，就必须将这段文字嵌套于 <body></body> 标签内。 -->
+<frameset cols="25%,50%,25%">
+<!-- <frameset cols="120,*"> -->
+  <frame src="/example/html/frame_a.html">
+  <frame src="/example/html/frame_b.html">
+  <frame src="/example/html/frame_c.html">
+<!-- 
+<noframes>
+<body>您的浏览器无法处理框架！</body>
+</noframes>
+ -->
+</frameset>
+
+<iframe src="/i/eg_landscape.jpg"></iframe>
+<!-- 内联框架 在body标签内使用 frameset不在body标签内使用-->
+
+<!-- 跳转至框架指定的节
+ <frame src="/example/html/frame_a.html">
+ <frame src="/example/html/link.html#C10">
+ 这个"link.htm"文件内指定的节使用 <a name="C10"> 进行标识。
+ -->
+<!--  使用框架导航跳转至指定的节
+<frame src="/example/html/link.html" name="showframe"> -->
+
+<iframe src="/example/html/demo_iframe.html" frameborder="0" width="400" height="200"></iframe>
+
+<iframe src="demo_iframe.htm" name="iframe_a"></iframe>
+
+<p><a href="http://www.w3school.com.cn" target="iframe_a">W3School.com.cn</a></p>
+
+
+
+
+
+</body>
+</html>

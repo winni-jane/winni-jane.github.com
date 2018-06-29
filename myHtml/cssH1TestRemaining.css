@@ -1,0 +1,350 @@
+/*属性选择器。
+简单属性选择：如果希望选择有某个属性的元素，而不论属性值是什么，可以使用简单属性选择器。
+
+*/
+
+*[title] {color:red;} /* 把包含标题（title）的所有元素变为红色*/
+
+a[href] {color:red;}  /*只对有 href 属性的锚（a 元素）应用样式*/
+
+a[href][title] {color:red;}  /*将同时有 href 和 title 属性的 HTML 超链接的文本设置为红色*/
+
+/*根据具体属性值选择*/
+a[href="http://www.w3school.com.cn/about_us.asp"] {color: red;} /*假设希望将指向 Web 服务器上某个指定文档的超链接变成红色*/
+
+a[href="http://www.w3school.com.cn/"][title="W3School"] {color: red;} /*与简单属性选择器类似，可以把多个属性-值选择器链接在一起来选择一个文档
+*/
+
+
+/*属性与属性值必须完全匹配
+请注意，这种格式要求必须与属性值完全匹配。
+
+如果属性值包含用空格分隔的值列表，匹配就可能出问题。
+<p class="important warning">This paragraph is a very important warning.</p>
+如果写成 p[class="important"]，那么这个规则不能匹配示例标记。
+
+要根据具体属性值来选择该元素，必须这样写：
+
+p[class="important warning"] {color: red;}
+*/
+
+/*根据部分属性值选择
+如果需要根据属性值中的词列表的某个词进行选择，则需要使用波浪号（~）
+p[class~="important"] {color: red;}
+*/
+
+
+/*子串匹配属性选择器
+[abc^="def"]   选择 abc 属性值以 "def" 开头的所有元素
+[abc$="def"]   选择 abc 属性值以 "def" 结尾的所有元素
+[abc*="def"]   选择 abc 属性值中包含子串 "def" 的所有元素
+
+*/
+
+/*特定属性选择类型 适用于连字符分割的属性*/
+*[lang|="en"] {color: red;}
+
+/*CSS 后代选择器*/
+/*根据上下文选择元素
+有关后代选择器有一个易被忽视的方面，即两个元素之间的层次间隔可以是无限的。
+*/
+h1 em {color:red;}  /*如果您希望只对 h1 元素中的 em 元素应用样式*/
+
+
+ /*CSS 子元素选择器
+选择子元素
+<h1>This is <strong>very</strong> <strong>very</strong> important.</h1>
+<h1>This is <em>really <strong>very</strong></em> important.</h1>
+这个规则会把第一个 h1 下面的两个 strong 元素变为红色，但是第二个 h1 中的 strong 不受影响
+ */
+h1 > strong {color:red;}
+
+/*相邻兄弟选择器
+如果需要选择紧接在另一个元素后的元素，而且二者有相同的父元素，可以使用相邻兄弟选择器
+*/
+
+/*这个选择器读作：“选择紧接在 h1 元素后出现的段落，h1 和 p 元素拥有共同的父元素”。*/
+h1 + p {margin-top:50px;}
+
+/*CSS 伪类
+CSS 伪类用于向某些选择器添加特殊的效果。
+*/
+
+/*注释：在 CSS 定义中，a:hover 必须位于 a:link 和 a:visited 之后，这样才能生效！
+
+注释：在 CSS 定义中，a:active 必须位于 a:hover 之后，这样才能生效！*/
+/*锚伪类*/
+a:link {color: #FF0000}
+a:visited {color: #00FF00}
+a:hover {color: #FF00FF}
+a:active {color: #0000FF}
+
+
+/*选中的时候背景为黄色*/
+input:focus
+{
+background-color:yellow;
+}
+
+p:first-child {font-weight: bold;}
+li:first-child {text-transform:uppercase;}
+
+/*:lang 伪类允许您为不同的语言定义特殊的规则。
+在下面的例子中，:lang 类为带有值为 "no" 的 lang 属性的 q 元素定义引号的类型：
+
+<p>一些文本 <q lang="no">段落中的引用</q> 一些文本。</p>
+结果为：一些文本 "段落中的引用" 一些文本。
+*/
+q:lang(no)
+{
+quotes: "~" "~"
+}
+/*选择器匹配所有作为元素的第一个子元素的 <p> 元素中的所有 <i> 元素*/
+p:first-child i {
+  color:blue;
+  } 
+
+/*伪元素*/
+ /*first-line 伪元素
+"first-line" 伪元素用于向文本的首行设置特殊样式
+"first-line" 伪元素只能用于块级元素
+下面的属性可应用于 "first-line" 伪元素：
+
+    font
+    color
+    background
+    word-spacing
+    letter-spacing
+    text-decoration
+    vertical-align
+    text-transform
+    line-height
+    clear
+
+ */
+
+p:first-letter
+  {
+  color:#ff0000;
+  font-size:xx-large;
+  }
+/*伪元素可以与 CSS 类配合使用：*/
+
+/*<p class="article">This is a paragraph in an article。</p>*/
+p.article:first-letter
+  {
+  color: #FF0000;
+  }
+
+/*多重伪元素*/
+/*在下面的例子中，段落的第一个字母将显示为红色，其字体大小为 xx-large。
+第一行中的其余文本将为蓝色，并以小型大写字母显示。段落中的其余文本将以默认字体大小和颜色来显示：*/
+p:first-letter
+  {
+  color:#ff0000;
+  font-size:xx-large;
+  }
+
+p:first-line
+  {
+  color:#0000ff;
+  font-variant:small-caps;
+  }
+
+/*CSS2 - :before 伪元素
+":before" 伪元素可以在元素的内容前面插入新内容。
+*/
+
+/*下面的例子在每个 <h1> 元素前面插入一幅图片：*/
+h1:before
+  {
+  content:url(logo.gif);
+  }
+
+
+/*CSS2 - :after 伪元素*/
+/*下面的例子在每个 <h1> 元素后面插入一幅图片：*/
+
+h1:after
+  {
+  content:url(logo.gif);
+  }
+
+
+/*水平对齐
+1.对齐块元素
+例：<h1> <p> <div> 占据全部可用宽度的元素，并且在其前后都会换行。
+使用 margin 属性来水平对齐
+可通过将左和右外边距设置为 "auto"，来对齐块元素
+margin:auto 
+2.使用 position 属性进行左和右对齐
+对齐元素的方法之一是使用绝对定位：
+注释：绝对定位元素会被从正常流中删除，并且能够交叠元素。
+当使用 position 属性时，请始终设置 !DOCTYPE 声明：
+3.使用 float 属性来进行左和右对齐
+
+*/
+.right
+{
+position:absolute;
+right:0px;
+width:300px;
+background-color:#b0e0e6;
+}
+ 
+
+/*当像这样对齐元素时，对 <body> 元素的外边距和内边距进行预定义是一个好主意。这样可以避免在不同的浏览器中出现可见的差异*/
+body
+{
+margin:0;
+padding:0;
+}
+
+
+.right3
+{
+float:right;
+width:300px;
+background-color:#b0e0e6;
+}
+
+/*CSS 尺寸
+CSS 尺寸 (Dimension) 属性允许你控制元素的高度和宽度。同样，它允许你增加行间距。
+width、height、max-width、max-height min-height min-width
+p.small {line-height: 90%}
+*/
+
+
+
+/*CSS 分类
+CSS 分类属性允许你规定如何以及在何处显示元素。
+display: inline
+display: block
+float:right
+visibility   设置元素是否可见或不可见。（visibility:hidden  visibility:visible  
+ visibility:collapse 使表格元素叠加（非IE浏览器）） 当在表格元素中使用时，此值可删除一行或一列，但是它不会影响表格的布局。被行或列占据的空间会留给其他内容使用。如果此值被用在其他的元素上，会呈现为 "hidden"。
+*/
+
+
+/*清除元素侧面的浮动元素*/
+img
+  {
+  float:left;
+  clear:both; /*清除元素侧面的浮动元素*/
+  }
+
+
+
+
+/*CSS 导航条
+
+导航栏基本上是一个链接列表，因此使用 <ul> 和 <li> 元素是非常合适的：
+<ul>
+<li><a href="default.asp">Home</a></li>
+<li><a href="news.asp">News</a></li>
+<li><a href="contact.asp">Contact</a></li>
+<li><a href="about.asp">About</a></li>
+</ul>
+
+ul
+{
+list-style-type:none;   删除圆点。导航栏不需要列表项标记。
+margin:0;
+padding:0;
+}
+以上例子中的代码是用在垂直、水平导航栏中的标准代码。
+（1）
+如需构建垂直导航栏，我们只需要定义 <a> 元素的样式，除了上面的代码之外：
+a
+{
+display:block;
+width:60px;
+}
+
+    display:block - 把链接显示为块元素可使整个链接区域可点击（不仅仅是文本），同时也允许我们规定宽度。
+    width:60px - 块元素默认占用全部可用宽度。我们需要规定 60 像素的宽度。
+注释：请始终规定垂直导航栏中 <a> 元素的宽度。如果省略宽度，IE6 会产生意想不到的结果。
+（2）水平导航栏
+有两种创建水平导航栏的方法。使用行内或浮动列表项。
+两种方法都不错，但是如果您希望链接拥有相同的尺寸，就必须使用浮动方法。
+《1》行内列表项
+构建水平导航栏的方法之一是将 <li> 元素规定为行内元素。
+li
+{
+display:inline;
+}
+《2》在《1》中，链接的宽度是不同的。为了让所有链接拥有相等的宽度，浮动 <li> 元素并规定 <a> 元素的宽度：
+li
+{
+float:left;
+}
+a
+{
+display:block;
+width:60px;
+}
+
+*/
+
+
+
+/*CSS 图片库*/
+
+/*CSS 图像透明度
+
+img
+{
+opacity:0.4;
+filter:alpha(opacity=40); /* For IE8 and earlier 
+}
+img:hover
+{
+opacity:1.0;
+filter:alpha(opacity=100); /* For IE8 and earlier 
+}
+
+<img src="/i/tulip_peach_blossom_w_s.jpg" alt="Peach Blossom" />
+在 IE 中，必须添加 <!DOCTYPE>，这样才能将 :hover 选择器用于除了 <a> 之外的其它元素。
+
+*/
+
+/*CSS2 媒介类型
+
+媒介类型(Media Types)允许你定义以何种媒介来提交文档。文档可以被显示在显示器、纸媒介或者听觉浏览器等等。
+下面这个例子中的样式告知浏览器在显示器上显示 14 像素的 Verdana 字体。
+但是假如页面需要被打印，将使用 10 个像素的 Times 字体。注意：font-weight 被设置为粗体，不论显示器还是纸媒介：
+
+all            用于所有的媒介设备。
+aural          用于语音和音频合成器。
+braille        用于盲人用点字法触觉回馈设备。
+embossed       用于分页的盲人用点字法打印机。
+handheld       用于小的手持的设备。
+print             用于打印机。
+projection       用于方案展示，比如幻灯片。
+screen          用于电脑显示器。
+tty            用于使用固定密度字母栅格的媒介，比如电传打字机和终端。
+tv             用于电视机类型的设备。
+*/
+
+@media screen
+{
+p.test {font-family:verdana,sans-serif; font-size:14px}
+}
+
+@media print
+{
+p.test {font-family:times,serif; font-size:10px}
+}
+
+@media screen,print
+{
+p.test {font-weight:bold}
+}
+
+/*CSS 时尽量避免使用的技术
+behaviors
+它是什么？Internet Explorer 5 引入了行为 (behaviors)。behaviors 是一种通过使用 CSS 向 HTML 元素添加行为的方法。
+
+为什么要避免它？只有 Internet Explorer 支持 behavior 属性。
+
+用什么代替？请使用 JavaScript 和 HTML DOM 取而代之。*/

@@ -1,0 +1,1087 @@
+/*
+最重要的 CSS3 模块包括：
+    选择器
+    框模型
+    背景和边框
+    文本效果
+    2D/3D 转换
+    动画
+    多列布局
+    用户界面
+*/
+
+
+/*CSS3 边框
+注释：对于 border-image，Safari 5 以及更老的版本需要前缀 -webkit-。
+Opera 支持 border-radius 和 box-shadow 属性，但是对于 border-image 需要前缀 -o-。
+
+*/
+/*CSS3 圆角边框*/
+div.corn
+{
+text-align:center;
+border:2px solid #a1a1a1;
+padding:10px 40px; 
+background:#dddddd;
+width:350px;
+border-radius:25px;
+-moz-border-radius:25px; /* 老的 Firefox */
+}
+
+/*CSS3 边框阴影
+box-shadow: h-shadow v-shadow blur spread color inset;
+h-shadow    必需。水平阴影的位置。允许负值。    测试
+v-shadow    必需。垂直阴影的位置。允许负值。    测试
+blur    可选。模糊距离。    测试
+spread  可选。阴影的尺寸。   测试
+color   可选。阴影的颜色。请参阅 CSS 颜色值。   测试
+inset   可选。将外部阴影 (outset) 改为内部阴影。
+*/
+div.shad
+{
+width:300px;
+height:100px;
+background-color:#ff9900;
+-moz-box-shadow: 10px 10px 5px #888888; /* 老的 Firefox */
+box-shadow: 10px 10px 5px #888888;
+}
+
+/*CSS3 边框图片
+注释： Internet Explorer 不支持 border-image 属性。
+
+border-image 属性规定了用作边框的图片。
+//transparent背景透明
+*/
+div.tra
+{
+border:15px solid transparent; 
+width:300px;
+padding:10px 20px;
+}
+/*平铺(repeated)、铺满(rounded)或拉伸(stretched)。
+border-image-source     用在边框的图片的路径。     
+border-image-slice  图片边框向内偏移。   
+border-image-width  图片边框的宽度。    
+border-image-outset     边框图像区域超出边框的量。   
+border-image-repeat     图像边框是否应平铺(repeated)、铺满(rounded)或拉伸(stretched)。
+*/
+#round
+{
+-moz-border-image:url(border.png) 30 30 round;	/* Old Firefox */
+-webkit-border-image:url(border.png) 30 30 round;	/* Safari and Chrome */
+-o-border-image:url(border.png) 30 30 round;		/* Opera */
+border-image:url(border.png) 30 30 round;
+}
+
+
+#stretch
+{
+
+-moz-border-image:url(border.png) 30 30 stretch;	/* Old Firefox */
+-webkit-border-image:url(border.png) 30 30 stretch;	/* Safari and Chrome */
+-o-border-image:url(border.png) 30 30 stretch;	/* Opera */
+border-image:url(border.png) 30 30 stretch;
+}
+
+/*CSS3 背景
+Internet Explorer 9+、Firefox、Chrome、Safari 以及 Opera 支持新的背景属性。
+background-size
+background-origin
+*/
+
+
+p.bgsize
+{
+background:url(border.png);
+background-size:100px 100px;
+-moz-background-size:63px 100px; /* 老版本的 Firefox */
+background-repeat:no-repeat;
+padding-top:80px;
+}
+
+div.backg
+{
+background:url(bg_flower.gif);
+background-size:35% 100%;
+-moz-background-size:35% 100%; /* 老版本的 Firefox */
+background-repeat:no-repeat;
+}
+
+/*CSS3 background-origin 属性
+background-origin 属性规定背景图片的定位区域。
+背景图片可以放置于 content-box、padding-box 或 border-box 区域。
+*/
+
+div.bgo
+{
+border:1px solid black;
+padding:85px;
+background-image:url('bg_flower.gif');
+background-repeat:no-repeat;
+background-position:left;
+}
+
+
+#div1
+{
+background-origin:border-box;
+}
+#div2
+{
+background-origin:content-box;
+}
+
+/*CSS3 多重背景图片*/
+
+div.someim
+{
+width:600px;
+height:300px;
+background-image:url(bg_flower.gif),url(border.png);
+}
+
+/*background-clip
+background-clip 属性规定背景的绘制区域。
+默认值：border-box
+JavaScript 语法： 	object.style.backgroundClip="content-box"
+
+background-clip: border-box|padding-box|content-box;
+*/
+div.bgclip
+{
+width:300px;
+height:300px;
+padding:50px;
+background-color:yellow;
+background-clip:content-box;
+border:2px solid #92b901;
+}
+
+
+/*CSS3 文本效果
+text-shadow
+word-wrap
+*/
+
+/*CSS3 文本阴影
+text-shadow
+您能够规定水平阴影、垂直阴影、模糊距离，以及阴影的颜色：
+*/
+
+h1.tshadow
+{
+text-shadow: 5px 5px 5px #FF0000;
+}
+
+
+/*CSS3 自动换行*/
+/*
+word-wrap
+允许对长单词进行拆分，并换行到下一行：
+normal 	只在允许的断字点换行（浏览器保持默认处理）。
+break-word 	在长单词或 URL 地址内部进行换行。
+*/
+
+p.test
+{
+width:11em; 
+border:1px solid #000000;
+word-wrap:break-word;
+}
+
+
+/*text-overflow 属性规定当文本溢出包含元素时发生的事情。
+clip 	    修剪文本。 	
+ellipsis 	显示省略符号来代表被修剪的文本。 	
+string 	    使用给定的字符串来代表被修剪的文本。
+
+*/
+p.toverflow
+{
+	white-space:nowrap; /*重要重要重要*/
+	width: 12em;
+	border: 1px solid #000000;
+
+}
+#OveFlo
+{
+overflow:hidden;
+text-overflow:ellipsis;  /*省略号显示*/
+}
+
+
+div.test
+{
+white-space:nowrap; 
+width:12em; 
+overflow:hidden; 
+border:1px solid #000000;
+}
+
+div.test:hover
+{
+text-overflow:inherit;
+overflow:visible;
+}
+
+/*word-break
+word-break: normal|break-all|keep-all;
+normal 	使用浏览器默认的换行规则。
+break-all 	允许在单词内换行。
+keep-all 	只能在半角空格或连字符处换行。
+*/
+p.test1
+{
+width:11em; 
+border:1px solid #000000;
+word-break:hyphenate;  /*在恰当的断字点进行换行：*/
+}
+
+p.test2
+{
+width:11em; 
+border:1px solid #000000;
+word-break:break-all;
+}
+
+/*CSS3 字体
+@font-face
+Firefox、Chrome、Safari 以及 Opera 支持 .ttf (True Type Fonts) 和 .otf (OpenType Fonts) 类型的字体。
+Internet Explorer 9+ 支持新的 @font-face 规则，但是仅支持 .eot 类型的字体 (Embedded OpenType)。
+注释：Internet Explorer 8 以及更早的版本不支持新的 @font-face 规则。
+
+*/
+
+@font-face
+{
+font-family: myFirstFont;
+src: url('/example/css3/Sansation_Light.ttf')
+    ,url('/example/css3/Sansation_Light.eot'); /* IE9+ */
+}
+div.ffamil
+{
+font-family:myFirstFont;
+}
+
+/*使用粗体字体
+文件 "Sansation_Bold.ttf" 是另一个字体文件，它包含了 Sansation 字体的粗体字符。
+只要 font-family 为 "myFirstFont" 的文本需要显示为粗体，浏览器就会使用该字体。
+通过这种方式，我们可以为相同的字体设置许多 @font-face 规则。
+*/
+
+@font-face
+{
+font-family: myFirstFont;
+src: url('/example/css3/Sansation_Bold.ttf')
+    ,url('/example/css3/Sansation_Bold.eot'); /* IE9+ */
+font-weight:bold;
+}
+
+/*CSS3 字体描述符
+能够在 @font-face 规则中定义的所有字体描述符：
+font-family    必需。规定字体的名称。
+src            必需。定义字体文件的 URL。
+font-stretch
+(normal 
+condensed
+ultra-condensed
+extra-condensed
+semi-condensed
+expanded
+semi-expanded
+extra-expanded
+ultra-expanded
+)                 可选。定义如何拉伸字体。默认是 "normal"。
+
+font-style
+
+ (   ormal
+    italic
+    oblique
+   )               可选。定义字体的样式。默认是 "normal"。
+
+font-weight
+(
+    normal
+    bold
+    100
+    200
+    300
+    400
+    500
+    600
+    700
+    800
+    900
+)                可选。定义字体的粗细。默认是 "normal"。
+
+
+unicode-range    可选。定义字体支持的 UNICODE 字符范围。默认是 "U+0-10FFFF"。
+*/
+
+/*CSS3 2D 转换
+transform
+通过 CSS3 转换，我们能够对元素进行移动、缩放、转动、拉长或拉伸。
+Internet Explorer 10、Firefox 以及 Opera 支持 transform 属性。
+Chrome 和 Safari 需要前缀 -webkit-。
+注释：Internet Explorer 9 需要前缀 -ms-。
+
+
+    translate()
+    rotate()
+    scale()
+    skew()
+    matrix()
+
+*/
+
+div.trotate
+{
+margin:30px;
+width:200px;
+height:100px;
+background-color:yellow;
+/* Rotate div */
+transform:rotate(9deg);
+-ms-transform:rotate(9deg); /* Internet Explorer */
+-moz-transform:rotate(9deg); /* Firefox */
+-webkit-transform:rotate(9deg); /* Safari 和 Chrome */
+-o-transform:rotate(9deg); /* Opera */
+}
+
+/*translate() 方法
+translate(x,y)          定义 2D 转换，沿着 X 和 Y 轴移动元素。
+translateX(n)           定义 2D 转换，沿着 X 轴移动元素。
+translateY(n)           定义 2D 转换，沿着 Y 轴移动元素。
+*/
+
+div.ttrans
+{
+width:100px;
+height:75px;
+background-color:yellow;
+border:1px solid black;
+}
+div#div2
+{
+transform:translate(50px,100px);
+-ms-transform:translate(50px,100px); /* IE 9 */
+-moz-transform:translate(50px,100px); /* Firefox */
+-webkit-transform:translate(50px,100px); /* Safari and Chrome */
+-o-transform:translate(50px,100px); /* Opera */
+}
+
+/*rotate() 方法
+通过 rotate() 方法，元素顺时针旋转给定的角度。允许负值，元素将逆时针旋转。
+
+*/
+
+div#div3
+{
+transform:rotate(30deg);
+-ms-transform:rotate(30deg); /* IE 9 */
+-moz-transform:rotate(30deg); /* Firefox */
+-webkit-transform:rotate(30deg); /* Safari and Chrome */
+-o-transform:rotate(30deg); /* Opera */
+}
+
+/*scale() 方法
+通过 scale() 方法，元素的尺寸会增加或减少，根据给定的宽度（X 轴）和高度（Y 轴）参数：
+值 scale(2,4) 把宽度转换为原始尺寸的 2 倍，把高度转换为原始高度的 4 倍。
+
+scale(x,y)      定义 2D 缩放转换，改变元素的宽度和高度。
+scaleX(n)       定义 2D 缩放转换，改变元素的宽度。
+scaleY(n)       定义 2D 缩放转换，改变元素的高度。
+*/
+
+
+div#div4
+{
+margin:100px;
+transform:scale(2,4);
+-ms-transform:scale(2,4); /* IE 9 */
+-moz-transform:scale(2,4); /* Firefox */
+-webkit-transform:scale(2,4); /* Safari and Chrome */
+-o-transform:scale(2,4); /* Opera */
+}
+
+/*skew() 方法
+通过 skew() 方法，元素翻转给定的角度，根据给定的水平线（X 轴）和垂直线（Y 轴）参数：
+值 skew(30deg,20deg) 围绕 X 轴把元素翻转 30 度，围绕 Y 轴翻转 20 度。
+
+skew(x-angle,y-angle)   定义 2D 倾斜转换，沿着 X 和 Y 轴。
+skewX(angle)            定义 2D 倾斜转换，沿着 X 轴。
+skewY(angle)            定义 2D 倾斜转换，沿着 Y 轴。
+*/
+div#div5
+{
+transform:skew(30deg,30deg);
+-ms-transform:skew(30deg,30deg); /* IE 9 */
+-moz-transform:skew(30deg,30deg); /* Firefox */
+-webkit-transform:skew(30deg,30deg); /* Safari and Chrome */
+-o-transform:skew(30deg,30deg); /* Opera */
+}
+
+
+/*
+matrix() 方法
+matrix() 方法把所有 2D 转换方法组合在一起。
+matrix() 方法需要六个参数，包含数学函数，允许您：旋转、缩放、移动以及倾斜元素。 rotate scale translate skew
+*/
+
+/*如何使用 matrix 方法将 div 元素旋转 30 度：*/
+div#div6
+{
+transform:matrix(0.866,0.5,-0.5,0.866,0,0);
+-ms-transform:matrix(0.866,0.5,-0.5,0.866,0,0); /* IE 9 */
+-moz-transform:matrix(0.866,0.5,-0.5,0.866,0,0); /* Firefox */
+-webkit-transform:matrix(0.866,0.5,-0.5,0.866,0,0); /* Safari and Chrome */
+-o-transform:matrix(0.866,0.5,-0.5,0.866,0,0); /* Opera */
+}
+
+
+
+/*CSS3 transform-origin 属性
+设置旋转元素的基点位置  必须和transform一起使用
+
+Internet Explorer 10、Firefox、Opera 支持 transform-origin 属性。
+Internet Explorer 9 支持替代的 -ms-transform-origin 属性（仅适用于 2D 转换）。
+Safari 和 Chrome 支持替代的 -webkit-transform-origin 属性（3D 和 2D 转换）。
+Opera 只支持 2D 转换。
+2D 转换元素能够改变元素 x 和 y 轴。3D 转换元素还能改变其 Z 轴。
+默认值：    50% 50% 0
+语法:
+transform-origin: x-axis y-axis z-axis;
+http://www.w3school.com.cn/example/css3/demo_css3_transform-origin.html
+
+*/
+div#div7
+{
+transform: rotate(45deg);
+transform-origin:20% 40%;
+
+-ms-transform: rotate(45deg);       /* IE 9 */
+-ms-transform-origin:20% 40%;       /* IE 9 */
+
+-webkit-transform: rotate(45deg);   /* Safari 和 Chrome */
+-webkit-transform-origin:20% 40%;   /* Safari 和 Chrome */
+
+-moz-transform: rotate(45deg);      /* Firefox */
+-moz-transform-origin:20% 40%;      /* Firefox */
+
+-o-transform: rotate(45deg);        /* Opera */
+-o-transform-origin:20% 40%;        /* Opera */
+}
+
+/*CSS3 3D 转换
+
+    rotateX()
+    rotateY()
+
+Internet Explorer 10 和 Firefox 支持 3D 转换。
+Chrome 和 Safari 需要前缀 -webkit-。
+Opera 仍然不支持 3D 转换（它只支持 2D 转换）。
+*/
+
+/*rotateX() 方法
+通过 rotateX() 方法，元素围绕其 X 轴以给定的度数进行旋转。
+*/
+
+
+div#div32
+{
+transform:rotateX(120deg);
+-webkit-transform:rotateX(120deg); /* Safari and Chrome */
+-moz-transform:rotateX(120deg); /* Firefox */
+}
+/*rotateY() 旋转
+通过 rotateY() 方法，元素围绕其 Y 轴以给定的度数进行旋转。
+*/
+div#div33
+{
+transform:rotateY(130deg);
+-webkit-transform:rotateY(130deg); /* Safari and Chrome */
+-moz-transform:rotateY(130deg); /* Firefox */
+}
+
+/*所有的转换属性
+transform   向元素应用 2D 或 3D 转换。   
+transform-origin    允许你改变被转换元素的位置。  
+transform-style     规定被嵌套元素如何在 3D 空间中显示。    
+perspective     规定 3D 元素的透视效果。  
+perspective-origin  规定 3D 元素的底部位置。  
+backface-visibility     定义元素在不面对屏幕时是否可见。
+*/
+
+/*CSS3 transform-style 属性
+    规定被嵌套元素如何在 3D 空间中显示。
+*/
+/*使被转换的子元素保留其 3D 转换：
+Firefox 支持 transform-style 属性。
+Chrome、Safari 和 Opera 支持替代的 -webkit-transform-style 属性。
+IE不支持。
+transform-style 属性规定如何在 3D 空间中呈现被嵌套的元素。
+注释：该属性必须与 transform 属性一同使用。
+语法：
+transform-style: flat|preserve-3d; 默认值：flat
+*/
+
+#divtran1
+{
+position: relative;
+height: 200px;
+width: 200px;
+margin: 100px;
+padding:10px;
+border: 1px solid black;
+}
+
+#divtran2
+{
+padding:50px;
+position: absolute;
+border: 1px solid black;
+background-color: red;
+transform: rotateY(60deg);
+transform-style: preserve-3d;
+-webkit-transform: rotateY(60deg); /* Safari and Chrome */
+-webkit-transform-style: preserve-3d; /* Safari and Chrome */
+}
+
+#divtran3
+{
+padding:40px;
+position: absolute;
+border: 1px solid black;
+background-color: yellow;
+transform: rotateY(80deg);
+-webkit-transform: rotateY(-80deg); /* Safari and Chrome */
+
+}
+
+
+/*
+目前浏览器都不支持 perspective 属性。
+规定 3D 元素的透视效果。
+Chrome 和 Safari 支持替代的 -webkit-perspective 属性。
+perspective 属性定义 3D 元素距视图的距离，以像素计。该属性允许您改变 3D 元素查看 3D 元素的视图。
+当为元素定义 perspective 属性时，其子元素会获得透视效果，而不是元素本身。*/
+
+#divpers1
+{
+position: relative;
+height: 150px;
+width: 150px;
+margin: 50px;
+padding:10px;
+border: 1px solid black;
+perspective:150;
+-webkit-perspective:150; /* Safari and Chrome */
+}
+
+#divpers2
+{
+padding:50px;
+position: absolute;
+border: 1px solid black;
+background-color: yellow;
+transform: rotateX(45deg);
+-webkit-transform: rotateX(45deg); /* Safari and Chrome */
+}
+
+
+/*
+CSS3 perspective-origin 属性
+规定 3D 元素的底部位置。
+设置 3D 元素的基点位置：
+目前浏览器都不支持 perspective-origin 属性。
+Chrome 和 Safari 支持替代的 -webkit-perspecitve-origin 属性。
+perspective-origin 属性定义 3D 元素所基于的 X 轴和 Y 轴。该属性允许您改变 3D 元素的底部位置。
+当为元素定义 perspective-origin 属性时，其子元素会获得透视效果，而不是元素本身。
+注释：该属性必须与 perspective 属性一同使用，而且只影响 3D 转换元素。
+默认值：    50% 50%
+*/
+
+/*
+#div1
+{
+position: relative;
+height: 150px;
+width: 150px;
+margin: 50px;
+padding:10px;
+border: 1px solid black;
+perspective:150;
+perspective-origin: 10% 10%;
+-webkit-perspective:150; /* Safari and Chrome
+-webkit-perspective-origin: 10% 10%;/* Safari and Chrome 
+}
+*/
+
+/*CSS3 backface-visibility 属性
+定义元素在不面对屏幕时是否可见。
+只有 Internet Explorer 10+ 和 Firefox 支持 backface-visibility 属性。
+Opera 15+、Safari 和 Chrome 支持替代的 -webkit-backface-visibility 属性。
+backface-visibility: visible|hidden;
+*/
+
+
+div.visib
+{
+position:relative;
+height:60px;
+width:60px;
+border:1px solid #000;
+background-color:yellow;
+transform:rotateY(180deg);
+-webkit-transform:rotateY(180deg); /* Chrome and Safari */
+-moz-transform:rotateY(180deg); /* Firefox */
+}
+#divvisib1
+{
+-webkit-backface-visibility:hidden;
+-moz-backface-visibility:hidden;
+-ms-backface-visibility:hidden;
+}
+#divvisib2
+{
+-webkit-backface-visibility:visible;
+-moz-backface-visibility:visible;
+-ms-backface-visibility:visible;
+}
+
+
+
+/*Transform 方法
+
+matrix3d(n,n,n,n,n,n,
+n,n,n,n,n,n,n,n,n,n)    定义 3D 转换，使用 16 个值的 4x4 矩阵。
+translate3d(x,y,z)  定义 3D 转化。
+translateX(x)   定义 3D 转化，仅使用用于 X 轴的值。
+translateY(y)   定义 3D 转化，仅使用用于 Y 轴的值。
+translateZ(z)   定义 3D 转化，仅使用用于 Z 轴的值。
+scale3d(x,y,z)  定义 3D 缩放转换。
+scaleX(x)   定义 3D 缩放转换，通过给定一个 X 轴的值。
+scaleY(y)   定义 3D 缩放转换，通过给定一个 Y 轴的值。
+scaleZ(z)   定义 3D 缩放转换，通过给定一个 Z 轴的值。
+rotate3d(x,y,z,angle)   定义 3D 旋转。
+rotateX(angle)  定义沿 X 轴的 3D 旋转。
+rotateY(angle)  定义沿 Y 轴的 3D 旋转。
+rotateZ(angle)  定义沿 Z 轴的 3D 旋转。
+perspective(n)  定义 3D 转换元素的透视视图。
+
+*/
+
+
+/*CSS3 过渡
+transition
+transition: property duration timing-function delay;
+通过 CSS3，我们可以在不使用 Flash 动画或 JavaScript 的情况下，当元素从一种样式变换为另一种样式时为元素添加效果。
+Internet Explorer 10、Firefox、Chrome 以及 Opera 支持 transition 属性。
+Safari 需要前缀 -webkit-。
+注释：Internet Explorer 9 以及更早的版本，不支持 transition 属性。
+注释：Chrome 25 以及更早的版本，需要前缀 -webkit-。
+效果开始于指定的 CSS 属性改变值时。CSS 属性改变的典型时间是鼠标指针位于元素上时：
+    
+transition-property     规定设置过渡效果的 CSS 属性的名称。
+transition-duration     规定完成过渡效果需要多少秒或毫秒。
+transition-timing-function  规定速度效果的速度曲线。（transition-timing-function: linear|ease|ease-in|ease-out|ease-in-out|cubic-
+bezier(n,n,n,n);）
+transition-delay    定义过渡效果何时开始。
+
+div
+{
+transition-property: width;
+transition-duration: 1s;
+transition-timing-function: linear;
+transition-delay: 2s;
+/* Firefox 4 
+-moz-transition-property:width;
+-moz-transition-duration:1s;
+-moz-transition-timing-function:linear;
+-moz-transition-delay:2s;
+/* Safari 和 Chrome 
+-webkit-transition-property:width;
+-webkit-transition-duration:1s;
+-webkit-transition-timing-function:linear;
+-webkit-transition-delay:2s;
+/* Opera 
+-o-transition-property:width;
+-o-transition-duration:1s;
+-o-transition-timing-function:linear;
+-o-transition-delay:2s;
+}
+
+
+div
+{
+transition: width 1s linear 2s;
+/* Firefox 4 
+-moz-transition:width 1s linear 2s;
+/* Safari and Chrome 
+-webkit-transition:width 1s linear 2s;
+/* Opera 
+-o-transition:width 1s linear 2s;
+}
+
+
+*/
+
+div.translat
+{
+width:100px;
+height:100px;
+background:yellow;
+transition: width 2s;  /*宽度属性 时长*/ /*如果时长未规定，则不会有过渡效果，因为默认值是 0。*/
+-moz-transition: width 2s;  /* Firefox 4 */
+-webkit-transition: width 2s;   /* Safari 和 Chrome */
+-o-transition: width 2s;    /* Opera */
+}
+
+div.translat:hover
+{
+width:300px;
+}
+
+/*如需向多个样式添加过渡效果，请添加多个属性，由逗号隔开：*/
+
+div.translatMore
+{
+width:100px;
+height:100px;
+background:yellow;
+transition:width 2s, height 2s  transform 2s;
+-moz-transition:width 2s, height 2s, -moz-transform 2s; /* Firefox 4 */
+-webkit-transition:width 2s, height 2s, -webkit-transform 2s; /* Safari and Chrome */
+-o-transition:width 2s, height 2s, -o-transform 2s; /* Opera */
+}
+
+div.translatMore:hover
+{
+width:200px;
+height:200px;
+transform:rotate(180deg);
+-moz-transform:rotate(180deg); /* Firefox 4 */
+-webkit-transform:rotate(180deg); /* Safari and Chrome */
+-o-transform:rotate(180deg); /* Opera */
+}
+
+
+/*CSS3 动画
+@keyframes 规则用于创建动画。在 @keyframes 中规定某项 CSS 样式，就能创建由当前样式逐渐改为新样式的动画效果。
+Internet Explorer 10、Firefox 以及 Opera 支持 @keyframes 规则和 animation 属性。
+Chrome 和 Safari 需要前缀 -webkit-。
+注释：Internet Explorer 9，以及更早的版本，不支持 @keyframe 规则或 animation 属性。
+
+请用百分比来规定变化发生的时间，或用关键词 "from" 和 "to"，等同于 0% 和 100%。
+0% 是动画的开始，100% 是动画的完成。
+*/
+
+div.animat
+{
+width:100px;
+height:100px;
+background:red;
+animation:myfirst 5s;
+-moz-animation:myfirst 5s; /* Firefox */
+-webkit-animation:myfirst 5s; /* Safari and Chrome */
+-o-animation:myfirst 5s; /* Opera */
+}
+
+@keyframes myfirst
+{
+from {background:red;}
+to {background:yellow;}
+}
+
+@-moz-keyframes myfirst /* Firefox */
+{
+from {background:red;}
+to {background:yellow;}
+}
+
+@-webkit-keyframes myfirst /* Safari and Chrome */
+{
+from {background:red;}
+to {background:yellow;}
+}
+
+@-o-keyframes myfirst /* Opera */
+{
+from {background:red;}
+to {background:yellow;}
+}
+
+/*
+@keyframes myfirst
+{
+0%   {background: red; left:0px; top:0px;}
+25%  {background: yellow; left:200px; top:0px;}
+50%  {background: blue; left:200px; top:200px;}
+75%  {background: green; left:0px; top:200px;}
+100% {background: red; left:0px; top:0px;}
+}
+*/
+
+/*@keyframes 规则和所有动画属性：
+@keyframes  规定动画。   
+animation   所有动画属性的简写属性，除了 animation-play-state 属性。     
+animation-name  规定 @keyframes 动画的名称。    
+animation-duration  规定动画完成一个周期所花费的秒或毫秒。默认是 0。   
+animation-timing-function   规定动画的速度曲线。默认是 "ease"。   
+animation-delay     规定动画何时开始。默认是 0。     
+animation-iteration-count   规定动画被播放的次数。默认是 1。   （n|infinite）
+animation-direction     规定动画是否在下一周期逆向地播放。默认是 "normal"。  （normal  应该正常播放。alternate  动画应该轮流反向播放。）
+animation-play-state    规定动画是否正在运行或暂停。默认是 "running"。（paused|running）    
+animation-fill-mode     规定对象动画时间之外的状态。（none | forwards | backwards | both）
+                        none    不改变默认行为。
+                        forwards    当动画完成后，保持最后一个属性值（在最后一个关键帧中定义）。
+                        backwards   在 animation-delay 所指定的一段时间内，在动画显示之前，应用开始属性值（在第一个关键帧中定义）。
+                        both    向前和向后填充模式都被应用。
+
+
+*/
+
+div.animationEvery
+{
+width:100px;
+height:100px;
+background:red;
+position:relative;
+animation-name: myfirst;
+animation-duration: 5s;
+animation-timing-function: linear;
+animation-delay: 2s;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+animation-play-state: running;
+/* Firefox: */
+-moz-animation-name: myfirst;
+-moz-animation-duration: 5s;
+-moz-animation-timing-function: linear;
+-moz-animation-delay: 2s;
+-moz-animation-iteration-count: infinite;
+-moz-animation-direction: alternate;
+-moz-animation-play-state: running;
+/* Safari 和 Chrome: */
+-webkit-animation-name: myfirst;
+-webkit-animation-duration: 5s;
+-webkit-animation-timing-function: linear;
+-webkit-animation-delay: 2s;
+-webkit-animation-iteration-count: infinite;
+-webkit-animation-direction: alternate;
+-webkit-animation-play-state: running;
+/* Opera: */
+-o-animation-name: myfirst;
+-o-animation-duration: 5s;
+-o-animation-timing-function: linear;
+-o-animation-delay: 2s;
+-o-animation-iteration-count: infinite;
+-o-animation-direction: alternate;
+-o-animation-play-state: running;
+}
+
+
+div.animationAll
+{
+width:100px;
+height:100px;
+background:red;
+position:relative;
+animation: myfirst 5s linear 2s infinite alternate;
+/* Firefox: */
+-moz-animation: myfirst 5s linear 2s infinite alternate;
+/* Safari 和 Chrome: */
+-webkit-animation: myfirst 5s linear 2s infinite alternate;
+/* Opera: */
+-o-animation: myfirst 5s linear 2s infinite alternate;
+}
+
+
+/*CSS3 多列
+column-count     属性规定元素应该被分隔的列数
+column-gap       规定列之间的间隔
+column-rule      设置列之间的宽度、样式和颜色规则
+
+Internet Explorer 10 和 Opera 支持多列属性。
+Firefox 需要前缀 -moz-。
+Chrome 和 Safari 需要前缀 -webkit-。
+注释：Internet Explorer 9 以及更早的版本不支持多列属性。
+*/
+
+.newspaper
+{
+-moz-column-count:3; /* Firefox */
+-webkit-column-count:3; /* Safari and Chrome */
+column-count:3;
+
+-moz-column-gap:30px; /* Firefox */
+-webkit-column-gap:30px; /* Safari and Chrome */
+column-gap:30px;
+
+-moz-column-rule:4px outset #ff0000; /* Firefox */
+-webkit-column-rule:4px outset #ff0000; /* Safari and Chrome */
+column-rule:4px outset #ff0000;
+}
+
+/*
+column-rule-width   设置列之间的宽度规则。
+column-rule-style   设置列之间的样式规则。
+column-rule-color   设置列之间的颜色规则。
+
+column-rule-width: thin|medium|thick|length;
+column-rule-style: none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset;
+
+column-span:all     使 h2 元素横跨所有列：（Internet Explorer 10 和 Opera 支持 column-span 属性。
+Safari 和 Chrome 支持替代的 -webkit-column-span 属性。
+注释：Internet Explorer 9 以及更早版本的浏览器不支持 column-span 属性。）
+
+column-width:100px;       规定列的宽度
+columns:100px 3;          规定列的宽度和列数
+*/
+
+/*CSS3 用户界面
+resize
+box-sizing
+outline-offset
+
+在 CSS3 中，新的用户界面特性包括重设元素尺寸、盒尺寸以及轮廓等。
+
+Firefox、Chrome 以及 Safari 支持 resize 属性。
+Internet Explorer、Chrome、Safari 以及 Opera 支持 box-sizing 属性。Firefox 需要前缀 -moz-。
+所有主流浏览器都支持 outline-offset 属性，除了 Internet Explorer。
+
+*/
+
+/*
+CSS3 Resizing
+在 CSS3，resize 属性规定是否可由用户调整元素尺寸。
+resize: none|both|horizontal|vertical;
+none    用户无法调整元素的尺寸。
+both    用户可调整元素的高度和宽度。
+horizontal  用户可调整元素的宽度。
+vertical    用户可调整元素的高度。
+*/
+
+div.resi
+{
+border:2px solid;
+padding:10px 40px; 
+width:300px;
+resize:both;
+overflow:auto;
+}
+
+/*box-sizing
+box-sizing 属性允许您以确切的方式定义适应某个区域的具体内容。
+box-sizing: content-box|border-box|inherit;
+*/
+/*规定两个并排的带边框方框：*/
+div.container
+{
+width:30em;
+border:1em solid;
+}
+div.box
+{
+box-sizing:border-box;
+-moz-box-sizing:border-box; /* Firefox */
+-webkit-box-sizing:border-box; /* Safari */
+width:50%;
+border:1em solid red;
+float:left;
+}
+
+/*
+CSS3 Outline Offset
+outline-offset 属性对轮廓进行偏移，并在超出边框边缘的位置绘制轮廓。
+轮廓与边框有两点不同：
+
+    轮廓不占用空间
+    轮廓可能是非矩形
+Internet Explorer 和 Opera 不支持 support outline-offset 属性。
+*/
+
+
+div.outli
+{
+margin:80px;
+width:150px; 
+padding:10px;
+height:70px;
+border:2px solid black;
+outline:2px solid red;
+outline-offset:15px;
+} 
+
+/*
+appearance  允许您将元素设置为标准用户界面元素的外观    
+box-sizing  允许您以确切的方式定义适应某个区域的具体内容。     
+icon    为创作者提供使用图标化等价物来设置元素样式的能力。   目前没有浏览器支持 icon 属性。
+nav-down    规定在使用 arrow-down 导航键时向何处导航。     目前只有 Opera 支持 nav-down 属性。
+nav-index   设置元素的 tab 键控制次序。                    目前只有 Opera 支持 nav-index 属性。
+nav-left    规定在使用 arrow-left 导航键时向何处导航。      目前只有 Opera 支持 nav-left 属性。
+nav-right   规定在使用 arrow-right 导航键时向何处导航。     目前只有 Opera 支持 nav-right 属性。
+nav-up  规定在使用 arrow-up 导航键时向何处导航。            目前只有 Opera 支持 nav-up 属性。
+outline-offset  对轮廓进行偏移，并在超出边框边缘的位置绘制轮廓。    
+resize  规定是否可由用户对元素的尺寸进行调整。
+*/
+
+/*
+appearance: normal|icon|window|button|menu|field;
+所有主流浏览器都不支持 appearance 属性。
+Firefox 支持替代的 -moz-appearance 属性。
+Safari 和 Chrome 支持替代的 -webkit-appearance 属性。
+*/
+
+
+
+/*
+box-flex 属性规定框的子元素是否可伸缩其尺寸。
+JavaScript 语法：  object.style.boxFlex=2.0
+目前没有浏览器支持 box-flex 属性。
+Firefox 支持替代的 -moz-box-flex 属性。
+Safari、Opera 以及 Chrome 支持替代的 -webkit-box-flex 属性。
+*/
+
+
+/*在元素上设置该属性，可使其子代排列在同一水平上，类似display:inline-block;。*/
+div.boxfl
+{
+display:-moz-box; /* Firefox */
+display:-webkit-box; /* Safari and Chrome */
+display:box;
+width:300px;
+border:1px solid black;
+}
+
+#p1
+{
+-moz-box-flex:1.0; /* Firefox */
+-webkit-box-flex:1.0; /* Safari and Chrome */
+box-flex:1.0;
+border:1px solid red;
+}
+
+#p2
+{
+-moz-box-flex:2.0; /* Firefox */
+-webkit-box-flex:2.0; /* Safari and Chrome */
+box-flex:2.0;
+border:1px solid blue;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Title of the document</title>
+<style type="text/css">
+#div1 {width:488px;height:70px;padding:10px;border:1px solid #aaaaaa;}
+</style>
+<script type="text/javascript">
+function allowDrop(ev)
+{
+ev.preventDefault();
+// 取消事件的默认动作。
+}
+
+function drag(ev)
+{
+ev.dataTransfer.setData("Text",ev.target.id);  
+// 数据类型是 "Text"，值是可拖动元素的 id ("drag1")。
+}
+
+function drop(ev)
+{
+ev.preventDefault();
+var data=ev.dataTransfer.getData("Text");
+ev.target.appendChild(document.getElementById(data));
+}
+</script>
+
+
+</head>
+
+<body>
+<!-- 
+Ogg 文件，适用于Firefox、Opera 以及 Chrome 浏览器。
+
+要确保适用于 Safari 浏览器，视频文件必须是 MPEG4 类型。 -->
+
+<video width="320" height="240" controls="controls">
+  <source src="movie.ogg" type="video/ogg">
+  <source src="movie.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+<!-- autoplay 	如果出现该属性，则视频在就绪后马上播放。
+controls 	如果出现该属性，则向用户显示控件，比如播放按钮。
+loop 	如果出现该属性，则当媒介文件完成播放后再次开始播放。
+preload 	如果出现该属性，则视频在页面加载时进行加载，并预备播放。如果使用 "autoplay"，则忽略该属性。
+ -->
+
+<!-- 拖拽图片 -->
+<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<br />
+<img id="drag1" src="1.jpg" width="100" height="100" draggable="true" ondragstart="drag(event)" />
+
+<br/>
+
+<canvas id="myCanvas" width="200" height="100"  style="border:1px solid #c3c3c3;">
+
+<script type="text/javascript">
+var c=document.getElementById("myCanvas");
+var cxt=c.getContext("2d");
+cxt.fillStyle="#FF0000";
+cxt.fillRect(0,0,150,75);
+</script>
+
+<script type="text/javascript">
+
+var c=document.getElementById("myCanvas");
+var cxt=c.getContext("2d");
+cxt.moveTo(10,10);
+cxt.lineTo(150,50);
+cxt.lineTo(10,50);
+cxt.stroke();
+</script>
+
+</canvas>
+<br />
+<canvas id="myCanvas2" width="200" height="100"  style="border:1px solid #c3c3c3;">
+
+ <!-- 圆形 -->
+
+ <script type="text/javascript">
+
+var c=document.getElementById("myCanvas2");
+var cxt=c.getContext("2d");
+cxt.fillStyle="#FF0000";
+cxt.beginPath();
+cxt.arc(70,18,18,0,Math.PI*2,true);
+// arc(x, y, radius, startAngle, endAngle, counterclockwise)
+cxt.closePath();
+cxt.fill();
+</script>
+</canvas>
+
+<br />
+<!-- 渐变 -->
+<canvas id="myCanvas3" width="200" height="100"  style="border:1px solid #c3c3c3;">
+<script type="text/javascript">
+var c=document.getElementById("myCanvas3");
+var cxt=c.getContext("2d");
+var grd=cxt.createLinearGradient(0,0,175,50);
+grd.addColorStop(0,"#FF0000");
+grd.addColorStop(1,"#00FF00");
+cxt.fillStyle=grd;
+cxt.fillRect(0,0,175,50);
+</script>
+</canvas>
+
+<br />
+<!-- 图像 -->
+<canvas id="myCanvas4" width="200" height="100"  style="border:1px solid #c3c3c3;">
+<script type="text/javascript">
+var c=document.getElementById("myCanvas4");
+var cxt=c.getContext("2d");
+var img=new Image()
+img.onload = function(){
+   cxt.drawImage(img,0,0,100,100);
+}
+img.src="1.jpg"
+
+</script>
+</canvas>
+<br/>
+
+<!-- SVG 指可伸缩矢量图形 (Scalable Vector Graphics)
+fill-rule:有效值 nonzero | evenodd | inherit
+points  点的坐标
+ -->
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="190">
+   <polygon points="100,10 40,180 190,60 10,60 160,180"
+   style="fill:red;stroke:blue;stroke-width:3;fill-rule:evenodd;" />
+   <!-- 多边形 -->
+</svg>
+
+<!-- 地图 -->
+<p id="demo">点击这个按钮，获得您的位置：</p>
+<button onclick="getLocation()">试一下</button>
+<div id="mapholder"></div>
+<!-- <script src="http://maps.google.com/maps/api/js?sensor=false"></script>-->
+ <script>
+var x=document.getElementById("demo");
+function getLocation()
+  {
+  if (navigator.geolocation)
+    {
+    navigator.geolocation.getCurrentPosition(showPosition,showError);
+    }
+  else{x.innerHTML="Geolocation is not supported by this browser.";}
+  }
+
+function showPosition(position)
+  {
+  lat=position.coords.latitude;
+  lon=position.coords.longitude;
+  latlon=new google.maps.LatLng(lat, lon)
+  mapholder=document.getElementById('mapholder')
+  mapholder.style.height='250px';
+  mapholder.style.width='500px';
+
+  var myOptions={
+  center:latlon,zoom:14,
+  mapTypeId:google.maps.MapTypeId.ROADMAP,
+  mapTypeControl:false,
+  navigationControlOptions:{style:google.maps.NavigationControlStyle.SMALL}
+  };
+  var map=new google.maps.Map(document.getElementById("mapholder"),myOptions);
+  var marker=new google.maps.Marker({position:latlon,map:map,title:"You are here!"});
+  }
+
+function showError(error)
+  {
+  switch(error.code) 
+    {
+    case error.PERMISSION_DENIED:
+      x.innerHTML="User denied the request for Geolocation."
+      break;
+    case error.POSITION_UNAVAILABLE:
+      x.innerHTML="Location information is unavailable."
+      break;
+    case error.TIMEOUT:
+      x.innerHTML="The request to get user location timed out."
+      break;
+    case error.UNKNOWN_ERROR:
+      x.innerHTML="An unknown error occurred."
+      break;
+    }
+  }
+</script>
+<!-- localStorage存储 -->
+<script type="text/javascript">
+localStorage.lastname="Smith";
+document.write(localStorage.lastname);
+</script>
+
+<!-- sessionStorage 方法针对一个 session 进行数据存储。当用户关闭浏览器窗口后，数据会被删除。 -->
+<script type="text/javascript">
+sessionStorage.lastname="Smith";
+document.write(sessionStorage.lastname);
+</script>
+
+
+<!--如需启用应用程序缓存，请在文档的 <html> 标签中包含 manifest 属性：
+
+每个指定了 manifest 的页面在用户对其访问时都会被缓存。如果未指定 manifest 属性，则页面不会被缓存（除非在 manifest 文件中直接指定了该页面）。
+
+manifest 文件的建议的文件扩展名是：".appcache"。
+
+请注意，manifest 文件需要配置正确的 MIME-type，即 "text/cache-manifest"。必须在 web 服务器上进行配置。 -->
+<!-- <html manifest="/example/html5/demo_html.appcache">
+<body>
+<script type="text/javascript" src="/example/html5/demo_time.js">
+</script>
+<p id="timePara"><button onclick="getDateTime()">获得日期和事件</button></p>
+<p><img src="/i/w3school_banner.gif" /></p>
+<p>请打开<a href="/example/html5/html5_html_manifest.html" target="_blank">这个页面</a>，然后脱机浏览，重新加载页面。页面中的脚本和图像依然可用。</p>
+</body>
+</html> -->
+
+
+<!-- web worker  output定义不同类型的输出-->
+<p>计数: <output id="result"></output></p>
+<button onclick="startWorker()">开始 Worker</button> 
+<button onclick="stopWorker()">停止 Worker</button>
+<br /><br />
+
+<script>
+var w;
+
+function startWorker()
+{
+if(typeof(Worker)!=="undefined")
+  {
+  if(typeof(w)=="undefined")
+  {
+  // w=new Worker("demo_workers.js");
+  }
+  w.onmessage = function (event) {
+    document.getElementById("result").innerHTML=event.data;
+    };
+  }
+else
+  {
+  document.getElementById("result").innerHTML="Sorry, your browser does not support Web Workers...";
+  }
+}
+
+function stopWorker()
+{ 
+w.terminate();
+}
+</script>
+
+<!-- "/example/html5/demo_workers.js") -->
+<script>
+// var i=0;
+
+// function timedCount()
+// {
+// i=i+1;
+// postMessage(i);
+// setTimeout("timedCount()",500);
+// }
+
+// timedCount();
+</script>
+
+<!-- EventSource 对象用于接收服务器发送事件通知： -->
+<!-- var source=new EventSource("demo_sse.php");
+source.onmessage=function(event)
+  {
+  document.getElementById("result").innerHTML+=event.data + "<br />";
+  }; -->
+<!-- output 
+for和id是对应的
+-->
+<form oninput="x.value=parseInt(a.value)+parseInt(b.value)">0
+<input type="range" id="a" value="50">100
++<input type="number" id="b" value="50">
+=<output name="x" for="a b"></output>
+</form>
+<!-- input -->
+<form action="" method="get">
+ <input type="email" name="user_email" />
+ <input type="url" name="user_url" />
+ <input type="number" name="points" min="1" max="10" />
+ <!-- max:最大值 min:最小值  step：合法的数字间隔 value：默认值-->
+ Points:<input type="range" name="points" min="1" max="10" />
+</form>
+
+
+<!-- 
+    date - 选取日、月、年
+    month - 选取月、年
+    week - 选取周和年
+    time - 选取时间（小时和分钟）
+    datetime - 选取时间、日、月、年（UTC 时间）
+    datetime-local - 选取时间、日、月、年（本地时间） -->
+<form action="/example/html5/demo_form.asp" method="get">
+Date: <input type="date" name="user_date" />
+<input type="submit" />
+</form>
+
+
+<!-- Input 类型 - search
+
+search 类型用于搜索域，比如站点搜索或 Google 搜索。
+
+search 域显示为常规的文本域。 -->
+
+
+
+
+<!-- datalist 元素规定输入域的选项列表。 提示：option 元素永远都要设置 value 属性。
+list 属性规定输入域的 datalist
+-->
+
+Webpage: <input type="url" list="url_list" name="link" />
+<datalist id="url_list">
+<option label="W3School" value="http://www.W3School.com.cn" />
+<option label="Google" value="http://www.google.com" />
+<option label="Microsoft" value="http://www.microsoft.com" />
+</datalist>
+
+
+<!-- keygen 元素是密钥对生成器（key-pair generator）。当提交表单时，会生成两个键，一个是私钥，一个公钥。
+
+私钥（private key）存储于客户端，公钥（public key）则被发送到服务器。公钥可用于之后验证用户的客户端证书（client certificate）。 -->
+
+
+<form action="/example/html5/demo_form.asp" method="get">
+Username: <input type="text" name="usr_name" />
+Encryption: <keygen name="security" />
+<input type="submit" />
+</form>
+
+<!-- 
+output 元素
+
+output 元素用于不同类型的输出，比如计算或脚本输出： -->
+
+
+
+
+
+<!-- 表单属性 
+  autocomplete 属性规定 form 或 input 域应该拥有自动完成功能。
+autocomplete 适用于 <form> 标签，以及以下类型的 <input> 标签：text, search, url, telephone, email, password, datepickers, range 以及 color。
+-->
+<form action="/example/html5/demo_form.asp" method="get" autocomplete="on">
+First name:<input type="text" name="fname" /><br />
+Last name: <input type="text" name="lname" /><br />
+E-mail: <input type="email" name="email" autocomplete="off" /><br />
+<input type="submit" />
+</form>
+
+
+
+<!-- onSubmit 执行的js代码 -->
+<form name="testform" action="/example/hdom/hdom_onsubmit.html"
+onSubmit="alert('Hello ' + testform.inputfield.value +'!')">
+<input type="text" name="inputfield" size="20">
+<input type="submit" value="Submit">
+</form>
+
+<!-- autofocus 属性规定在页面加载时，域自动地获得焦点。
+
+注释：autofocus 属性适用于所有 <input> 标签的类型。 -->
+
+<form action="/example/html5/demo_form.asp" method="get">
+User name: <input type="text" name="user_name" autofocus="autofocus" />
+<input type="submit" />
+</form>
+
+
+<!-- form 属性规定输入域所属的一个或多个表单。
+
+注释：form 属性适用于所有 <input> 标签的类型。
+
+form 属性必须引用所属表单的 id： 
+注释：如需引用一个以上的表单，请使用空格分隔的列表。
+-->
+
+
+<form action="demo_form.asp" method="get" id="user_form">
+First name:<input type="text" name="fname" />
+<input type="submit" />
+</form>
+Last name: <input type="text" name="lname" form="user_form" />
+
+
+
+<!-- 表单重写属性（form override attributes）允许您重写 form 元素的某些属性设定。
+
+表单重写属性有：
+
+    formaction - 重写表单的 action 属性
+    formenctype - 重写表单的 enctype 属性  例子：formenctype="multipart/form-data"
+    formmethod - 重写表单的 method 属性 例子： formmethod="post"
+    formnovalidate - 重写表单的 novalidate 属性  进行没有验证的提交
+                       novalidate 属性规定在提交表单时不应该验证 form 或 input 域。
+    formtarget - 重写表单的 target 属性  例子：formtarget="_blank"
+
+注释：表单重写属性适用于以下类型的 <input> 标签：submit 和 image。 -->
+
+
+<form action="/example/html5/demo_form.asp" method="get" id="user_form">
+E-mail: <input type="email" name="userid" /><br />
+<input type="submit" value="Submit" /><br />
+<input type="submit" formaction="/example/html5/demo_admin.asp" value="Submit as admin" /><br />
+<input type="submit" formnovalidate="true" value="Submit without validation" /><br />
+</form>
+
+
+
+
+
+<form action="/example/html5/demo_form.asp" method="get">
+User name: <input type="text" name="user_name" /><br />
+<input type="image" src="1.jpg" width="99" height="99" />
+</form>
+
+
+<!-- multiple 属性规定输入域中可选择多个值。
+
+注释：multiple 属性适用于以下类型的 <input> 标签：email 和 file。 -->
+
+
+<form action="" method="get">
+Select images: <input type="file" name="img" multiple="multiple" />
+<input type="submit" />
+</form>
+
+
+
+
+<!-- 
+pattern 属性规定用于验证 input 域的模式（pattern）。
+pattern 属性适用于以下类型的 <input> 标签：text, search, url, telephone, email 以及 password。
+title显示在警告下面
+ -->
+
+<form action="" method="get">
+Country code: <input type="text" name="country_code" pattern="[A-z]{3}"
+title="Three letter country code" />
+<input type="submit" />
+</form>
+
+
+
+<!-- placeholder 属性适用于以下类型的 <input> 标签：text, search, url, telephone, email 以及 password。
+
+提示（hint）会在输入域为空时显示出现，会在输入域获得焦点时消失 -->
+<form action="" method="get">
+<input type="search" name="user_search" placeholder="Search W3School" />
+<input type="submit" />
+</form>
+
+
+<!-- 
+required 属性规定必须在提交之前填写输入域（不能为空）。
+
+注释：required 属性适用于以下类型的 <input> 标签：text, search, url, telephone, email, password, date pickers, number, checkbox, radio 以及 file。 -->
+<form action="/example/html5/demo_form.asp" method="get">
+Name: <input type="text" name="usr_name" required="required" />
+<input type="submit" />
+</form>
+
+
+
+
+
+</body>
+</html>
