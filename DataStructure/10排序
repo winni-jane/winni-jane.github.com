@@ -398,7 +398,7 @@ while(j<=n) TR[k++]=SR[j++];//课本伪码要转化为程序
 
 2-路归并排序的递归实现
 
-思路:若R[s..t]长为1则直接填入TR1即完成排序；对长为n的序列,假设稍短的都能排序,先对子列R[s..(s+t)/2]和  R[(s+t)/2+1..t] 排序(递归), 后调用归并函数进行归并
+思路:若R[s..t]长为1则直接填入TR1即完成排序；对长为n的序列,假设稍短的都能排序,先对子列R[s..(s+t)/2（下取整）]和  R[（下取整）(s+t)/2+1..t] 排序(递归), 后调用归并函数进行归并
 
 
 ```
@@ -456,9 +456,127 @@ c语言代码：
 
 
 ```
-
-
+#include<math.h>
+testBS()
+{
+   int a[] = {2, 343, 342, 1, 123, 43, 4343, 433, 687, 654, 3};
+    int *a_p = a;
+    //计算数组长度
+    int size = sizeof(a) / sizeof(int);
+    //基数排序
+    bucketSort3(a_p, size);
+    //打印排序后结果
+    int i;
+    for(i = 0; i < size; i++)
+    {
+        printf("%d\n", a[i]);
+    }
+    int t;
+    scanf("%d", t);
+}
+//基数排序
+void bucketSort3(int *p, intn)
+{
+    //获取数组中的最大数
+    int maxNum = findMaxNum(p, n);
+    //获取最大数的位数，次数也是再分配的次数。
+    int loopTimes = getLoopTimes(maxNum);
+    int i;
+    //对每一位进行桶分配
+    for(i = 1; i <= loopTimes; i++)
+    {
+        sort2(p, n, i);
+    }
+}
+//获取数字的位数
+int getLoopTimes(intnum)
+{
+    int count = 1;
+    int temp = num / 10;
+    while(temp != 0)
+    {
+        count++;
+        temp = temp / 10;
+    }
+    return count;
+}
+//查询数组中的最大数
+int findMaxNum(int *p, intn)
+{
+    int i;
+    int max = 0;
+    for(i = 0; i < n; i++)
+    {
+        if(*(p + i) > max)
+        {
+            max = *(p + i);
+        }
+    }
+    return max;
+}
+//将数字分配到各自的桶中，然后按照桶的顺序输出排序结果
+void sort2(int *p, int n, int loop)
+{
+    //建立一组桶此处的20是预设的根据实际数情况修改（此处为20列，即尾数相同的有多少个）
+    int buckets[10][20] = {};
+    //求桶的index的除数
+    //如798个位桶index=(798/1)%10=8
+    //十位桶index=(798/10)%10=9
+    //百位桶index=(798/100)%10=7
+    //tempNum为上式中的1、10、100
+    int tempNum = (int)pow(10, loop - 1);
+    int i, j;
+    for(i = 0; i < n; i++)
+    {
+        int row_index = (*(p + i) / tempNum) % 10;
+        for(j = 0; j < 20; j++)
+        {
+            if(buckets[row_index][j] == NULL)
+            {
+                buckets[row_index][j] = *(p + i);
+                break;
+            }
+        }
+    }
+    //将桶中的数，倒回到原有数组中
+    int k = 0;
+    for(i = 0; i < 10; i++)
+    {
+        for(j = 0; j < 20; j++)
+        {
+            if(buckets[i][j] != NULL)
+            {
+                *(p + k) = buckets[i][j];
+                buckets[i][j] = NULL;
+                k++;
+            }
+        }
+    }
+}
 
 ```
+
+![](picture/10/19.png '')
+
+
+各排序方法各有优缺点,具体选择时考虑稳定性、记录大小(小则简单方法即可)、原始数据是否基本有序、关键字大小等因素。
+
+如直接插入排序适合基本有序、n值较小时,
+
+基数排序适合关键字较小、n较大、空间充裕、要求稳定时;
+
+快速排序适合n大、不要求稳定、分布随机时;
+
+堆排序适合n大、关键字分布可能有序、不要求稳定;
+
+归并排序适合n大、关键字分布可能有序、要求稳定且内存空间充裕时
+
+理论上可证明基于比较的排序方法可能达到的最快的时间复杂度为O(nlogn)；基数排序不是基于“比较”
+
+第11章 外部排序
+
+按可用内存大小,将外存中的记录文件分成若干段，依次读入各段到内存并利用内部排序方法对各段排序，排序后的段重新写入外存(通常称外存中这些有序段位为“归并段”)
+
+对各归并段分块进行归并，逐步扩大 (记录的)有序子序列的长度，直至外存中整个记录序列按关键字有序为止
 
 
