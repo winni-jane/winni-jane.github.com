@@ -5,7 +5,8 @@
 body {
 	font:   Arial, Helvetica, sans-serif;
 	color: #666666;
-	background: url(image/bg.png);
+	/*background: url(image/bg.png);*/
+	background-color: #173069;
 }
 img {
 	border: 0;
@@ -46,7 +47,8 @@ a:hover {
 	padding: 50px 0 20px 20px;
 	font-size: 26px;
 	font-family: "微软雅黑", sans-serif;
-	color: #333;
+	/*color: #333;*/
+	color: #E1E1E1;
 	font-weight: bold;
 }
 .clear {
@@ -65,7 +67,8 @@ nav {
 .navigation {
 	height: 64px;
 	/*background: url(image/navbg.png) no-repeat;*/
-	background-color: #E9C2A6;
+	/*background-color: #E9C2A6;*/
+	background-color: #313C72;
 	font-family: "微软雅黑";
 	border-radius:10px;
 }
@@ -85,7 +88,8 @@ nav {
 .menu li a {
 	display: block;
 	text-decoration: none;
-	color: #5C4033;
+	/*color: #5C4033;*/
+	color: 	#B0C4DE;
 	font-size: 15px;
 	font-weight: bold
 }
@@ -103,7 +107,10 @@ nav {
 	left: 0;
 }
  
-.cur{ background:#D96C00;  }  
+.cur{
+ /*background:#D96C00;  */
+background:	#707299; 
+}  
 .menu li ul li {
 	font-size: 12px;
 	height: 28px;
@@ -128,9 +135,9 @@ nav {
 .stripe {
 	/*background: url(image/mainbg.jpg) no-repeat;*/
 	/*background: rgba(77, 123, 175, 0.58);*/
-	FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=##D0D0D0,endColorStr=#FFFFDF); /*IE*/   
-    background:-moz-linear-gradient(top,##D0D0D0,#FFFFDF);/*火狐*/   
-    background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(#D0D0D0), to(#FFFFDF));/*谷歌*/   
+	FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=##D0D0D0,endColorStr=#A8A8A8); /*IE*/   
+    background:-moz-linear-gradient(top,##D0D0D0,#A8A8A8);/*火狐*/   
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(#D0D0D0), to(#A8A8A8));/*谷歌*/   
   
 	width: 720px;
 	height: 14px;
@@ -140,7 +147,8 @@ nav {
 
 #container {
 	/*background: rgba(77, 123, 175, 0.58);*/
-	background: #FFFCEC;
+	/*background: #FFFCEC;*/
+	background: #F5F5F5;
 	overflow: hidden;
 	width: 620px;
 	margin-left: 50px;
@@ -173,7 +181,8 @@ nav {
 
 #roundR
 {
-	border-color: #856363;
+	/*border-color: #856363;*/
+	border-color: #707299;
 	border-width: 7px;
 	border-radius: 7px;
 
