@@ -1,0 +1,106 @@
+
+char *p = "1417ios\nyanyiming";//字符串常量 1417ios\nyanyiming 字符串常量 以 ‘\0’为结尾
+printf("p = %s\n",p);//%s 打印字符串专用
+
+char c[] = "1417ios hanbing";
+//    puts(c);//输出
+
+ gets(c);//输入
+
+ ‘0’ 字符0 存到计算机里面就是ASCII值  48
+“0” 字符串 0 字符串常量 存到只读数据段 里面包含的是两个字符 '0' 和 ‘\0’,存的是   '0' 和‘\0’ 的ASCII的值
+
+
+```
+
+char c[100] = "class";
+    unsigned long len4 = strlen(c);
+    printf("len4_size:%lu\n",len4);//5
+    
+    printf("c_sizeof(c):%lu\n",sizeof(c));//100
+
+1.sizeof()是C语言的一个关键字，strlen是C语言的一个库函数
+2.sizeof()求的是类型变量空间的大小  || 数据空间的大小
+  strlen:求的是字符串的有效长度(即:统计字符串‘\0’前的有效字符，不包括‘\0’)
+3.sizeof() 是编译时的概念  strlen是运行时的概念。
+```
+
+一、atoi 将一个字符串转化为一个整数：atoi
+
+原型:int atoi(const char *s);
+ 
+ 功能:把字符串转换成长整型数
+ 
+ 说明:atoi 将一个字符串转化为一个整数，从最前面开始，如果有空格，则跳过空格，直到第一个非空格字符，开始转换。
+ 如果第一个字符是‘+’或‘-’ 则会转换为正/负数(正号不输出，负号输出)；
+ 如果第一个字符是字母则整个数字字符串转换为0；
+ 如果数字字符串中间有字母，则整个数字字符串只转化字母前面的数字字符串,并结束转换！
+
+int ret = atoi("123");
+    printf("ret = %d\n",ret);//123
+
+二、strcmp 比较两个ASCII码大小
+int ret = strcmp(st1, st2);
+
+三、strcpy 复制
+
+ char buff[256] = {};
+ char *q = "iosiosiosocandroid";
+char *ret = strcpy(buff, q);
+
+四、strcat  连接
+char buff[256] = "jianjian";
+    
+ char *p = "1417ios";
+    
+ char *ret = strcat(buff, p);
+
+五、strstr 查找子串
+char *ret = strstr("ococosiosiosiosCLassiosiosoc","ios");
+    
+    if (ret != NULL) {
+        printf("Find!\n");
+        
+        printf("ret = %s\n",ret);
+        
+        printf("ret = %p\n",ret);
+    }else{
+        printf("Not Find!\n");
+    }
+
+六、strtok 字符串分割
+
+
+```
+
+//strtok 字符串分割
+    char c[] = "I#am#a#good#boy!";
+    char *p = c;
+    
+    while (1) {
+        p = strtok(p, "#");//将字符串以‘#’作为分隔符来分割
+        if (p == NULL) {//strtok分割完以后 会返回NULL
+            break;
+        }
+        sleep(2);
+        printf("%s ",p);//I am a good boy!
+        
+        p = NULL;//置空操作 不做此操作 strtok分割完第一个 I 以后 不会往下继续寻址（分割）
+    }
+
+```
+
+七、自定义实现strcpy
+
+
+```
+char *strcpy(char *strDest, const char *strSrc)
+{
+    assert((strDest!=NULL) && (strSrc !=NULL));  //assert 断言  声明  // 
+    char *address = strDest;                                          // 
+    while( (*strDest++  =  * strSrc++) != '\0' )         // 
+              NULL ;
+    return address ;                                                  // 
+}
+
+```
