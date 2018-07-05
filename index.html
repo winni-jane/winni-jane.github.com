@@ -3,8 +3,8 @@
 <html>
 
 <head>
-<script src="//apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
-<script src="//apps.bdimg.com/libs/angular-route/1.3.13/angular-route.js"></script>
+<script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+<script src="http://apps.bdimg.com/libs/angular-route/1.3.13/angular-route.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-utf8-base64/0.0.5/angular-utf8-base64.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown.js/0.5.0/markdown.min.js"></script>
 <script type="text/javascript" src="showdown-master/dist/showdown.min.js"></script> 
@@ -36,6 +36,7 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
     var converter = new showdown.Converter(); 
     var html = converter.makeHtml(response); 
     document.getElementById("container").innerHTML = html; 
+   
     // document.getElementById("container").innerHTML = response;
 
      //初次打开页面显示第一条的内容
@@ -60,8 +61,7 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
     var converter = new showdown.Converter(); 
     var html = converter.makeHtml(response); 
     document.getElementById("container").innerHTML = html; 
-
-    // document.getElementById("container").innerHTML = response;
+    
 
   });                                                              
 }
@@ -80,6 +80,7 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
     var converter = new showdown.Converter(); 
     var html = converter.makeHtml(response); 
     document.getElementById("container").innerHTML = html; 
+    
     // document.getElementById("container").innerHTML = response;
  
   var bb =document.querySelectorAll(".listul li:first-child a"); 
@@ -121,6 +122,7 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
     var converter = new showdown.Converter(); 
     var html = converter.makeHtml(response); 
     document.getElementById("container").innerHTML = html; 
+    
     // document.getElementById("container").innerHTML = response;
  
   var bb =document.querySelectorAll(".listul li:first-child a"); 
@@ -142,6 +144,7 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
     var converter = new showdown.Converter(); 
     var html = converter.makeHtml(response); 
     document.getElementById("container").innerHTML = html; 
+    
 
     // document.getElementById("container").innerHTML = response;
   });                                                              
@@ -162,6 +165,7 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
     var converter = new showdown.Converter(); 
     var html = converter.makeHtml(response); 
     document.getElementById("container").innerHTML = html; 
+    
     // document.getElementById("container").innerHTML = response;
  
   var bb =document.querySelectorAll(".listul li:first-child a"); 
@@ -183,6 +187,7 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
     var converter = new showdown.Converter(); 
     var html = converter.makeHtml(response); 
     document.getElementById("container").innerHTML = html; 
+    
 
     // document.getElementById("container").innerHTML = response;
   });                                                              
@@ -258,13 +263,14 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
 
 <div class="outside">
 
-<div class="stripe f_l">
+ <div class="stripe f_l"> 
 
-</div>
+</div> 
+<div class= "content">
 <!-- 显示内容 -->
 <div class=" f_l" id="container">
 
-</div>
+</div> 
 
 
 <!-- 右边显示列表 -->
@@ -272,6 +278,8 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
 
 
 <div >
+
+</div>
 <script type="text/ng-template" id="embedded.home.html">
 
 <ul class="listul" id ="listul">
