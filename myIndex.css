@@ -40,7 +40,7 @@ a:hover {
 }
 
 .contenttop {
-	width: 1000px;
+	width: 80%;
 	margin: auto;
 }
 .logo {
@@ -71,6 +71,7 @@ nav {
 	background-color: #313C72;
 	font-family: "微软雅黑";
 	border-radius:10px;
+	margin: 0;
 }
 .menu {
 	position: relative;
@@ -80,7 +81,7 @@ nav {
 }
 .menu li {
 	float: left;
-	width: 210px;
+	width: 20%;
 	text-align: center;
 	position: relative;
 	line-height: 64px;
@@ -101,7 +102,8 @@ nav {
 }
 .menu li ul {
 	display: none;
-	width: 210px;
+	/*width: 210px;*/
+	width: 20%;
 	position: absolute;
 	TOP: 40px;
 	left: 0;
@@ -127,8 +129,10 @@ background:	#707299;
 
 .outside {
 	
-	width: 1000px;
-	margin: auto;
+	/*width: 1000px;*/
+	width: 100%;
+	margin: 0px;
+
 	
 }
 
@@ -139,7 +143,8 @@ background:	#707299;
     background:-moz-linear-gradient(top,##D0D0D0,#A8A8A8);/*火狐*/   
     background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(#D0D0D0), to(#A8A8A8));/*谷歌*/   
   
-	width: 720px;
+	/*width: 720px;*/
+	width: 73%;
 	height: 14px;
 	background-size:720px 14px;
 	border-radius:50px;
@@ -150,8 +155,9 @@ background:	#707299;
 	/*background: #FFFCEC;*/
 	background: #F5F5F5;
 	overflow: hidden;
-	width: 620px;
-	margin-left: 50px;
+	/*width: 620px;*/
+	width: 65%;
+	margin-left: 20px;
 	border-left: #d2d2d2 1px solid;
 	border-right: #d2d2d2 1px solid;
 	border-bottom: #d2d2d2 1px solid;
@@ -160,6 +166,8 @@ background:	#707299;
 	overflow:auto;
 	padding: 20px;
 	/*font-size: 14px;*/
+	word-break:break-all;
+
 }
  code { color:#00009C; background: #F6F6F6; } } 
  blockquote { border-left:#eee solid 5px; padding-left:20px; } 
@@ -172,12 +180,19 @@ background:	#707299;
 	padding-top: 20px;
 	line-height: 28px;
 	font-size: 15px;
-	width: 200px;
-	height: 500px;
+	/*width: 250px;*/
+	width: 20%;
+	height: 600px;
 	border:15px solid transparent; 
 	overflow:auto;
 }
 
+.content
+{
+
+	display: block;
+	overflow: visible;
+}
 
 #roundR
 {
@@ -185,6 +200,7 @@ background:	#707299;
 	border-color: #707299;
 	border-width: 7px;
 	border-radius: 7px;
+  margin-right: 20px;
 
 }
 .listul li
