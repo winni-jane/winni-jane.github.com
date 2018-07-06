@@ -195,6 +195,54 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
   //
 })
 
+
+//小知识页面
+.controller('littleKnowledgeController', function ($scope, $route, $http) { 
+  $scope.$route = $route;
+  //Swift界面的
+   $http.get("https://api.github.com/repos/winni-jane/winni-jane.github.com/contents/littleKnowledge?ref=master")
+  .success(function (response) {$scope.list= response;
+      
+
+    $http.get(response[0].download_url)
+  .success(function (response) {
+
+    var converter = new showdown.Converter(); 
+    var html = converter.makeHtml(response); 
+    document.getElementById("container").innerHTML = html; 
+    
+    // document.getElementById("container").innerHTML = response;
+ 
+  var bb =document.querySelectorAll(".listul li:first-child a"); 
+  bb[0].className = 'cur'; 
+
+
+  });  
+ });
+
+
+//内容展示
+  $scope.showContent = function (download_url,event) {
+
+    $(event.target).addClass("cur"); //jQuery的方法
+    $(event.target).parent().siblings().find("a").removeClass("cur");
+
+    $http.get(download_url)
+  .success(function (response) {
+    var converter = new showdown.Converter(); 
+    var html = converter.makeHtml(response); 
+    document.getElementById("container").innerHTML = html; 
+    
+
+    // document.getElementById("container").innerHTML = response;
+  });                                                              
+}
+  //
+})
+
+
+
+
 .config(function ($routeProvider) {
     $routeProvider.
     when('/home', {
@@ -212,6 +260,10 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
     when('/myHtml', {
         templateUrl: 'embedded.myHtml.html',
         controller: 'myHtmlController'
+    }).
+    when('/littleKnowledge', {
+        templateUrl: 'embedded.littleKnowledge.html',
+        controller: 'littleKnowledgeController'
     }).
     otherwise({
         redirectTo: '/home'
@@ -247,6 +299,7 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
 <li><a href="#/about" onclick="testBG('1')">数据结构</a></li>
 <li><a href="#/mySwift" onclick="testBG('2')">Swift</a></li>
 <li><a href="#/myHtml" onclick="testBG('3')">Html类</a></li>
+<li><a href="#/littleKnowledge" onclick="testBG('4')">小知识</a></li>
 </ul>
 
 </div>
@@ -323,6 +376,16 @@ angular.module('ngRouteExample', ['ngRoute','ab-base64'])
       </ul>
    
   </script>
+  <!-- littleKnowledge -->
+  <script type="text/ng-template" id="embedded.littleKnowledge.html">
+      <ul class="listul" id ="listul">
+        <li ng-repeat="x in list">
+         <a  ng-click = "showContent(x.download_url,$event)"> {{ x.name }} </a>
+        </li>
+      </ul>
+   
+  </script>
+
 <div> 
 
       
@@ -354,6 +417,7 @@ function  testBG(value){
       $("#menu a").eq(1).removeClass('cur'); 
       $("#menu a").eq(2).removeClass('cur'); 
       $("#menu a").eq(3).removeClass('cur'); 
+      $("#menu a").eq(4).removeClass('cur'); 
        urlstatus = true;  
 
     } 
@@ -362,6 +426,7 @@ function  testBG(value){
       $("#menu a").eq(1).addClass('cur'); 
        $("#menu a").eq(2).removeClass('cur'); 
        $("#menu a").eq(3).removeClass('cur'); 
+       $("#menu a").eq(4).removeClass('cur'); 
        urlstatus = true; 
     } 
     else if (value == "2"){  
@@ -369,13 +434,23 @@ function  testBG(value){
       $("#menu a").eq(1).removeClass('cur'); 
       $("#menu a").eq(2).addClass('cur'); 
       $("#menu a").eq(3).removeClass('cur'); 
+      $("#menu a").eq(4).removeClass('cur'); 
+       urlstatus = true; 
+    }  
+    else if (value == "3"){  
+      $("#menu a").eq(0).removeClass('cur'); 
+      $("#menu a").eq(1).removeClass('cur'); 
+      $("#menu a").eq(2).removeClass('cur'); 
+      $("#menu a").eq(3).addClass('cur'); 
+      $("#menu a").eq(4).removeClass('cur'); 
        urlstatus = true; 
     }  
      else {  
       $("#menu a").eq(0).removeClass('cur'); 
       $("#menu a").eq(1).removeClass('cur'); 
       $("#menu a").eq(2).removeClass('cur'); 
-      $("#menu a").eq(3).addClass('cur'); 
+      $("#menu a").eq(3).removeClass('cur'); 
+      $("#menu a").eq(4).addClass('cur'); 
        urlstatus = true; 
     }  
      if (!urlstatus) {$("#menu a").eq(0).addClass('cur'); } 
@@ -389,6 +464,7 @@ function testBgFresh()
   var pos =  urlstr.indexOf('home');
   var pos1 =  urlstr.indexOf('about');
   var pos2 =  urlstr.indexOf('mySwift');
+   var pos3 =  urlstr.indexOf('myHtml');
   if (pos !== -1) {
        testBG('0');
   }
@@ -400,9 +476,13 @@ function testBgFresh()
 
        testBG('2');
   }
-  else{
+  else if (pos3 !== -1){
 
        testBG('3');
+  }
+  else{
+
+       testBG('4');
   }
 
 
