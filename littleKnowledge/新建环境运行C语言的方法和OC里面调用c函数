@@ -1,0 +1,32 @@
+1.OC文件里调用c函数示例：
+
+```
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+   
+   int a0 = sum2(2, 3);
+    NSLog(@"a0=%d",a0);
+    
+   
+
+}
+
+int sum2(int a, int b){
+   return a + b;
+}
+
+
+```
+
+2. xcode运行C语言环境：
+新建工程--》macOS--》Command Line Tool
+
+
+
+
+
+
+
+
+

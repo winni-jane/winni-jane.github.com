@@ -1,0 +1,76 @@
+这里是不带头结点（空节点）的链表。
+方法一：使得两个节点间的指向反向。
+
+```
+    linkList* ReverseList1(linkList* head)  
+    {  
+ 
+     if(NULL==head|| NULL==head->next) return head;    //少于两个节点没有反转的必要。  
+        linkList* p;  //结点
+        linkList* q;  
+        linkList* r;  
+        p = head;    
+        q = head->next;  
+        head->next = NULL; //旧的头指针是新的尾指针，next需要指向NULL  
+        while(q){  
+            r = q->next; //先保留下一个step要处理的指针  
+            q->next = p; //然后p q交替工作进行反向  
+            p = q;   
+            q = r;   
+        }  
+        head=p; // 最后q必然指向NULL，所以返回了p作为新的头指针  
+        return head;      
+    }  
+
+```
+
+方法二：从第2个节点到第N个节点，依次逐节点插入到第1个节点(head节点)之后，最后将第一个节点挪到新表的表尾。
+
+
+```
+head指向第一个元素不动，p指向第二个元素不动，q依次往下进行反转。
+
+    linkList* ReverseList2(linkList* head)  
+    {  
+        linkList* p;  
+        linkList* q;  
+        p=head->next;  
+        while(p->next!=NULL){  
+            q=p->next;  
+            p->next=q->next;  
+            q->next=head->next;  
+            head->next=q;  
+        }  
+      
+        p->next=head;//相当于成环  
+        head=p->next->next;//新head变为原head的next  
+        p->next->next=NULL;//断掉环  
+        return head;    
+    }  
+
+
+```
+
+方法三：递归法
+
+保留新链表的head指针，可以增加一个引用型参数 new_head。也可以先把链表遍历一遍 保存一下指针。
+
+```
+ ListNode* reverseLinkedList3(ListNode* head, ListNode* & new_head){ //输入参数head为旧链表的头指针。new_head为新链表的头指针。  
+        if(head==NULL)  
+            return NULL;  
+        if(head->next==NULL){  
+            new_head=head; //当处理到了旧链表的尾指针，也就是新链表的头指针时，对new_head进行赋值。因为是引用型参数，所以在接下来调用中new_head的值逐层传递下去。  
+            return head;  
+        }  
+        ListNode* new_tail=reverseLinkedList3(head->next,new_head);  
+        new_tail->next=head;  
+        head->next=NULL;  
+        return head; //输出参数head为新链表的尾指针。  
+    }  
+
+
+```
+
+
+
