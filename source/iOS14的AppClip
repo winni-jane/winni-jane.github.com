@@ -86,7 +86,7 @@ Xcode配置<br/>
 
 4.Safari网页设置<br/>
 网页内添加代码如下：<br/>
-<br/>
+￼￼![](picture/ios/8.png '')
 这样就在Safari的网页中显示clip的banner了（测试的时候如果该app-id没有上架到appstore，在这里bannner是不展示的），App Clips 准备发布时，需要在 App Store Connect 上进行配置。在 App Store Connect 上还可进行clip的高级设置，比如iMessage中、苹果自带地图中、Siri唤醒App Clips。
 效果如下：<br/>
 ￼￼![](picture/ios/7.png '')
