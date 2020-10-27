@@ -1,14 +1,14 @@
-一、简介：
-1、App Clip的体积在10M之内。
-2、实际上是一个target，可以和主APP公用文件和一些图片资源，需要和App一起提交审核。
-3、可在设置页「轻 App 」设置里找到所有的 轻 App，并进行删除、权限管理、下载完整 App 等操作。轻 App 使用了 30 天后会被自动移除。
-4、访问过的 App Clip 在桌面上没有图标，你只能去「App 资源库」里面的最近添加分类里找。
-5、一段时间不用App Clip后，本地存储的数据会被删除，如果用户想要安装完整版的App，那么Clips和保存的数据都会被删除，但是相关信息在删除前会被迁移到App上，而且麦克风等的授权也会被迁移。
-6、设备上没有安装主应用程序，那么系统就会下载 App Clip 到设备上，接着会被唤起调用；否则主应用程序总是第一选择，实际上用户一旦安装了主应用程序，系统就会移除掉 App Clip。
-二、开发配置 App Clip
-1、新建时如下（在target页面点击“+”号）：
-￼![](picture/ios/1.png '')
-2、Clip 的URL被响应之后会调用如下方法，可在方法里面拿到URL：
+一、简介：<br/>
+1、App Clip的体积在10M之内。<br/>
+2、实际上是一个target，可以和主APP公用文件和一些图片资源，需要和App一起提交审核。<br/>
+3、可在设置页「轻 App 」设置里找到所有的 轻 App，并进行删除、权限管理、下载完整 App 等操作。轻 App 使用了 30 天后会被自动移除。<br/>
+4、访问过的 App Clip 在桌面上没有图标，你只能去「App 资源库」里面的最近添加分类里找。<br/>
+5、一段时间不用App Clip后，本地存储的数据会被删除，如果用户想要安装完整版的App，那么Clips和保存的数据都会被删除，但是相关信息在删除前会被迁移到App上，而且麦克风等的授权也会被迁移。<br/>
+6、设备上没有安装主应用程序，那么系统就会下载 App Clip 到设备上，接着会被唤起调用；否则主应用程序总是第一选择，实际上用户一旦安装了主应用程序，系统就会移除掉 App Clip。<br/>
+二、开发配置 App Clip<br/>
+1、新建时如下（在target页面点击“+”号）：<br/>
+￼![](picture/ios/1.png '')<br/>
+2、Clip 的URL被响应之后会调用如下方法，可在方法里面拿到URL：<br/>
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
  {
     
