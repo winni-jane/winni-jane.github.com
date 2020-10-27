@@ -113,7 +113,3 @@ Assets Library, CallKit, CareKit, CloudKit, Contacts, Contacts UI, Core Motion, 
 
 2、消息推送<br/>
 和普通 app 的消息推送一样，都需要获取用户的推送授权。<br/>
-
-
-
-
