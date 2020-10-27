@@ -20,8 +20,8 @@
     }
 }
 
-
-3、向主APP引流：
+<br/>
+3、向主APP引流：<br/>
 - (void)getFullApp{
     UIWindowScene *scene = [UIApplication sharedApplication].windows.firstObject.windowScene;
     if (scene) {
@@ -37,10 +37,10 @@
 
 
 
-
-三、测试方法
-1、服务器配置
-在 Server 的 App Site Association (通常是在网站 .well-known 下的 apple-app-site-association 文件) 中添加这个域名对应的 appclips 条目如下：（需改为对应的BundleID）。
+<br/>
+三、测试方法<br/>
+1、服务器配置<br/>
+在 Server 的 App Site Association (通常是在网站 .well-known 下的 apple-app-site-association 文件) 中添加这个域名对应的 appclips 条目如下：（需改为对应的BundleID）。<br/>
 {
 	"appclips": {
 		"apps": ["9LH86Y288Y.com.tong.clipstest.Clip"]
@@ -61,57 +61,58 @@
 		"apps": ["9LH86Y288Y.com.tong.clipstest"]
 	}
 }
-
-2、客户端测试
-方法一：
-Xcode配置
-在xcode中配置环境变量可直接运行：
+<br/>
+2、客户端测试<br/>
+方法一：<br/>
+Xcode配置<br/>
+在xcode中配置环境变量可直接运行：<br/>
 ￼![](picture/ios/2.png '')
-
- 2、本地测试
-设置页配置如下（路径：设置->开发者-> Local Experiences->Register Local Experience）：
+<br/>
+ 2、本地测试<br/>
+设置页配置如下（路径：设置->开发者-> Local Experiences->Register Local Experience）：<br/>
 ￼￼![](picture/ios/3.jpeg '')
 
-
-手机用xcode运行App Clip的程序,再如方法一中对xcode的环境变量进行设置，然后生成响应网址的二维码，用手机二维码扫描工具扫描二维码可以看到卡片展示：
+<br/>
+手机用xcode运行App Clip的程序,再如方法一中对xcode的环境变量进行设置，然后生成响应网址的二维码，用手机二维码扫描工具扫描二维码可以看到卡片展示：<br/>
 ￼￼￼![](picture/ios/4.jpeg '')
+<br/>
+点击后可打开手机刚刚安装的的App Clip。<br/>
 
-点击后可打开手机刚刚安装的的App Clip。
-
-3、testflight测试
-将App(包含App Clip的完整程序)通过 App Store Connect提交之后，在TestFlight中配置相应URL的信息后进行testflight的分发可以测试轻APP（点击下图的测试按钮可以打开App Clip）。
+3、testflight测试<br/>
+将App(包含App Clip的完整程序)通过 App Store Connect提交之后，在TestFlight中配置相应URL的信息后进行testflight的分发可以测试轻APP（点击下图的测试按钮可以打开App Clip）。<br/>
 ￼￼￼![](picture/ios/5.jpeg '')
-相应的TestFlight配置如下：
+相应的TestFlight配置如下：<br/>
 ￼￼![](picture/ios/6.png '')
 
-4.Safari网页设置
-网页内添加代码如下：
+4.Safari网页设置<br/>
+网页内添加代码如下：<br/>
 <meta name="apple-itunes-app" content="app-id= 1536736500, app-clip-bundle-id=com.tong.browser.Clip>
 >
+<br/>
 这样就在Safari的网页中显示clip的banner了（测试的时候如果该app-id没有上架到appstore，在这里bannner是不展示的），App Clips 准备发布时，需要在 App Store Connect 上进行配置。在 App Store Connect 上还可进行clip的高级设置，比如iMessage中、苹果自带地图中、Siri唤醒App Clips。
-效果如下：
+效果如下：<br/>
 ￼￼![](picture/ios/7.png '')
 
 
-四、权限相关
-1、不能使用指定 Framework
+四、权限相关<br/>
+1、不能使用指定 Framework<br/>
 Assets Library, CallKit, CareKit, CloudKit, Contacts, Contacts UI, Core Motion, File Provider, File Provider UI, HealthKit, HomeKit, Media, Player, Messages, Message UI, PhotoKit, ResearchKit, SensorKit, Speech
-以上 Framework 不能在 AppClip 使用，若使用了在编译时不会报错，而是在运行时报错或者返回错误的结果。
+以上 Framework 不能在 AppClip 使用，若使用了在编译时不会报错，而是在运行时报错或者返回错误的结果。<br/>
 
-	•.	不能跟踪用户信息，也不能通过 identifierForVendor 来获取用户唯一标识。
-	•.	不能持续地获取用户位置，每次使用位置需要请求用户授权，次日凌晨 4:00，会自动关闭授权。再次使用位置时，需要用户重新授权。
-	•.	只允许 App Clip 和其对应的主 app 通信，不允许和其他 app 进行通信，这就导致微信登录分享支付等功能在 App Clip 里使用不了。
-	•.	不能访问苹果音乐、多媒体，通讯录，文件，运动健康，相册等数据。
+	•.	不能跟踪用户信息，也不能通过 identifierForVendor 来获取用户唯一标识。<br/>
+	•.	不能持续地获取用户位置，每次使用位置需要请求用户授权，次日凌晨 4:00，会自动关闭授权。再次使用位置时，需要用户重新授权。<br/>
+	•.	只允许 App Clip 和其对应的主 app 通信，不允许和其他 app 进行通信，这就导致微信登录分享支付等功能在 App Clip 里使用不了。<br/>
+	•.	不能访问苹果音乐、多媒体，通讯录，文件，运动健康，相册等数据。<br/>
 
-以下操作也不能进行：
-	•.	后台活动：网络请求、位置更新等
-	•.	蓝牙连接
-	•.	App extensions
-	•.	URL schemes
-	•.	内购（In-app purchases）（区别苹果支付 Apple Pay，在 App Clip 是能够使用苹果支付的）
+以下操作也不能进行：<br/>
+	•.	后台活动：网络请求、位置更新等<br/>
+	•.	蓝牙连接<br/>
+	•.	App extensions<br/>
+	•.	URL schemes<br/>
+	•.	内购（In-app purchases）（区别苹果支付 Apple Pay，在 App Clip 是能够使用苹果支付的）<br/>
 
-2、消息推送
-和普通 app 的消息推送一样，都需要获取用户的推送授权。
+2、消息推送<br/>
+和普通 app 的消息推送一样，都需要获取用户的推送授权。<br/>
 
 
 
